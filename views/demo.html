@@ -1,0 +1,137 @@
+<%- include header.html %>
+<script src="js/chart.js"></script>
+
+<script>
+  function Controller($scope) {
+    // $scope.name = 'Hello World';
+
+  }
+
+  var data = {
+    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    datasets: [
+        {
+            label: "My First dataset",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [65, 59, 80, 81, 56, 55, 40]
+        },
+        {
+            label: "My Second dataset",
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            data: [28, 48, 40, 19, 86, 27, 90]
+        }
+    ]
+  };
+
+  var polar = [
+    {
+        value: 300,
+        color:"#F7464A",
+        highlight: "#FF5A5E",
+        label: "Red"
+    },
+    {
+        value: 50,
+        color: "#46BFBD",
+        highlight: "#5AD3D1",
+        label: "Green"
+    },
+    {
+        value: 100,
+        color: "#FDB45C",
+        highlight: "#FFC870",
+        label: "Yellow"
+    },
+    {
+        value: 40,
+        color: "#949FB1",
+        highlight: "#A8B3C5",
+        label: "Grey"
+    },
+    {
+        value: 120,
+        color: "#4D5360",
+        highlight: "#616774",
+        label: "Dark Grey"
+    }
+
+  ];
+
+
+  function start() {
+    var w = $(window).width();
+    w = w/3 - 15;
+    $('canvas').css('width', w + 'px');
+    $('canvas').prop('width', w);
+    var h = $(window).height();
+    h -= 200;
+    $('canvas').css('height', h/2 + 'px');
+    $('canvas').prop('height', h/2);
+    // Chart.defaults.global.responsive = true;
+    var chart1 = new Chart($("#chart1")[0].getContext("2d")).Bar(data);
+    var chart2 = new Chart($("#chart2")[0].getContext("2d")).Line(data);
+    var chart3 = new Chart($("#chart3")[0].getContext("2d")).Radar(data);
+    var chart4 = new Chart($("#chart4")[0].getContext("2d")).Pie(polar);
+    var chart5 = new Chart($("#chart5")[0].getContext("2d")).Doughnut(polar);
+    var chart6 = new Chart($("#chart6")[0].getContext("2d")).PolarArea(polar);
+  }
+
+  $(document).ready(function() {
+    start();
+  });
+
+</script>
+
+<div class='container'>
+  <ul class='title'>
+    <li>
+      <a href="#drawer" class="uk-icon-button uk-icon-navicon" id='navicon'
+        data-uk-offcanvas></a>
+    </li>
+    <li>
+      <a href="" class="uk-icon-button uk-icon-refresh"
+        onclick='location.reload()'></a>
+    </li>
+    <li>Demo
+    </li>
+</div>
+
+<div class='frame'>
+  <div class='bit-3 chart'>
+    <span class='title'>Sales per month</span>
+    <canvas id="chart1" class='chart'></canvas>
+  </div>
+  <div class='bit-3 chart'>
+    <span class='title'>Sales per month</span>
+    <canvas id="chart2" class='chart'></canvas>
+  </div>
+  <div class='bit-3 chart'>
+    <span class='title'>Sales per month</span>
+    <canvas id="chart3" class='chart'></canvas>
+  </div>
+
+  <div class='bit-3 chart'>
+    <span class='title'>Sales per month</span>
+    <canvas id="chart4" class='chart'></canvas>
+  </div>
+  <div class='bit-3 chart'>
+    <span class='title'>Sales per month</span>
+    <canvas id="chart5" class='chart'></canvas>
+  </div>
+  <div class='bit-3 chart'>
+    <span class='title'>Sales per month</span>
+    <canvas id="chart6" class='chart'></canvas>
+  </div>
+</div>
+<%- include drawer.html %>
+<%- include footer.html %>

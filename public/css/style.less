@@ -1,0 +1,45 @@
+@border: #ccc;
+
+html {
+  font-size: 100%;
+}
+
+.uk-container {
+  .uk-form {
+    padding: 10px;
+    h1 {
+      text-align: center;
+    }
+    .uk-grid {
+      * {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+
+
+// DEMO ONLY
+
+ul.title {
+  li {
+    display: inline-block;
+    margin-top: 1rem;
+  }
+  vertical-align: middle;
+  list-style: none;
+  font-size: 1rem;
+}
+
+div.chart {
+  border: 1px solid white;
+  border-radius: 4px;
+  transition: all .25s ease-in;
+  &:hover {
+    border: 1px solid @border;
+  }
+}
+
+.frame {
+  margin: 4px;
+}

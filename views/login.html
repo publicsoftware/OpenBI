@@ -1,0 +1,38 @@
+<%- include header.html %>
+
+<script>
+  function Controller($scope, $http) {
+    $http.get('/debug')
+    .success(function(r) {
+      // console.log(r);
+    });
+
+    $scope.login = function() {
+      $http.post('/login', $scope.form)
+      .success(function(r) {
+        if (r.result === 'ok') {
+          window.location = './';
+        }
+      });
+    }
+  }
+</script>
+
+<div class="uk-container" ng-controller="Controller">
+  <form class="uk-form" ng-submit="login()">
+    <h1>Log In</h1>
+    <div class="uk-grid uk-grid-preserve">
+      <label class="uk-width-1-3">User Name</label>
+      <input class="uk-width-2-3" type="text" ng-model="form.username"
+             autofocus/>
+      <label class="uk-width-1-3">Password</label>
+      <input class="uk-width-2-3" type="password" ng-model="form.password" />
+
+      <label class="uk-width-1-3">&nbsp;</label>
+      <input type="submit" value="Log In" class="uk-button" />
+    </div>
+  </form>
+</div>
+
+<%- include drawer.html %>
+<%- include footer.html %>
