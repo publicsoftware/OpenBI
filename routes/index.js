@@ -33,6 +33,18 @@ router.get('/demo2', function(req, res) {
   res.render('demo2.html', { title: title });
 });
 
+router.get('/demo4', function(req, res) {
+  res.render('demo4.html', { title: title });
+});
+
+router.get('/demo5', function(req, res) {
+  res.render('demo5.html', { title: title });
+});
+
+router.get('/demo6', function(req, res) {
+  res.render('demo5.html', { title: title });
+});
+
 router.get('/login', function(req, res) {
   res.render('login.html', { title: title });
 });

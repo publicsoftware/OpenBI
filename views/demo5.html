@@ -1,0 +1,109 @@
+<%- include header.html %>
+
+
+<div class='container'>
+  <ul class='title'>
+    <li>
+      <a href="#drawer" class="uk-icon-button uk-icon-navicon" id='navicon'
+        data-uk-offcanvas></a>
+    </li>
+    <li>
+      <a href="" class="uk-icon-button uk-icon-refresh"
+        onclick='location.reload()'></a>
+    </li>
+    <li>Demo
+    </li>
+</div>
+
+
+<div id="ring-year"></div>
+<div id="chart-hist-spend"></div>
+<div id="chart-row-spenders"></div>
+
+<script src="/js/d3.js"></script>
+<script src="/js/crossfilter.js"></script>
+<script src="/js/dc.js"></script>
+
+<div id="chart"></div>
+
+<script>
+var data = [
+    {"date": "2014/02/09", "apples": 10, "kiwis": 10, "lemons": 10},
+    {"date": "2014/02/10", "apples":  2, "kiwis": 10, "lemons": 11},
+    {"date": "2014/02/11", "apples": 10, "kiwis":  2, "lemons": 12},
+    {"date": "2014/02/12", "apples": 10, "kiwis": 10, "lemons":  3},
+    {"date": "2014/02/13", "apples":  2, "kiwis":  2, "lemons": 10},
+    {"date": "2014/02/14", "apples":  2, "kiwis": 10, "lemons":  8},
+    {"date": "2014/02/15", "apples": 10, "kiwis":  2, "lemons":  7}
+];
+
+dateFormat = d3.time.format("%Y/%m/%d");
+data.forEach(function (e) {
+    e.dd = dateFormat.parse(e.date);
+});
+
+var cssChart = dc.barChart("#chart");
+var xf = crossfilter(data);
+
+var dateDim = xf.dimension(function (d) {
+    return d.dd;
+});
+
+var eventsByDate = dateDim.group().reduce(
+        function (p, v) {
+            p.apples += v.apples;
+            p.kiwis += v.kiwis;
+            p.lemons += v.lemons;
+            return p;
+        },
+        function (p, v) {
+            p.apples -= v.apples;
+            p.kiwis -= v.kiwis;
+            p.lemons -= v.lemons;
+            return p;
+        },
+        function () {
+            return {
+                apples: 0,
+                kiwis: 0,
+                lemons: 0
+            };
+        }
+);
+
+
+var minDate = dateDim.bottom(1)[0].dd;
+var maxDate = dateDim.top(1)[0].dd;
+
+cssChart
+        .margins({top: 50, right: 20, left: 50, bottom: 50})
+        .width(500)
+        .height(200)
+        .gap(50)
+        .dimension(dateDim)
+        .group(eventsByDate, "Apples")
+        .valueAccessor(function (d) {
+            return d.value.apples;
+        })
+        .stack(eventsByDate, "Kiwis", function (d) {
+            return d.value.kiwis;
+        })
+        .stack(eventsByDate, "Lemons", function (d) {
+            return d.value.lemons;
+        })
+        .x(d3.time.scale().domain([minDate, maxDate]))
+        .xUnits(d3.time.days)
+        // .centerBar(true)
+        .elasticY(true)
+        // .brushOn(false)
+        //.renderlet(colorRenderlet)
+        .legend(dc.legend().x(100).y(0).itemHeight(13).gap(5))
+        .render();
+
+dc.renderAll();
+
+</script>
+
+
+<%- include drawer.html %>
+<%- include footer.html %>

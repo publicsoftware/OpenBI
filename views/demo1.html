@@ -44,34 +44,38 @@ var spendData = [
 
 var ndx = crossfilter(spendData),
     yearDim  = ndx.dimension(function(d) {return d.Year;}),
+    spendDim = ndx.dimension(function(d) {return Math.floor(d.Spent / 1.0);}),
     nameDim  = ndx.dimension(function(d) {return d.Name;}),
-    spendDim = ndx.dimension(function(d) {return Math.floor(d.Spent/10);}),
 
-    spendPerYear = yearDim.group().reduceSum(function(d) {return d.Spent;}),
-    spendPerName = nameDim.group().reduceSum(function(d) {return d.Spent;}),
-    spendHist    = spendDim.group().reduceCount();
+    spendPerYear =  yearDim.group().reduceSum(dc.pluck('Spent')),
+    spendHist    = spendDim.group().reduceSum(dc.pluck('Spent')),
+    spendPerName =  nameDim.group().reduceSum(dc.pluck('Spent')),
+    xx = 0;
 
 yearRingChart
     .width(200).height(200)
     .dimension(yearDim)
     .group(spendPerYear)
-    .innerRadius(50);
+    .innerRadius(50)
+    .transitionDuration(1000)
+    ;
 
 spendHistChart
     .width(300).height(200)
     .dimension(spendDim)
     .group(spendHist)
-    .x(d3.scale.linear().domain([0,10]))
-    .elasticY(true);
-
-spendHistChart.xAxis().tickFormat(function(d) {return d*10});
-spendHistChart.yAxis().ticks(2);
+    .x(d3.scale.linear().domain([0,100]))
+    .elasticY(true)
+    .transitionDuration(1000)
+    ;
 
 spenderRowChart
     .width(350).height(200)
     .dimension(nameDim)
     .group(spendPerName)
-    .elasticX(true);
+    .elasticX(true)
+    .transitionDuration(1000)
+    ;
 
 dc.renderAll();
 

@@ -17,6 +17,7 @@
 
 <div id="chart-ring-year"></div>
 <div id="chart-line-hitsperday"></div>
+<div id="chart-ring-year2"></div>
 
 <script src="/js/d3.js"></script>
 <script src="/js/crossfilter.js"></script>
@@ -99,6 +100,7 @@
   {"quarter":"Q4","hits":68,"date":"12/01/2013"},
   {"quarter":"Q4","hits":63,"date":"12/15/2013"}
 ];
+
   var ndx = crossfilter(data);
   var parseDate  = d3.time.format("%m/%d/%Y").parse;
   var parseDate2 = d3.time.format("%m/%d").parse;
@@ -108,54 +110,78 @@
     d.Year  = d.date.getFullYear();
   });
 
-var chart = new Array();
-var dim   = new Array();
-var group = new Array();
+function Chart(info) {
+  // chartType, id, cross, dimension, group) {
 
-chart[0] = dc.pieChart("#chart-ring-year");
-dim[0]   = ndx.dimension(function(d) {return d.Year;});
-group[0] = dim[0].group().reduceSum(function(d) {return d.hits;});
-chart[0]
-  .width(200).height(200)
-  .legend(dc.legend().x(80).y(70).itemHeight(13).gap(5))
-  .dimension(dim[0])
-  .group(group[0])
-  .innerRadius(60)
-  .renderLabel(true)
-  .renderTitle(true)
-  .ordinalColors(["#56B2EA","#E064CD","#F8B700","#78CC00","#7B71C5"])
-;
+  info.chartType = info.chartType == null ? 'pie' : info.chartType;
+  info.id = info.id == null ? 'body' : info.id;
 
-chart[1] = dc.lineChart("#chart-line-hitsperday");
-dim[1]   = ndx.dimension(function(d) {return d.qtime;});
-group[1] = dim[1].group().reduceSum(function(d) {return d.hits;});
-var minDate = new Date("01/01/1900");
-var maxDate = new Date("12/30/1900");
+  var chart;
 
-var hits_2011 = dim[1].group().reduceSum(
-  function(d) { if (d.Year === 2011) {return d.hits;}else{return 0;}});
-var hits_2012 = dim[1].group().reduceSum(
-  function(d) { if (d.Year === 2012) {return d.hits;}else{return 0;}});
-var hits_2013 = dim[1].group().reduceSum(
-  function(d) { if (d.Year === 2013) {return d.hits;}else{return 0;}});
-
-chart[1]
-    .width(500).height(200)
-    .dimension(dim[1])
-        .group(hits_2011,"2011")
-        .stack(hits_2012,"2012")
-        .stack(hits_2013,"2013")
-        .renderArea(true)
-    .x(d3.time.scale().domain([minDate,maxDate]))
-        .elasticX(true)
-        .brushOn(true)
-        .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
-    .yAxisLabel("Hits per day")
-        .ordinalColors(["#56B2EA","#E064CD","#F8B700","#78CC00","#7B71C5"])
+  if (info.chartType === 'pie') {
+    chart = dc.pieChart(info.id);
+    chart
+      .width(200).height(200)
+      .legend(dc.legend().x(80).y(70).itemHeight(13).gap(5))
+      .dimension(info.dimension)
+      .group(info.group)
+      .innerRadius(60)
+      .renderLabel(true)
+      .renderTitle(true)
+      .ordinalColors(["#56B2EA","#E064CD","#F8B700","#78CC00","#7B71C5"])
     ;
+  }
+  else
+  if (info.chartType === 'line') {
+    var minDate = new Date("01/01/1900");
+    var maxDate = new Date("12/30/1900");
+
+    chart = dc.lineChart(info.id);
+    chart
+      .width(1000).height(200)
+      .dimension(info.dimension)
+          .renderArea(true)
+      .x(d3.time.scale().domain([minDate,maxDate]))
+          .elasticX(true)
+          .brushOn(true)
+          .legend(dc.legend().x(60).y(10).itemHeight(13).gap(5))
+      .yAxisLabel("Hits per day")
+          .ordinalColors(["#56B2EA","#E064CD","#F8B700","#78CC00","#7B71C5"])
+      ;
+
+  }
+
+  return chart;
+}
+
+  var chart = new Array();
+  var dim   = new Array();
+  var group = new Array();
+
+  dim[0]   = ndx.dimension(function(d) {return d.Year;});
+  group[0] = dim[0].group().reduceSum(function(d) {return d.hits;});
+
+  dim[1]   = ndx.dimension(function(d) {return d.qtime;});
+  group[1] = dim[1].group().reduceSum(function(d) {return d.hits;});
+
+  chart[0] = Chart({chartType:'pie', id:'#chart-ring-year', cross:ndx, dimension:dim[0],  group:group[0]});
+  chart[1] = Chart('line', '#chart-line-hitsperday', ndx, dim[1], group[1]);
+  chart[2] = Chart('pie', '#chart-ring-year2', ndx, dim[0], group[0]);
+
+
+  var hits_2011 = dim[1].group().reduceSum(
+    function(d) { if (d.Year === 2011) {return d.hits;}else{return 0;}});
+  var hits_2012 = dim[1].group().reduceSum(
+    function(d) { if (d.Year === 2012) {return d.hits;}else{return 0;}});
+  var hits_2013 = dim[1].group().reduceSum(
+    function(d) { if (d.Year === 2013) {return d.hits;}else{return 0;}});
+
+  chart[1]
+  .group(hits_2011,"2011")
+  .stack(hits_2012,"2012")
+  .stack(hits_2013,"2013");
 
   dc.renderAll();
-
 
   $('#chart-ring-year').on('click', function(){
     //var minDate2 = dateDim.bottom(1)[0].date;
