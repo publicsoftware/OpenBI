@@ -42,7 +42,7 @@ router.get('/demo5', function(req, res) {
 });
 
 router.get('/demo6', function(req, res) {
-  res.render('demo5.html', { title: title });
+  res.render('demo6.html', { title: title });
 });
 
 router.get('/login', function(req, res) {

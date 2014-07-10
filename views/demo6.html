@@ -24,8 +24,48 @@
 <script src="/js/dc.js"></script>
 
 <script>
-var data = [];
+var data = [
+{date:'2013-12-29', value:48},
+{date:'2013-12-30', value:52},
+{date:'2013-12-31', value:45},
+
+{date:'2014-01-01', value:50},
+{date:'2014-01-02', value:48},
+{date:'2014-01-03', value:35},
+{date:'2014-01-04', value:23},
+{date:'2014-01-05', value:40},
+{date:'2014-01-06', value:44},
+{date:'2014-01-08', value:52},
+{date:'2014-01-09', value:42},
+{date:'2014-01-10', value:48}
+];
+data.forEach(function(row) {
+  row.date = d3.time.format("%Y-%m-%d").parse(row.date);
+  row.year = row.date.getFullYear();
+});
+
 var xf = crossfilter(data);
+var dimension = xf.dimension(dc.pluck('date'));
+var group = dimension.group().reduceSum(dc.pluck('value'));
+
+var minDate = dimension.bottom(1)[0].date;
+var maxDate = dimension.top(1)[0].date;
+
+var yearDim = xf.dimension(dc.pluck('year'));
+var yearGrp = yearDim.group().reduceSum(dc.pluck('value'));
+
+var c1 = dc.lineChart('#chart1')
+  .width(700).height(400)
+  .dimension(dimension)
+  .group(group)
+  .x(d3.time.scale().domain([minDate,maxDate]))
+  .elasticY(true)
+  ;
+var c2 = dc.pieChart("#chart2")
+  .width(150).height(150)
+  .dimension(yearDim)
+  .group(yearGrp)
+  .innerRadius(30);
 
 dc.renderAll();
 
