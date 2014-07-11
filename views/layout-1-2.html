@@ -85,7 +85,7 @@ var transitionDuration = 1000;
 
 
 var c1 = dc.barChart('#chart1')
-  .width(760).height(400)
+  .width(640).height(320)
   .margins({top: 10, right: 40, bottom: 20, left: 40})
   .dimension(dimension[0])
   .group(group[0])
@@ -98,7 +98,7 @@ var c1 = dc.barChart('#chart1')
   ;
 
 var c2 = dc.pieChart("#chart2")
-  .width(300).height(300)
+  .width(320).height(320)
   .dimension(dimension[1])
   .group(group[1])
   .innerRadius(30)
@@ -106,7 +106,7 @@ var c2 = dc.pieChart("#chart2")
   ;
 
 var c3 = dc.rowChart("#chart3")
-  .width(300).height(300)
+  .width(320).height(320)
   .dimension(dimension[2])
   .group(group[2])
   .elasticX(true)

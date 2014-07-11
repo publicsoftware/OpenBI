@@ -17,7 +17,65 @@ router.get('/', function(req, res) {
     res.redirect('/login');
   }
   else {
-    res.render('demo.html', { title: title });
+    res.render('index.html', { title: title });
+  }
+});
+
+router.get('/data', function(req, res) {
+  if (req.session.info == null) {
+    res.redirect('/login');
+  }
+  else {
+    res.render('data.html', { title: title });
+  }
+});
+
+router.get('/data', function(req, res) {
+  if (req.session.info == null) {
+    res.redirect('/login');
+  }
+  else {
+    db.query("select * from data where user=?",
+      [req.session.info.id],
+      function(err, rows) {
+        res.send(rows);
+      });
+  }
+});
+
+
+router.get('/data-list', function(req, res) {
+  if (req.session.info == null) {
+    res.send({result:'error'});
+  }
+  else {
+    db.query("select * from data where user=?",
+      [req.session.info.id],
+      function(err, rows) {
+        res.send(rows);
+      });
+  }
+});
+
+router.post('/data-add', function(req, res) {
+  if (req.session.info == null) {
+    res.send({result:'error'});
+  }
+  else {
+    if (req.body.id === 0) {
+      db.query("insert into data(user, name, data) values(?, ?, ?)",
+        [req.session.info.id, req.body.name, req.body.data],
+        function(err, rows) {
+          res.send({result:'ok'});
+        });
+    }
+    else {
+      db.query("update data set name=?, data=? where id=? and user=?",
+        [req.body.name, req.body.data, req.body.id, req.session.info.id],
+        function(err, rows) {
+          res.send({result:'ok'});
+        });
+    }
   }
 });
 
