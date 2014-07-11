@@ -1,27 +1,31 @@
+<%- include header.html %>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title><%=title%></title>
+<div class='container'>
+  <ul class='title'>
+    <li>
+      <a href="#drawer" class="uk-icon-button uk-icon-navicon" id='navicon'
+        data-uk-offcanvas></a>
+    </li>
+    <li>
+      <a href="" class="uk-icon-button uk-icon-refresh"
+        onclick='location.reload()'></a>
+    </li>
+    <li>Demo
+    </li>
+  </ul>
+</div>
 
-    <meta charset="UTF-8">
+<style>
+    #monthly-volume-chart g.y {
+        display: none;
+    }
+</style>
 
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
-    <link rel="stylesheet" type="text/css" href="css/dc.css"/>
-
-    <style>
-        #monthly-volume-chart g.y {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
+<div class="uk-container">
 
 <h2>Nasdaq 100 Index 1985/11/01-2012/06/29</h2>
 
-<div class="row">
+<div class="uk-grid">
     <div id="yearly-bubble-chart" class="dc-chart">
         <strong>Yearly Performance</strong> (radius: fluctuation/index ratio, color: gain/loss)
         <a class="reset" href="javascript:yearlyBubbleChart.filterAll();dc.redrawAll();"
@@ -31,7 +35,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="uk-grid">
     <div id="gain-loss-chart">
         <strong>Days by Gain/Loss</strong>
         <a class="reset" href="javascript:gainOrLossChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
@@ -62,7 +66,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="uk-grid">
     <div id="monthly-move-chart">
         <strong>Monthly Index Abs Move & Volume/500,000 Chart</strong>
         <span class="reset" style="display: none;">range: <span class="filter"></span></span>
@@ -73,19 +77,21 @@
     </div>
 </div>
 
-<div class="row">
+<div class="uk-grid">
     <div id="monthly-volume-chart">
     </div>
     <p class="muted pull-right" style="margin-right: 15px;">select a time range to zoom in</p>
 </div>
 
-<div class="row">
+<div class="uk-grid">
     <div>
         <div class="dc-data-count">
             <span class="filter-count"></span> selected out of <span class="total-count"></span> records | <a
                 href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
         </div>
     </div>
+</div>
+<div class="uk-grid">
     <table class="table table-hover dc-data-table">
         <thead>
         <tr class="header">
@@ -101,12 +107,8 @@
 
 </div>
 
-<script type="text/javascript" src="js/d3.js"></script>
-<script type="text/javascript" src="js/crossfilter.js"></script>
-<script type="text/javascript" src="js/dc.js"></script>
 <script type="text/javascript" src="js/colorbrewer.js"></script>
-
 <script type="text/javascript" src="stock.js"></script>
 
-</body>
-</html>
+<%- include drawer.html %>
+<%- include footer.html %>
