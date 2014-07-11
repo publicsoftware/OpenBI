@@ -1,0 +1,50 @@
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+How much revenue per sales person per week?
+
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+Dashboard option
+
+Tab: Data
+  [URL or Spreadsheet]
+
+Tab: Initialize
+
+Tab: Chart
+  transitionDuration
+
+-- -- -- --
+Each Chart option
+Dimension
+Group
+options that depends on chart type
+
+options for each chart
+
+dimension pluck
+group - pluck or custom
+transitionDuration
+width, height
+
+barChart
+x, xUnit
+elasticY(true)
+
+rowChart
+elasticX(true)
+
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+
+
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
