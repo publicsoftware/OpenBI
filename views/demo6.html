@@ -1,6 +1,5 @@
 <%- include header.html %>
 
-
 <div class='container'>
   <ul class='title'>
     <li>
@@ -15,7 +14,6 @@
     </li>
   </ul>
 </div>
-
 
 <div id="chart1"></div>
 <div id="chart2"></div>
@@ -61,6 +59,7 @@ var c1 = dc.lineChart('#chart1')
   .group(group)
   .x(d3.time.scale().domain([minDate,maxDate]))
   .elasticY(true)
+  .elasticX(true)
   ;
 var c2 = dc.pieChart("#chart2")
   .width(150).height(150)
@@ -71,7 +70,6 @@ var c2 = dc.pieChart("#chart2")
 dc.renderAll();
 
 </script>
-
 
 <%- include drawer.html %>
 <%- include footer.html %>

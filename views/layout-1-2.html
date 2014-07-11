@@ -16,9 +16,15 @@
   </ul>
 </div>
 
-<div id="chart1"></div>
-<div id="chart2"></div>
-<div id="chart3"></div>
+<div class='frame'>
+  <div class='bit-1'>
+    <div id="chart1"></div>
+  </div>
+</div>
+<div class='frame'>
+  <div id="chart2"></div>
+  <div id="chart3"></div>
+</div>
 
 <script src="/js/d3.js"></script>
 <script src="/js/crossfilter.js"></script>
@@ -92,7 +98,7 @@ var c1 = dc.barChart('#chart1')
   ;
 
 var c2 = dc.pieChart("#chart2")
-  .width(320).height(320)
+  .width(300).height(300)
   .dimension(dimension[1])
   .group(group[1])
   .innerRadius(30)
@@ -100,7 +106,7 @@ var c2 = dc.pieChart("#chart2")
   ;
 
 var c3 = dc.rowChart("#chart3")
-  .width(440).height(320)
+  .width(300).height(300)
   .dimension(dimension[2])
   .group(group[2])
   .elasticX(true)

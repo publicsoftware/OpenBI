@@ -2,7 +2,6 @@
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 How much revenue per sales person per week?
 
-
 Chart
 Quarters - Donut
 Days of Week - Row
@@ -16,14 +15,10 @@ var dimensions = new Array();
 var groups     = new Array();
 var charts     = new Array();
 
-
-
 dimension[i] = field // first version has no custom dimension, use initializer
 
 group[i].reduce = reduceSum | reduceCount | reduce
 group[i].reduceCode = dc.pluck('field');
-
-
 
 Tab: Data
   [URL or Spreadsheet]

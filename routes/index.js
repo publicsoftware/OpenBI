@@ -57,6 +57,10 @@ router.get('/demo8', function(req, res) {
   res.render('demo8.html', { title: title });
 });
 
+router.get('/demo9', function(req, res) {
+  res.render('layout-1-2.html', { title: title });
+});
+
 router.get('/login', function(req, res) {
   res.render('login.html', { title: title });
 });
