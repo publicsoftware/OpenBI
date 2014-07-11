@@ -45,6 +45,14 @@ router.get('/demo6', function(req, res) {
   res.render('demo6.html', { title: title });
 });
 
+router.get('/demo7', function(req, res) {
+  res.render('demo7.html', { title: title });
+});
+
+router.get('/demo8', function(req, res) {
+  res.render('demo8.html', { title: title });
+});
+
 router.get('/login', function(req, res) {
   res.render('login.html', { title: title });
 });

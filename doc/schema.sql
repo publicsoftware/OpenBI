@@ -17,3 +17,11 @@ create table users (
 insert into users(user, email, name, role, password)
   values('root', 'email@email.com', 'System Administrator', 'root',
          sha2('password', 256));
+
+
+
+create table data (
+  id       serial,
+  user     bigint,
+  data     longtext
+)

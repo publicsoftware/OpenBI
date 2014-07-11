@@ -3,9 +3,27 @@
 How much revenue per sales person per week?
 
 
+Chart
+Quarters - Donut
+Days of Week - Row
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Dashboard option
+
+Global variables:
+var records    = new Array();
+var dimensions = new Array();
+var groups     = new Array();
+var charts     = new Array();
+
+
+
+dimension[i] = field // first version has no custom dimension, use initializer
+
+group[i].reduce = reduceSum | reduceCount | reduce
+group[i].reduceCode = dc.pluck('field');
+
+
 
 Tab: Data
   [URL or Spreadsheet]
@@ -19,14 +37,14 @@ Tab: Chart
 Each Chart option
 Dimension
 Group
-options that depends on chart type
 
-options for each chart
 
 dimension pluck
 group - pluck or custom
 transitionDuration
 width, height
+
+options that depends on chart type
 
 barChart
 x, xUnit
@@ -34,6 +52,7 @@ elasticY(true)
 
 rowChart
 elasticX(true)
+innerRadius
 
 
 
