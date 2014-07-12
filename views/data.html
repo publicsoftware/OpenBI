@@ -50,13 +50,18 @@
     </div>
     <div class='uk-width-2-3'>
       <form class='uk-form' ng-submit='save()'>
-        <input type='button' class='uk-button' value='New' ng-click='new()' />
-        <br/>
         <input type='hidden' ng-model='data.id' />
-        <input type='text' ng-model='data.name' placeholder='Name' />
-        <textarea ng-model='data.data' rows='8'
-          placeholder='CSV or TSV or JSON'></textarea>
-        <input type='submit' value='Save' class='uk-button' />
+        <div class='uk-grid uk-grid-preserve'>
+          <div class='uk-width-1-1'>
+            <input type='button' class='uk-button' value='New'
+                   ng-click='new()' />
+            <br/>
+            <input type='text' ng-model='data.name' placeholder='Name' />
+            <textarea ng-model='data.data' rows='8'
+              placeholder='CSV or TSV or JSON'></textarea>
+            <input type='submit' value='Save' class='uk-button' />
+          </div>
+        </div>
       </form>
     </div>
   </div>
