@@ -14,7 +14,7 @@ var title = 'OpenBI';
 
 router.get('/', function(req, res) {
   if (req.session.info == null) {
-    res.redirect('/login');
+    res.redirect('/welcome');
   }
   else {
     res.render('index.html', { title: title });
@@ -117,6 +117,10 @@ router.get('/demo8', function(req, res) {
 
 router.get('/demo9', function(req, res) {
   res.render('layout-1-2.html', { title: title });
+});
+
+router.get('/welcome', function(req, res) {
+  res.render('welcome.html', { title: title });
 });
 
 router.get('/login', function(req, res) {
