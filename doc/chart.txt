@@ -1,6 +1,9 @@
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 How much revenue per sales person per week?
+How much [ revenue ] per [ sales person ] per [ week    ]
+         [ profit  ]     [ product type ]     [ quarter ]
+
 
 Chart
 Quarters - Donut
