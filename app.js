@@ -18,7 +18,7 @@ app.use(cookieParser());
 
 app.set('trust proxy', 1);
 app.use(session({
-	secret: 'privat3' ,
+	secret: 'priv@te' ,
 	cookie: { maxAge: 60000 * 60 /*, secure: true */ },
 	saveUninitialized: true,
 	resave: true
@@ -49,5 +49,3 @@ app.use(function(err, req, res, next) {
 var server = app.listen(PORT, function() {
 	console.log('Express server listening on port ' + server.address().port);
 });
-
-// module.exports = app;

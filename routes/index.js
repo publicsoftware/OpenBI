@@ -43,7 +43,6 @@ router.get('/data', function(req, res) {
 	}
 });
 
-
 router.get('/data-list', function(req, res) {
 	if (req.session.info == null) {
 		res.send({result:'error'});
@@ -124,12 +123,18 @@ router.get('/welcome', function(req, res) {
 });
 
 router.get('/login', function(req, res) {
-	res.render('login.html', { title: title });
+	if (req.session.info == null) {
+		res.render('login.html', { title: title });
+	}
+	else {
+		res.redirect("/");
+	}
+	// res.render('login.html', { title: title });
 });
 
 router.post('/login', function(req, res) {
 	var digest = crypto.createHash('sha256').update(req.body.password)
-							 .digest("hex");
+					.digest("hex");
 	db.query('select * from users where email=? or user=?',
 		[req.body.username, req.body.username],
 		function(err, rows) {

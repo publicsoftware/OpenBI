@@ -14,22 +14,29 @@
 					window.location = './';
 				}
 			});
-		}
+		};
 	}
 </script>
+
+<style>
+	.uk-container {
+		padding-top: 100px;
+	}
+</style>
 
 <div class="uk-container" ng-controller="Controller">
 	<form class="uk-form" ng-submit="login()">
 		<h1>Log In</h1>
 		<div class="uk-grid uk-grid-preserve">
-			<label class="uk-width-1-3">User Name</label>
-			<input class="uk-width-2-3" type="text" ng-model="form.username"
-						 autofocus/>
-			<label class="uk-width-1-3">Password</label>
-			<input class="uk-width-2-3" type="password" 
+			<label class="uk-width-4-10">User Name</label>
+			<input class="uk-width-5-10" type="text" ng-model="form.username"
+						 autofocus placeholder="User Name" />
+			<span  class="uk-width-1-10"></span>
+			<label class="uk-width-4-10">Password</label>
+			<input class="uk-width-5-10" type="password" placeholder="Password"
 				   ng-model="form.password" />
-
-			<label class="uk-width-1-3">&nbsp;</label>
+			<span  class="uk-width-1-10"></span>
+			<span  class="uk-width-4-10"></span>
 			<input type="submit" value="Log In" class="uk-button" />
 		</div>
 	</form>
