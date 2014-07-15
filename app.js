@@ -18,10 +18,10 @@ app.use(cookieParser());
 
 app.set('trust proxy', 1);
 app.use(session({
-  secret: 'privat3' ,
-  cookie: { maxAge: 60000 * 60 /*, secure: true */ },
-  saveUninitialized: true,
-  resave: true
+	secret: 'privat3' ,
+	cookie: { maxAge: 60000 * 60 /*, secure: true */ },
+	saveUninitialized: true,
+	resave: true
 }));
 
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
@@ -32,22 +32,22 @@ app.use('/', routes);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+	var err = new Error('Not Found');
+	err.status = 404;
+	next(err);
 });
 
 // production error handler, no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error.html', {
-    message: err.message,
-    error: {}
-  });
+	res.status(err.status || 500);
+	res.render('error.html', {
+		message: err.message,
+		error: {}
+	});
 });
 
 var server = app.listen(PORT, function() {
-  console.log('Express server listening on port ' + server.address().port);
+	console.log('Express server listening on port ' + server.address().port);
 });
 
 // module.exports = app;

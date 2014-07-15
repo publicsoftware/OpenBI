@@ -1,29 +1,28 @@
 <%- include header.html %>
 
-
 <div class='container'>
-  <ul class='title'>
-    <li>
-      <a href="#drawer" class="uk-icon-button uk-icon-navicon" id='navicon'
-        data-uk-offcanvas></a>
-    </li>
-    <li>
-      <a href="" class="uk-icon-button uk-icon-refresh"
-        onclick='location.reload()'></a>
-    </li>
-    <li>Demo
-    </li>
-  </ul>
+	<ul class='title'>
+		<li>
+			<a href="#drawer" class="uk-icon-button uk-icon-navicon" 
+			   id='navicon' data-uk-offcanvas></a>
+		</li>
+		<li>
+			<a href="" class="uk-icon-button uk-icon-refresh"
+				onclick='location.reload()'></a>
+		</li>
+		<li>Demo
+		</li>
+	</ul>
 </div>
 
 <div class='frame'>
-  <div class='bit-1'>
-    <div id="chart1"></div>
-  </div>
+	<div class='bit-1'>
+		<div id="chart1"></div>
+	</div>
 </div>
 <div class='frame'>
-  <div id="chart2"></div>
-  <div id="chart3"></div>
+	<div id="chart2"></div>
+	<div id="chart3"></div>
 </div>
 
 <script src="/js/d3.js"></script>
@@ -49,23 +48,23 @@ var data = [
 ];
 
 data.forEach(function(row) {
-  row.date = d3.time.format("%Y-%m-%d").parse(row.date);
-  row.year = row.date.getFullYear();
-  row.month = row.date.getMonth() + 1;
-  switch (row.month) {
-    case 1: row.monthName = 'Jan'; break;
-    case 2: row.monthName = 'Feb'; break;
-    case 3: row.monthName = 'Mar'; break;
-    case 4: row.monthName = 'Apr'; break;
-    case 5: row.monthName = 'May'; break;
-    case 6: row.monthName = 'Jun'; break;
-    case 7: row.monthName = 'Jul'; break;
-    case 8: row.monthName = 'Aug'; break;
-    case 9: row.monthName = 'Sep'; break;
-    case 10:row.monthName = 'Oct'; break;
-    case 11:row.monthName = 'Nov'; break;
-    case 12:row.monthName = 'Dec'; break;
-  }
+	row.date = d3.time.format("%Y-%m-%d").parse(row.date);
+	row.year = row.date.getFullYear();
+	row.month = row.date.getMonth() + 1;
+	switch (row.month) {
+		case 1: row.monthName = 'Jan'; break;
+		case 2: row.monthName = 'Feb'; break;
+		case 3: row.monthName = 'Mar'; break;
+		case 4: row.monthName = 'Apr'; break;
+		case 5: row.monthName = 'May'; break;
+		case 6: row.monthName = 'Jun'; break;
+		case 7: row.monthName = 'Jul'; break;
+		case 8: row.monthName = 'Aug'; break;
+		case 9: row.monthName = 'Sep'; break;
+		case 10:row.monthName = 'Oct'; break;
+		case 11:row.monthName = 'Nov'; break;
+		case 12:row.monthName = 'Dec'; break;
+	}
 });
 
 var xf = crossfilter(data);
@@ -73,45 +72,45 @@ var dimension = new Array();
 var group = new Array();
 
 dimension[0] = xf.dimension(dc.pluck('date'));
-group[0]     = dimension[0].group().reduceSum(dc.pluck('value'));
+group[0]		 = dimension[0].group().reduceSum(dc.pluck('value'));
 
 dimension[1] = xf.dimension(dc.pluck('year'));
-group[1]     = dimension[1].group().reduceSum(dc.pluck('value'));
+group[1]		 = dimension[1].group().reduceSum(dc.pluck('value'));
 
 dimension[2] = xf.dimension(dc.pluck('monthName'));
-group[2]     = dimension[2].group().reduceSum(dc.pluck('value'));
+group[2]		 = dimension[2].group().reduceSum(dc.pluck('value'));
 
 var transitionDuration = 1000;
 
 
 var c1 = dc.barChart('#chart1')
-  .width(640).height(320)
-  .margins({top: 10, right: 40, bottom: 20, left: 40})
-  .dimension(dimension[0])
-  .group(group[0])
-  .x(d3.time.scale().domain([
-    dimension[0].bottom(1)[0].date, dimension[0].top(1)[0].date]))
-//  .xUnits(d3.time.days)
-  .xUnits(function(){return 50;})
-  .elasticY(true)
-  .transitionDuration(transitionDuration)
-  ;
+	.width(640).height(320)
+	.margins({top: 10, right: 40, bottom: 20, left: 40})
+	.dimension(dimension[0])
+	.group(group[0])
+	.x(d3.time.scale().domain([
+		dimension[0].bottom(1)[0].date, dimension[0].top(1)[0].date]))
+//	.xUnits(d3.time.days)
+	.xUnits(function(){return 50;})
+	.elasticY(true)
+	.transitionDuration(transitionDuration)
+	;
 
 var c2 = dc.pieChart("#chart2")
-  .width(320).height(320)
-  .dimension(dimension[1])
-  .group(group[1])
-  .innerRadius(30)
-  .transitionDuration(transitionDuration)
-  ;
+	.width(320).height(320)
+	.dimension(dimension[1])
+	.group(group[1])
+	.innerRadius(30)
+	.transitionDuration(transitionDuration)
+	;
 
 var c3 = dc.rowChart("#chart3")
-  .width(320).height(320)
-  .dimension(dimension[2])
-  .group(group[2])
-  .elasticX(true)
-  .transitionDuration(transitionDuration)
-  ;
+	.width(320).height(320)
+	.dimension(dimension[2])
+	.group(group[2])
+	.elasticX(true)
+	.transitionDuration(transitionDuration)
+	;
 
 dc.renderAll();
 
