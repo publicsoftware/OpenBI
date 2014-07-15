@@ -1,0 +1,31 @@
+
+To Do
+Design Wireframe
+Root Page
+Settings Dialog
+Root - manage and grant URL / REST / Query Page
+Root - activate user
+Big Data
+Data Uploader from CSV file
+Embedded Dashboard / Chart to other web
+Git pull after committing code
+Isometric Chart
+
+
+Doing
+Register New User
+View Page
+dc / crossfilter / d3
+Installation page
+Table
+Home page
+Intro page
+Word cloud
+Use SPA architecture
+
+
+Done
+Log Out
+Print what you see is what you get
+Log In
+Setup Github
