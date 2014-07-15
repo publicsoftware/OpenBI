@@ -13,7 +13,7 @@
 			var item = new Object();
 			$scope.data = item;
 			$scope.all.push(item);
-		}
+		};
 
 		$scope.save = function() {
 			console.log($scope.data);
@@ -25,7 +25,7 @@
 			success(function(result) {
 				console.log(result);
 			});
-		}
+		};
 
 		$scope.show = function(id) {
 			for (var i = 0; i < $scope.all.length; i++) {
@@ -34,7 +34,7 @@
 					break;
 				}
 			}
-		}
+		};
 	}
 </script>
 
@@ -42,17 +42,21 @@
 	<ul class='title'>
 		<li>
 			<a href="#drawer" class="uk-icon-button uk-icon-navicon"
-				data-uk-offcanvas></a>
+			   id='navicon' data-uk-offcanvas></a>
 		</li>
 		<li>
 			<a href="" class="uk-icon-button uk-icon-refresh"
 				onclick='location.reload()'></a>
 		</li>
-		<li>Data
+		<li>
+			OpenBI
 		</li>
+		
+		<li><a href="/">Home</a></li>
+		<li><a href="/data">Data</a></li>
+		<li><a href="/welcome">Welcome</a></li>
 	</ul>
 </div>
-
 
 <div class="uk-container" ng-controller='Controller'>
 	<div class="uk-grid uk-grid-preserve">

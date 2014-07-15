@@ -1,13 +1,13 @@
-var express = require('express');
+var express	= require('express');
 var router	= express.Router();
-var mysql	 = require('mysql');
+var mysql	= require('mysql');
 var crypto	= require('crypto');
 
 var db = mysql.createConnection({
-	host		 : 'localhost',
-	user		 : 'openbi',
-	password : 'p@ssword',
-	database : 'openbi'
+	host		: 'localhost',
+	user		: 'openbi',
+	password	: 'p@ssword',
+	database	: 'openbi'
 });
 
 var title = 'OpenBI';
@@ -71,7 +71,7 @@ router.post('/data-add', function(req, res) {
 		else {
 			db.query("update data set name=?, data=? where id=? and user=?",
 				[req.body.name, req.body.data, req.body.id, req.session.info.id]
-				,function(err, rows) {
+				, function(err, rows) {
 					res.send({result:'ok'});
 				});
 		}
