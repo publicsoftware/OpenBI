@@ -129,7 +129,6 @@ router.get('/login', function(req, res) {
 	else {
 		res.redirect("/");
 	}
-	// res.render('login.html', { title: title });
 });
 
 router.post('/login', function(req, res) {
@@ -150,7 +149,7 @@ router.post('/login', function(req, res) {
 
 router.get('/logout', function(req, res) {
 	req.session.destroy();
-	res.redirect('./');
+	res.render('logout.html', { title: title });
 });
 
 router.get('/debug', function(req, res) {
