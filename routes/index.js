@@ -21,19 +21,32 @@ router.get('/', function(req, res) {
 	}
 });
 
+router.get('/dashboard', function(req, res) {
+	res.redirect('/');
+});
+
+router.get('/dashboard/:id', function(req, res) {
+	if (req.session.info == null) {
+		res.redirect("/login");
+	}
+	else {
+		res.render('demo.html', { title: title + ' ' + req.params.id });
+	}
+});
+
 router.post('/dashboard-create', function(req, res) {
 	// console.log(req.files);
 	if (req.session.info == null) {
 		res.redirect("/login");
 	}
 	else {
-		var data = '{"path":"' + req.files.file.path + '", "name":"' +
-					req.files.file.originalname + '"}';		
+		var path = req.files.file ? req.files.file.path : '';
+		var name = req.files.file ? req.files.file.originalname : '';
 		db.query("insert into dashboards(user, name, layout, " + 
 				"data_type, data_name, data) "
 				+ " values(?, ?, ?, 'file', ?, ?)",
 			[req.session.info.id, req.body.name, req.body.layout,
-				req.files.file.originalname, req.files.file.path],
+				name, path],
 			function(err, rows) {
 				res.redirect("/");
 				// todo redirect to referer or the new dashboard that created
@@ -55,43 +68,6 @@ router.get('/dashboard-list', function(req, res) {
 	}
 });
 
-
-/*
-router.get('/data-list', function(req, res) {
-	if (req.session.info == null) {
-		res.send({result:'error'});
-	}
-	else {
-		db.query("select * from data where user=?",
-		[req.session.info.id],
-		function(err, rows) {
-			res.send(rows);
-		});
-	}
-});
-
-router.post('/data-add', function(req, res) {
-	if (req.session.info == null) {
-		res.send({result:'error'});
-	}
-	else {
-		if (req.body.id === 0) {
-			db.query("insert into data(user, name, data) values(?, ?, ?)",
-			[req.session.info.id, req.body.name, req.body.data],
-			function(err, rows) {
-				res.send({result:'ok'});
-			});
-		}
-		else {
-			db.query("update data set name=?, data=? where id=? and user=?",
-			[req.body.name, req.body.data, req.body.id, req.session.info.id],
-			function(err, rows) {
-				res.send({result:'ok'});
-			});
-		}
-	}
-});
-*/
 
 router.get('/demo', function(req, res) {
 	res.render('demo.html', { title: title });

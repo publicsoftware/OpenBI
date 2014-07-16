@@ -2,7 +2,7 @@
 
 <script>
 
-function Controller($scope, $http) {
+function DashboardController($scope, $http) {
 	
 	// initialize
 	$scope.dashboards = [];
@@ -33,16 +33,18 @@ function Controller($scope, $http) {
 	</ul>
 </div>
 
-<div class="uk-container" ng-controller="Controller">
+<div class="uk-container" ng-controller="DashboardController">
 	<div class="uk-grid">
 		<div class="uk-width-1-3" ng-repeat="d in dashboards">
-			<h1>{{ d.name }}</h1>
+			<a href="/dashboard/{{d.id}}">
+				<h1>{{ d.name }}</h1>
+			</a>
 		</div>
 	</div>
 </div>
 
 <script>
-function upload() {
+function chooseFile() {
 	$('[name=file]').click();
 }
 
@@ -78,7 +80,7 @@ function layout(l) {
 			</div>
 
 			<h3>Data Upload</h3>
-			<a href="javascript:upload()" class="uk-button">
+			<a href="javascript:chooseFile()" class="uk-button">
 				Choose File
 			</a>
 			
