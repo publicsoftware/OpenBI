@@ -34,7 +34,10 @@ router.get('/dashboard/:id', function(req, res) {
 		[req.params.id, req.session.info.id],
 		function (err, rows) {
 			if (rows != null && rows[0] != null) {
-				res.render('demo.html', { title: title + ' ' + rows[0].name });
+				res.render(rows[0].layout + '.html', { 
+					title: title + ' ' + rows[0].name,
+					dashboard: rows[0]
+				});
 			}
 			else {
 				res.redirect("/");
@@ -52,7 +55,7 @@ router.post('/dashboard-create', function(req, res) {
 		var path = req.files.file ? req.files.file.path : '';
 		var name = req.files.file ? req.files.file.originalname : '';
 		db.query("insert into dashboards(user, name, layout, " + 
-				"data_type, data_name, data) "
+				  " data_type, data_name, data) "
 				+ " values(?, ?, ?, 'file', ?, ?)",
 			[req.session.info.id, req.body.name, req.body.layout,
 				name, path],
@@ -205,4 +208,4 @@ req.files =
      extension: 'csv',
      size: 347229,
      truncated: false } }
- */
+*/
