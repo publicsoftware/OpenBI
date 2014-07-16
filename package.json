@@ -1,6 +1,6 @@
 {
-	"name": "openbi",
-	"version": "0.0.2",
+	"name": "OpenBI",
+	"version": "0.0.3",
 	"private": true,
 	"dependencies": {
 		"express": "~4.2.0",

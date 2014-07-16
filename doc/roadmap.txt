@@ -14,6 +14,8 @@ Isometric Chart
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Doing
+Use SPA architecture
+Color Swatching
 Register New User
 View Page
 dc / crossfilter / d3
@@ -22,7 +24,6 @@ Table
 Home page
 Intro page
 Word cloud
-Use SPA architecture
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Done
