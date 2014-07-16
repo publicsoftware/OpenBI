@@ -4,45 +4,5 @@
 	</div>
 </div>
 
-<script>
-function newDashboard() {
-	console.log("new dashboard");
-}
-
-function upload() {
-	$('[name=file]').click();
-}
-
-function uploadSubmit() {
-	// console.log('submitting');
-	$('#uploader').submit();
-}
-</script>
-
-
-<div id="new-dashboard" class="uk-modal">
-	<div class="uk-modal-dialog">
-		<a class="uk-modal-close uk-close"></a>
-		Dashboard
-
-		<br/>
-		
-		
-		<a href="javascript:upload()">Data</a>
-
-		<form method="post" action="/data-upload" enctype="multipart/form-data" 
-				id="uploader" style="display:none;" >
-			<input type="file" name="file" onchange="uploadSubmit()" />
-		</form>
-		
-		<!--
-		<br/>
-		<hr/>
-		<button class="uk-button">OK</button>
-		<button class="uk-button">Cancel</button>
-		-->
-	</div>
-</div>
-
 </body>
 </html>

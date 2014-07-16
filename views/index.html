@@ -37,5 +37,66 @@ function Controller($scope) {
 	</div>
 </div>
 
+<script>
+function newDashboard() {
+	console.log("new dashboard");
+}
+
+function upload() {
+	$('[name=file]').click();
+}
+
+function uploadSubmit() {
+	// console.log('submitting');
+	$('#uploader').submit();
+}
+
+function layout(l) {
+	$('[name=layout]').val(l);
+	console.log($('[name=layout]').val());
+}
+</script>
+
+<div id="new-dashboard" class="uk-modal">
+	<div class="uk-modal-dialog">
+		<a class="uk-modal-close uk-close"></a>
+		<h2>Dashboard</h2>
+		
+		<form method="post" action="/data-upload" enctype="multipart/form-data" 
+				id="uploader">
+			<h3>Layout</h3>
+			<div data-uk-button-radio>
+				<a href="javascript:layout('layout-1')" class="uk-button">
+					Layout 1
+				</a>
+
+				<a href="javascript:layout('layout-2')" class="uk-button">
+					Layout 2
+				</a>
+				
+				<a href="javascript:layout('layout-3')" class="uk-button">
+					Layout 3
+				</a>
+			</div>
+
+			<h3>Data Upload</h3>
+			<a href="javascript:upload()" class="uk-button uk-button-primary">
+				Data
+			</a>
+			
+			<input type="hidden" name="layout" value="layout-1" />
+			<input type="file" name="file"  style="display:none;"  
+					onchange="uploadSubmit()" />
+		</form>
+		
+		<!--
+		<br/>
+		<hr/>
+		<button class="uk-button">OK</button>
+		<button class="uk-button">Cancel</button>
+		-->
+	</div>
+</div>
+
 <%- include drawer.html %>
 <%- include footer.html %>

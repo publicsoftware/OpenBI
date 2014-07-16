@@ -18,23 +18,14 @@ insert into users(user, email, name, role, password)
 	values('root', 'email@email.com', 'System Administrator', 'root',
 		sha2('password', 256));
 
-drop table if exists data;
-create table data (
-	id			 serial,
-	user		 bigint,
-	name		 nvarchar(1023),
-	data		 longtext
-);
-
 drop table if exists dashboards;
 create table dashboards (
 	id			serial,
 	user		bigint,
 	name		nvarchar(1023),
-	layout		bigint,
+	layout		nvarchar(255),
 	data		bigint
 );
-
 
 drop table if exists files;
 create table files(
@@ -43,7 +34,6 @@ create table files(
 	name		nvarchar(255),
 	original	nvarchar(1023)
 );
-
 
 drop table if exists charts;
 create table charts (
@@ -57,6 +47,17 @@ create table charts (
 	reduce		longtext		-- code e.g. reduceSum(dc.pluck('column'))
 );
 
+/*
+drop table if exists data;
+create table data (
+	id			 serial,
+	user		 bigint,
+	name		 nvarchar(1023),
+	data		 longtext
+);
+*/
+
+/*
 drop table if exists layouts;
 create table layouts (
 	id				serial,
@@ -64,7 +65,7 @@ create table layouts (
 	icon			nvarchar(1023),
 	file			nvarchar(1023)
 );
-
+*/
 
 
 
