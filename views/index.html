@@ -38,22 +38,12 @@ function Controller($scope) {
 </div>
 
 <script>
-function newDashboard() {
-	console.log("new dashboard");
-}
-
 function upload() {
 	$('[name=file]').click();
 }
 
-function uploadSubmit() {
-	// console.log('submitting');
-	$('#uploader').submit();
-}
-
 function layout(l) {
 	$('[name=layout]').val(l);
-	console.log($('[name=layout]').val());
 }
 </script>
 
@@ -63,7 +53,12 @@ function layout(l) {
 		<h2>Dashboard</h2>
 		
 		<form method="post" action="/data-upload" enctype="multipart/form-data" 
-				id="uploader">
+				class="uk-form" >
+			
+			<fieldset data-uk-margin>
+			<input type="text" name="name" placeholder="Title" />
+			</fieldset>
+			
 			<h3>Layout</h3>
 			<div data-uk-button-radio>
 				<a href="javascript:layout('layout-1')" class="uk-button">
@@ -80,13 +75,15 @@ function layout(l) {
 			</div>
 
 			<h3>Data Upload</h3>
-			<a href="javascript:upload()" class="uk-button uk-button-primary">
+			<a href="javascript:upload()" class="uk-button">
 				Data
 			</a>
 			
 			<input type="hidden" name="layout" value="layout-1" />
-			<input type="file" name="file"  style="display:none;"  
-					onchange="uploadSubmit()" />
+			<input type="file" name="file"  style="display:none;" />
+			
+			<input type="submit" value="Create" 
+				   class="uk-button uk-button-primary" />
 		</form>
 		
 		<!--

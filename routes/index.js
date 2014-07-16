@@ -21,54 +21,25 @@ router.get('/', function(req, res) {
 	}
 });
 
-router.get('/data', function(req, res) {
-	if (req.session.info == null) {
-		res.redirect('/login');
-	}
-	else {
-		res.render('data.html', { title: title });
-	}
-});
-
-router.get('/data', function(req, res) {
-	if (req.session.info == null) {
-		res.redirect('/login');
-	}
-	else {
-		db.query("select * from data where user=?",
-			[req.session.info.id],
-			function(err, rows) {
-				res.send(rows);
-			});
-	}
-});
-
-/*
-req.files = 
-{ file: 
-   { fieldname: 'file',
-     originalname: 'ndx.csv',
-     name: 'ba7c2f5b698c5f1d0b0a37afddc78c1c.csv',
-     encoding: '7bit',
-     mimetype: 'text/csv',
-     path: 'uploads/ba7c2f5b698c5f1d0b0a37afddc78c1c.csv',
-     extension: 'csv',
-     size: 347229,
-     truncated: false } }
- */
 router.post('/data-upload', function(req, res) {
 	// console.log(req.files);
 	if (req.session.info == null) {
 		res.redirect("/login");
 	}
 	else {
-		db.query("insert into files(user, name, original) values(?,?,?)",
-		[req.session.info.id, req.files.file.name, req.files.file.originalname],
-		function(err, rows) {
-			res.redirect("/");
-			// todo redirect to referer or the new dashboard that created
-		});
+		var data = '{"path":"' + req.files.file.path + '", "name":"' +
+					req.files.file.originalname + '"}';		
+		db.query("insert into dashboards(user, name, layout, " + 
+				"data_type, data_name, data) "
+				+ " values(?, ?, ?, 'file', ?, ?)",
+			[req.session.info.id, req.body.name, req.body.layout,
+				req.files.file.originalname, req.files.file.path],
+			function(err, rows) {
+				res.redirect("/");
+				// todo redirect to referer or the new dashboard that created
+			});
 	}
+	
 });
 
 router.get('/data-list', function(req, res) {
@@ -220,3 +191,17 @@ NOTE:
 
 
 */
+
+/*
+req.files = 
+{ file: 
+   { fieldname: 'file',
+     originalname: 'ndx.csv',
+     name: 'ba7c2f5b698c5f1d0b0a37afddc78c1c.csv',
+     encoding: '7bit',
+     mimetype: 'text/csv',
+     path: 'uploads/ba7c2f5b698c5f1d0b0a37afddc78c1c.csv',
+     extension: 'csv',
+     size: 347229,
+     truncated: false } }
+ */

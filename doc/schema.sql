@@ -24,16 +24,25 @@ create table dashboards (
 	user		bigint,
 	name		nvarchar(1023),
 	layout		nvarchar(255),
-	data		bigint
+	data_type	 varchar(255) default 'none',	-- none file url query
+	data_name	nvarchar(1023),					-- original file name or name
+	data		nvarchar(2047)					-- file path on server
 );
 
-drop table if exists files;
-create table files(
-	id			serial,
-	user		bigint,
-	name		nvarchar(255),
-	original	nvarchar(1023)
-);
+/*
+if (data_type == 'file') {
+	data_name	is the original filename
+	data		is the path on the server
+}
+if (data_type == 'url') {
+	data_name	is the name or description of data
+	data		is the url to data
+}
+if (data_type == 'query') {
+	data_name	is the name or description of data
+	data		is the query string
+}
+*/
 
 drop table if exists charts;
 create table charts (
@@ -46,6 +55,10 @@ create table charts (
 	dimension	longtext,		-- code e.g. dc.pluck('column')
 	reduce		longtext		-- code e.g. reduceSum(dc.pluck('column'))
 );
+
+
+
+
 
 /*
 drop table if exists data;
@@ -68,15 +81,28 @@ create table layouts (
 */
 
 
+/*
+drop table if exists data_queries;
+drop table if exists data_urls;
+drop table if exists data_files;
 
+create table data_queries(
+	id			serial,
+	queries		nvarchar(2047)
+);
 
+create table data_urls(
+	id			serial,
+	url			nvarchar(2047)
+);
 
-
-
-
-
-
-
+create table data_files(
+	id			serial,
+	user		bigint,
+	name		nvarchar(255),
+	original	nvarchar(1023)
+);
+*/
 
 
 /*
