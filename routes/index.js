@@ -26,24 +26,20 @@ router.get('/dashboard', function(req, res) {
 });
 
 router.get('/dashboard/:id', function(req, res) {
-	if (req.session.info == null) {
-		res.redirect("/login");
-	}
-	else {
-		db.query("select * from dashboards where id=? and (user=? or public=1)",
-		[req.params.id, req.session.info.id],
-		function (err, rows) {
-			if (rows != null && rows[0] != null) {
-				res.render(rows[0].layout + '.html', { 
-					title: title + ' ' + rows[0].name,
-					dashboard: rows[0]
-				});
-			}
-			else {
-				res.redirect("/");
-			}
-		});
-	}
+	var user = req.session.info ? req.session.id : 0;
+	db.query("select * from dashboards where id=? and (user=? or public=1)",
+	[req.params.id, user],
+	function (err, rows) {
+		if (rows != null && rows[0] != null) {
+			res.render(rows[0].layout + '.html', { 
+				title: title + ' ' + rows[0].name,
+				dashboard: rows[0]
+			});
+		}
+		else {
+			res.redirect("/");
+		}
+	});
 });
 
 router.post('/dashboard-create', function(req, res) {
