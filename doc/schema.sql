@@ -23,6 +23,7 @@ create table dashboards (
 	id			serial,
 	user		bigint,
 	name		nvarchar(1023),
+	public		int default 0,
 	layout		nvarchar(255),
 	data_type	 varchar(255) default 'none',	-- none file url query
 	data_name	nvarchar(1023),					-- original file name or name

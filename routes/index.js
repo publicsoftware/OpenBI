@@ -30,7 +30,16 @@ router.get('/dashboard/:id', function(req, res) {
 		res.redirect("/login");
 	}
 	else {
-		res.render('demo.html', { title: title + ' ' + req.params.id });
+		db.query("select * from dashboards where id=? and (user=? or public=1)",
+		[req.params.id, req.session.info.id],
+		function (err, rows) {
+			if (rows != null && rows[0] != null) {
+				res.render('demo.html', { title: title + ' ' + rows[0].name });
+			}
+			else {
+				res.redirect("/");
+			}
+		});
 	}
 });
 
