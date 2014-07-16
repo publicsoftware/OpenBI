@@ -6,7 +6,7 @@ Web-based Business Intelligence system for the rest of us on this planet.
 Installation
 ------------
 >$ git clone https://github.com/publicsoftware/OpenBI.git<br/>
->$ cd openbi<br/>
+>$ cd OpenBI<br/>
 >$ npm install<br/>
 >$ node app<br/>
 >Please run SQL statements from doc/schema.sql to local database server<br/>

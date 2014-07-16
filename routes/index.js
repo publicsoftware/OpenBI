@@ -26,11 +26,12 @@ router.get('/dashboard', function(req, res) {
 });
 
 router.get('/dashboard/:id', function(req, res) {
-	var user = req.session.info ? req.session.id : 0;
+	var user = req.session.info ? req.session.info.id : 0;
 	db.query("select * from dashboards where id=? and (user=? or public=1)",
 	[req.params.id, user],
 	function (err, rows) {
 		if (rows != null && rows[0] != null) {
+			rows[0].data = '/' + rows[0].data;
 			res.render(rows[0].layout + '.html', { 
 				title: title + ' ' + rows[0].name,
 				dashboard: rows[0]
@@ -38,6 +39,21 @@ router.get('/dashboard/:id', function(req, res) {
 		}
 		else {
 			res.redirect("/");
+		}
+	});
+});
+
+router.get('/data', function(req, res) {
+	res.send([]);
+});
+
+router.get('/data/:id', function(req, res) {
+	var user = req.session.info ? req.session.info.id : 0;
+	db.query("select * from dashboards where id=? and (user=? or public=1)",
+	[req.params.id, user],
+	function (err, rows) {
+		if (rows != null && rows[0] != null) {
+			res.sendfile(rows[0].data);
 		}
 	});
 });
