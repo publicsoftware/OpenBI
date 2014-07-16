@@ -65,7 +65,8 @@ router.post('/data-upload', function(req, res) {
 		db.query("insert into files(user, name, original) values(?,?,?)",
 		[req.session.info.id, req.files.file.name, req.files.file.originalname],
 		function(err, rows) {
-			res.redirect("/data"); 
+			res.redirect("/");
+			// todo redirect to referer or the new dashboard that created
 		});
 	}
 });
