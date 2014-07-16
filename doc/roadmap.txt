@@ -11,11 +11,13 @@ Data Uploader from CSV file
 Embedded Dashboard / Chart to other web
 Git pull after committing code
 Isometric Chart
+File Drag & Drop
+Use SQLite as a primary database for standalone app
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Doing
 Use SPA architecture
-Color Swatching
+Color Swatch
 Register New User
 View Page
 dc / crossfilter / d3

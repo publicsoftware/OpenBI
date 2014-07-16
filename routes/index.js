@@ -44,22 +44,30 @@ router.get('/data', function(req, res) {
 });
 
 /*
-	{
-	fieldname: 'file',
-	originalname: 'data-visulization-Ecommerce-in-Real-Time-How-Money-is-Spent-on-the-Internet-interactive-infographic.png',
-	name: '316f6e43da29ee166d8f5e73aa1abda2.png',
-	encoding: '7bit',
-	mimetype: 'image/png',
-	path: 'uploads/316f6e43da29ee166d8f5e73aa1abda2.png',
-	extension: 'png',
-	size: 589779,
-	truncated: false
-	}
+req.files = 
+{ file: 
+   { fieldname: 'file',
+     originalname: 'ndx.csv',
+     name: 'ba7c2f5b698c5f1d0b0a37afddc78c1c.csv',
+     encoding: '7bit',
+     mimetype: 'text/csv',
+     path: 'uploads/ba7c2f5b698c5f1d0b0a37afddc78c1c.csv',
+     extension: 'csv',
+     size: 347229,
+     truncated: false } }
  */
 router.post('/data-upload', function(req, res) {
-	console.log(req.body);
-	console.log(req.files);
-	res.redirect("/data");
+	// console.log(req.files);
+	if (req.session.info == null) {
+		res.redirect("/login");
+	}
+	else {
+		db.query("insert into files(user, name, original) values(?,?,?)",
+		[req.session.info.id, req.files.file.name, req.files.file.originalname],
+		function(err, rows) {
+			res.redirect("/data"); 
+		});
+	}
 });
 
 router.get('/data-list', function(req, res) {
@@ -68,10 +76,10 @@ router.get('/data-list', function(req, res) {
 	}
 	else {
 		db.query("select * from data where user=?",
-			[req.session.info.id],
-			function(err, rows) {
-				res.send(rows);
-			});
+		[req.session.info.id],
+		function(err, rows) {
+			res.send(rows);
+		});
 	}
 });
 
@@ -82,17 +90,17 @@ router.post('/data-add', function(req, res) {
 	else {
 		if (req.body.id === 0) {
 			db.query("insert into data(user, name, data) values(?, ?, ?)",
-				[req.session.info.id, req.body.name, req.body.data],
-				function(err, rows) {
-					res.send({result:'ok'});
-				});
+			[req.session.info.id, req.body.name, req.body.data],
+			function(err, rows) {
+				res.send({result:'ok'});
+			});
 		}
 		else {
 			db.query("update data set name=?, data=? where id=? and user=?",
-				[req.body.name, req.body.data, req.body.id, req.session.info.id]
-				, function(err, rows) {
-					res.send({result:'ok'});
-				});
+			[req.body.name, req.body.data, req.body.id, req.session.info.id],
+			function(err, rows) {
+				res.send({result:'ok'});
+			});
 		}
 	}
 });

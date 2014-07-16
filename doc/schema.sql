@@ -35,6 +35,16 @@ create table dashboards (
 	data		bigint
 );
 
+
+drop table if exists files;
+create table files(
+	id			serial,
+	user		bigint,
+	name		nvarchar(255),
+	original	nvarchar(1023)
+);
+
+
 drop table if exists charts;
 create table charts (
 	id			serial,
