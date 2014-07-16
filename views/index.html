@@ -59,9 +59,8 @@ function layout(l) {
 		<form method="post" action="/dashboard-create" enctype="multipart/form-data" 
 				class="uk-form" >
 			
-			<fieldset data-uk-margin>
-			<input type="text" name="name" placeholder="Title" />
-			</fieldset>
+			<input type="text" name="name" placeholder="Title" autofocus
+				   class="uk-width-1-1" />
 			
 			<h3>Layout</h3>
 			<div data-uk-button-radio>
@@ -80,12 +79,13 @@ function layout(l) {
 
 			<h3>Data Upload</h3>
 			<a href="javascript:upload()" class="uk-button">
-				Data
+				Choose File
 			</a>
 			
 			<input type="hidden" name="layout" value="layout-1" />
 			<input type="file" name="file"  style="display:none;" />
 			
+			<hr/>
 			<input type="submit" value="Create" 
 				   class="uk-button uk-button-primary" />
 		</form>
