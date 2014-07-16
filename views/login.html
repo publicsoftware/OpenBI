@@ -2,11 +2,7 @@
 
 <script>
 	function Controller($scope, $http) {
-		$http.get('/debug')
-		.success(function(r) {
-			// console.log(r);
-		});
-
+		
 		$scope.login = function() {
 			$http.post('/login', $scope.form)
 			.success(function(r) {

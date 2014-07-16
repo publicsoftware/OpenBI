@@ -153,10 +153,12 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/debug', function(req, res) {
+	/*
 	db.query("select * from users",
 		function(err, rows) {
 			res.send(rows);
 		});
+	*/
 });
 
 module.exports = router;
@@ -182,5 +184,11 @@ module.exports = router;
 
 /*
 NOTE:
+
+
+
+
+
+
 
 */
