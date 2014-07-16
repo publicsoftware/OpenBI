@@ -1,11 +1,17 @@
 <%- include header.html %>
 
 <script>
-/*
-function Controller($scope) {
-	$scope.name = 'Hello World';
+
+function Controller($scope, $http) {
+	
+	// initialize
+	$scope.dashboards = [];
+	$http.get('/dashboard-list').success(function(result) {
+		$scope.dashboards = result;
+	});
+	
 }
-*/
+
 </script>
 
 <div class='uk-container'>
@@ -24,15 +30,13 @@ function Controller($scope) {
 		
 		<li><a href="/">Home</a></li>
 		<li><a href='#new-dashboard' data-uk-modal>New Dashboard</a></li>
-		<li><a href="/data">Data</a></li>
-		<li><a href="/welcome">Welcome</a></li>
 	</ul>
 </div>
 
-<div class="uk-container">
+<div class="uk-container" ng-controller="Controller">
 	<div class="uk-grid">
-		<div class="uk-width-1-3">
-
+		<div class="uk-width-1-3" ng-repeat="d in dashboards">
+			<h1>{{ d.name }}</h1>
 		</div>
 	</div>
 </div>
@@ -52,7 +56,7 @@ function layout(l) {
 		<a class="uk-modal-close uk-close"></a>
 		<h2>Dashboard</h2>
 		
-		<form method="post" action="/data-upload" enctype="multipart/form-data" 
+		<form method="post" action="/dashboard-create" enctype="multipart/form-data" 
 				class="uk-form" >
 			
 			<fieldset data-uk-margin>
@@ -86,12 +90,6 @@ function layout(l) {
 				   class="uk-button uk-button-primary" />
 		</form>
 		
-		<!--
-		<br/>
-		<hr/>
-		<button class="uk-button">OK</button>
-		<button class="uk-button">Cancel</button>
-		-->
 	</div>
 </div>
 

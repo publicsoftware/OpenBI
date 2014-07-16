@@ -21,7 +21,7 @@ router.get('/', function(req, res) {
 	}
 });
 
-router.post('/data-upload', function(req, res) {
+router.post('/dashboard-create', function(req, res) {
 	// console.log(req.files);
 	if (req.session.info == null) {
 		res.redirect("/login");
@@ -42,6 +42,21 @@ router.post('/data-upload', function(req, res) {
 	
 });
 
+router.get('/dashboard-list', function(req, res) {
+	if (req.session.info == null) {
+		res.send([]);
+	}
+	else {
+		db.query("select * from dashboards where user=?",
+		[req.session.info.id],
+		function(err, rows) {
+			res.send(rows);
+		});
+	}
+});
+
+
+/*
 router.get('/data-list', function(req, res) {
 	if (req.session.info == null) {
 		res.send({result:'error'});
@@ -76,6 +91,7 @@ router.post('/data-add', function(req, res) {
 		}
 	}
 });
+*/
 
 router.get('/demo', function(req, res) {
 	res.render('demo.html', { title: title });
