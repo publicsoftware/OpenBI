@@ -43,6 +43,25 @@ router.get('/data', function(req, res) {
 	}
 });
 
+/*
+	{
+	fieldname: 'file',
+	originalname: 'data-visulization-Ecommerce-in-Real-Time-How-Money-is-Spent-on-the-Internet-interactive-infographic.png',
+	name: '316f6e43da29ee166d8f5e73aa1abda2.png',
+	encoding: '7bit',
+	mimetype: 'image/png',
+	path: 'uploads/316f6e43da29ee166d8f5e73aa1abda2.png',
+	extension: 'png',
+	size: 589779,
+	truncated: false
+	}
+ */
+router.post('/data-upload', function(req, res) {
+	console.log(req.body);
+	console.log(req.files);
+	res.redirect("/data");
+});
+
 router.get('/data-list', function(req, res) {
 	if (req.session.info == null) {
 		res.send({result:'error'});

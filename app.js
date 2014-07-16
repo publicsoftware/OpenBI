@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var routes = require('./routes/index');
+var multer = require('multer');
 var app = express();
 
 // view engine setup
@@ -26,6 +27,7 @@ app.use(session({
 
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(multer({ dest: './uploads/'}));
 
 app.engine('html', require('ejs').renderFile);
 app.use('/', routes);

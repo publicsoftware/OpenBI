@@ -13,6 +13,7 @@
 			var item = new Object();
 			$scope.data = item;
 			$scope.all.push(item);
+			$('[placeholder=Name]').focus();
 		};
 
 		$scope.save = function() {
@@ -35,6 +36,15 @@
 				}
 			}
 		};
+		
+		$scope.upload = function() {
+			$('[name=file]').click();
+		};
+	}
+	
+	function uploaderSubmit() {
+		console.log('submitting');
+		$('#uploader').submit();
 	}
 </script>
 
@@ -62,6 +72,13 @@
 	<div class="uk-grid uk-grid-preserve">
 		<div class="uk-width-1-3">
 			<h3>Current Data</h3>
+			<!--
+			<input type='button' class='uk-button' value='New'
+					ng-click='new()' />
+			-->
+			<input type='button' class='uk-button' value='Upload'
+					ng-click='upload()' />
+			
 			<ul class='uk-list'>
 				<li ng-repeat="d in all">
 					<a href='' ng-click='show(d.id)'>{{d.name}}</a>
@@ -73,8 +90,7 @@
 				<input type='hidden' ng-model='data.id' />
 				<div class='uk-grid uk-grid-preserve'>
 					<div class='uk-width-1-1'>
-						<input type='button' class='uk-button' value='New'
-									 ng-click='new()' />
+
 						<br/>
 						<input type='text' ng-model='data.name' placeholder='Name' />
 						<textarea ng-model='data.data' rows='8'
@@ -85,6 +101,11 @@
 			</form>
 		</div>
 	</div>
+	
+	<form method="post" action="/data-upload" enctype="multipart/form-data" 
+		  id="uploader" style="display:none;" >
+		<input type="file" name="file" onchange="uploaderSubmit()" />
+	</form>
 </div>
 
 <%- include drawer.html %>
