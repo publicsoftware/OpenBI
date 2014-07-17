@@ -60,7 +60,9 @@ router.post('/chart-save', function(req, res) {
 	else {
 		db.query("select * from dashboards where id=?", [id],
 		function(error, records) {
-			if (error == null && records[0].user === req.session.info.id) {
+			if (error == null && records != null &&
+				records[0].user === req.session.info.id) 
+			{
 				if (id === 0) {
 					db.query("insert into charts(dashboard, name, " + 
 							" x, y, width, height) " +
