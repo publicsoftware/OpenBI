@@ -14,7 +14,6 @@ db.on('error', function(err) {
 	console.log(err.code);
 });
 
-
 var title = 'OpenBI';
 
 router.get('/', function(req, res) {
@@ -34,20 +33,25 @@ router.get('/dashboard/:id', function(req, res) {
 	var user = req.session.info ? req.session.info.id : 0;
 	db.query("select * from dashboards where id=? and (user=? or public=1)",
 	[req.params.id, user],
-	function (err, rows) {
-		if (err) {
+	function (error, rows) {
+		if (error) {
 			res.redirect("/");
 		}
 		else {
 			rows[0].data = '/' + rows[0].data;
 			db.query("select * from charts where dashboard=?",
 				[req.params.id],
-			function(err1, rows1) {
-				res.render(rows[0].layout + '.html', { 
-					title: title + ' ' + rows[0].name,
-					dashboard: rows[0],
-					charts: rows1
-				});
+			function(error, charts) {
+				if (error) {
+					res.redirect("/");
+				}
+				else {
+					res.render(rows[0].layout + '.html', { 
+						title: title + ' ' + rows[0].name,
+						dashboard: rows[0],
+						charts: charts
+					});
+				}
 			});
 		}
 	});
@@ -76,7 +80,7 @@ router.post('/chart-save', function(req, res) {
 						[dashboard, req.body.name,
 							req.body.x, req.body.y, 
 							req.body.width, req.body.height],
-						function(err, rows) {
+						function(error, rows) {
 							res.send({result:'ok'});
 						});
 					}
@@ -89,7 +93,7 @@ router.post('/chart-save', function(req, res) {
 							req.body.x, req.body.y, 
 							req.body.width, req.body.height,
 							id],
-						function(err, rows) {
+						function(error, rows) {
 							res.send({result:'ok'});
 						});
 					}
@@ -111,8 +115,8 @@ router.get('/data/:id', function(req, res) {
 	var user = req.session.info ? req.session.info.id : 0;
 	db.query("select * from dashboards where id=? and (user=? or public=1)",
 	[req.params.id, user],
-	function (err, rows) {
-		if (err) {
+	function (error, rows) {
+		if (error) {
 			res.send([]);
 		}
 		else {
@@ -134,9 +138,8 @@ router.post('/dashboard-create', function(req, res) {
 				+ " values(?, ?, ?, 'file', ?, ?)",
 			[req.session.info.id, req.body.name, req.body.layout,
 				name, path],
-			function(err, rows) {
+			function(error, rows) {
 				res.redirect("/");
-				// todo redirect to referer or the new dashboard that created
 			});
 	}
 	
@@ -149,51 +152,15 @@ router.get('/dashboard-list', function(req, res) {
 	else {
 		db.query("select * from dashboards where user=?",
 		[req.session.info.id],
-		function(err, rows) {
-			res.send(rows);
+		function(error, rows) {
+			if (error) {
+				res.send([]);
+			}
+			else {
+				res.send(rows);
+			}
 		});
 	}
-});
-
-
-router.get('/demo', function(req, res) {
-	res.render('demo.html', { title: title });
-});
-
-router.get('/demo1', function(req, res) {
-	res.render('demo1.html', { title: title });
-});
-
-router.get('/demo2', function(req, res) {
-	res.render('demo2.html', { title: title });
-});
-
-router.get('/demo3', function(req, res) {
-	res.render('demo3.html', { title: title });
-});
-
-router.get('/demo4', function(req, res) {
-	res.render('demo4.html', { title: title });
-});
-
-router.get('/demo5', function(req, res) {
-	res.render('demo5.html', { title: title });
-});
-
-router.get('/demo6', function(req, res) {
-	res.render('demo6.html', { title: title });
-});
-
-router.get('/demo7', function(req, res) {
-	res.render('demo7.html', { title: title });
-});
-
-router.get('/demo8', function(req, res) {
-	res.render('demo8.html', { title: title });
-});
-
-router.get('/demo9', function(req, res) {
-	res.render('layout-1-2.html', { title: title });
 });
 
 router.get('/welcome', function(req, res) {
@@ -214,8 +181,8 @@ router.post('/login', function(req, res) {
 					.digest("hex");
 	db.query('select * from users where email=? or user=?',
 		[req.body.username, req.body.username],
-		function(err, rows) {
-			if (rows[0].password === digest) {
+		function(error, rows) {
+			if (error == null && rows[0].password === digest) {
 				req.session.info = rows[0];
 				res.send({result:'ok'});
 			}

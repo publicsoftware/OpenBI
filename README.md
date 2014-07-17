@@ -8,7 +8,7 @@ Installation
 >$ git clone https://github.com/publicsoftware/OpenBI.git<br/>
 >$ cd OpenBI<br/>
 >$ npm install<br/>
->$ node app<br/>
+>$ node openbi<br/>
 >Please run SQL statements from doc/schema.sql to local database server<br/>
 >Open your browser to localhost:3500<br/>
 
