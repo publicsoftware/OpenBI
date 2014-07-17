@@ -10,6 +10,11 @@ var db = mysql.createConnection({
 	database	: 'openbi'
 });
 
+db.on('error', function(err) {
+	console.log(err.code);
+});
+
+
 var title = 'OpenBI';
 
 router.get('/', function(req, res) {
@@ -30,22 +35,20 @@ router.get('/dashboard/:id', function(req, res) {
 	db.query("select * from dashboards where id=? and (user=? or public=1)",
 	[req.params.id, user],
 	function (err, rows) {
-		if (rows != null && rows[0] != null) {
+		if (err) {
+			res.redirect("/");
+		}
+		else {
 			rows[0].data = '/' + rows[0].data;
-			
 			db.query("select * from charts where dashboard=?",
 				[req.params.id],
 			function(err1, rows1) {
-				
 				res.render(rows[0].layout + '.html', { 
 					title: title + ' ' + rows[0].name,
 					dashboard: rows[0],
 					charts: rows1
 				});
 			});
-		}
-		else {
-			res.redirect("/");
 		}
 	});
 });
@@ -60,35 +63,40 @@ router.post('/chart-save', function(req, res) {
 	else {
 		db.query("select user from dashboards where id=?", [dashboard],
 		function(error, records) {
-			if (error == null && records[0].user === req.session.info.id) 
+			if (error) {
+				res.send({result:'error'});
+			}
+			else
 			{
-				if (id === 0) {
-					db.query("insert into charts(dashboard, name, " + 
-							" x, y, width, height) " +
-							" values(?, ?, ?, ?, ?, ?)",
-					[dashboard, req.body.name,
-						req.body.x, req.body.y, 
-						req.body.width, req.body.height],
-					function(err, rows) {
-						res.send({result:'ok'});
-					});
+				if (records[0].user === req.session.info.id) {
+					if (id === 0) {
+						db.query("insert into charts(dashboard, name, " + 
+								" x, y, width, height) " +
+								" values(?, ?, ?, ?, ?, ?)",
+						[dashboard, req.body.name,
+							req.body.x, req.body.y, 
+							req.body.width, req.body.height],
+						function(err, rows) {
+							res.send({result:'ok'});
+						});
+					}
+					else {
+						db.query("update charts set " +
+								" name=?," +
+								" x=?, y=?, width=?, height=? " +
+								" where id = ?"
+						,[req.body.name,
+							req.body.x, req.body.y, 
+							req.body.width, req.body.height,
+							id],
+						function(err, rows) {
+							res.send({result:'ok'});
+						});
+					}
 				}
 				else {
-					db.query("update charts set " +
-							" name=?," +
-							" x=?, y=?, width=?, height=? " +
-							" where id = ?"
-					,[req.body.name,
-						req.body.x, req.body.y, 
-						req.body.width, req.body.height,
-						id],
-					function(err, rows) {
-						res.send({result:'ok'});
-					});
+					res.send({result:'error'});
 				}
-			}
-			else {
-				res.send({result:'error'});
 			}
 		});
 	}
@@ -104,7 +112,10 @@ router.get('/data/:id', function(req, res) {
 	db.query("select * from dashboards where id=? and (user=? or public=1)",
 	[req.params.id, user],
 	function (err, rows) {
-		if (rows != null && rows[0] != null) {
+		if (err) {
+			res.send([]);
+		}
+		else {
 			res.sendfile(rows[0].data);
 		}
 	});
