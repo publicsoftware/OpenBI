@@ -17,20 +17,85 @@
 	</ul>
 </div>
 
-<div class='absolute'>
-	<div id="chart1" 
-		 draggable="true" ondragstart="return dragStart(event)"
-		 style="top:100px; left:100px; width:400px; height:400px; border: 1px solid #aaa; 
-			resize: both; overflow: auto;
-		 ">
-		
+<style>
+	body {
+		overflow: hidden;
+		background: #eee;
+	}
+	
+	.chart {
+		position: absolute;
+		width: 408px;
+		height: 408px;
+		top: 72px;
+		left: 24px;
+		background: white;
+		resize: both;
+		overflow: hidden;
+	}
+	
+	.handle {
+		width:100%; 
+		background:#f7f7f7; 
+		height:20px;
+		display:block;
+		margin: 0;
+	}
+</style>
+
+<script type="text/html" id="chart-template">
+	<div class='chart' id='chart1'>
+		<span class='handle'>Test</span>
 	</div>
-</div>
+</script>
 
 <script>
 $(document).ready(function() {
-	$('#chart1').drags();
+	
+	var html = $('#chart-template').html();
+	$('body').append(html).trigger($.Event('resize'));
+	$('#chart1').drags({handle: '.handle'});
+
+	$('body').on('mouseup', function() {
+		snapAll();
+	});
+	// snapAll();
 });
+
+function snapAll() {
+	console.log('snapAll()');
+	$('.chart').each(function() {
+		var x = $(this).position().left;
+		var y = $(this).position().top;
+		x = snap(x, 24);
+		y = snap(y, 24);
+		var w = $(this).width();
+		var h = $(this).height();
+		w = snap(w, 24);
+		h = snap(h, 24);
+
+		$(this).css('left', x + 'px');
+		$(this).css('top',  y + 'px');
+		$(this).width(w + 'px');
+		$(this).height(h + 'px');
+	});
+}
+
+function snap(x, grid) {
+	x = parseInt(x);
+	grid = parseInt(grid);
+	
+	if (x % grid === 0) {
+	}
+	if (x % grid > grid / 2) {
+		x = parseInt(x / grid) * (grid + 1);
+	}
+	else {
+		x = parseInt(x / grid) * grid;
+	}
+	return x;
+}
+
 </script>
 
 <script src="/js/d3.js"></script>
@@ -45,13 +110,13 @@ var square	= width < height ? width : height;
 var keys = new Array();
 
 square = 400;
+
 	
 d3.csv("/data/<%= dashboard.id %>", function(data) {
 	for (var k in data[0]) {
 		keys.push(k);
 	}
 	
-   
 	var xf = crossfilter(data);
 	var dimension = new Array();
 	var group = new Array();
@@ -62,7 +127,7 @@ d3.csv("/data/<%= dashboard.id %>", function(data) {
 	var transitionDuration = 1000;
 
 	var c1 = dc.pieChart("#chart1")
-		.width(square - 10).height(square - 10)
+		.width(square - 20).height(square - 20)
 		.dimension(dimension[0])
 		.group(group[0])
 		.innerRadius(square / 10)
@@ -73,46 +138,57 @@ d3.csv("/data/<%= dashboard.id %>", function(data) {
 });
 
 (function($) {
-    $.fn.drags = function(opt) {
+	$.fn.drags = function(opt) {
 
-        opt = $.extend({handle:"",cursor:"move"}, opt);
+		opt = $.extend({handle:"",cursor:"move"}, opt);
 
-        if(opt.handle === "") {
-            var $el = this;
-        } else {
-            var $el = this.find(opt.handle);
-        }
+		if(opt.handle === "") {
+			var $el = this;
+		} else {
+			var $el = this.find(opt.handle);
+		}
 
-        return $el.css('cursor', opt.cursor).on("mousedown", function(e) {
-            if(opt.handle === "") {
-                var $drag = $(this).addClass('draggable');
-            } else {
-                var $drag = $(this).addClass('active-handle').parent().addClass('draggable');
-            }
-            var z_idx = $drag.css('z-index'),
-                drg_h = $drag.outerHeight(),
-                drg_w = $drag.outerWidth(),
-                pos_y = $drag.offset().top + drg_h - e.pageY,
-                pos_x = $drag.offset().left + drg_w - e.pageX;
-            $drag.css('z-index', 1000).parents().on("mousemove", function(e) {
-                $('.draggable').offset({
-                    top:e.pageY + pos_y - drg_h,
-                    left:e.pageX + pos_x - drg_w
-                }).on("mouseup", function() {
-                    $(this).removeClass('draggable').css('z-index', z_idx);
-                });
-            });
-            e.preventDefault(); // disable selection
-        }).on("mouseup", function() {
-            if(opt.handle === "") {
-                $(this).removeClass('draggable');
-            } else {
-                $(this).removeClass('active-handle').parent().removeClass('draggable');
-            }
-        });
+		return $el.css('cursor', opt.cursor).on("mousedown", function(e) {
+			if(opt.handle === "") {
+				var $drag = $(this).addClass('draggable');
+			} else {
+				var $drag = $(this).addClass('active-handle').parent().
+									addClass('draggable');
+			}
+			var z_idx = $drag.css('z-index'),
+				drg_h = $drag.outerHeight(),
+				drg_w = $drag.outerWidth(),
+				pos_y = $drag.offset().top + drg_h - e.pageY,
+				pos_x = $drag.offset().left + drg_w - e.pageX;
+			$drag.css('z-index', 1000).parents().on("mousemove", function(e) {
+				$('.draggable').offset({
+					top:e.pageY + pos_y - drg_h,
+					left:e.pageX + pos_x - drg_w
+				}).on("mouseup", function() {
+					$(this).removeClass('draggable').css('z-index', z_idx);
+				});
+			});
+			e.preventDefault(); // disable selection
+		}).on("mouseup", function() {
+			if(opt.handle === "") {
+				$(this).removeClass('draggable');
+			} else {
+				/*
+				var x = $(this).parent().position().left;
+				var y = $(this).parent().position().top;
+				x = snap(x, 24);
+				y = snap(y, 24);
+				$(this).parent().css('left', x + 'px');
+				$(this).parent().css('top',  y + 'px');
+				*/			   
+				$(this).removeClass('active-handle').parent().
+						removeClass('draggable');
+			}
+		});
 
-    }
+	};
 })(jQuery);
+
 
 </script>
 
