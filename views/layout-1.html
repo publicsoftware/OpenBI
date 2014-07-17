@@ -1,6 +1,8 @@
 <%- include header.html %>
 
-<!-- layout-1 -->
+<script src="/js/d3.js"></script>
+<script src="/js/crossfilter.js"></script>
+<script src="/js/dc.js"></script>
 
 <div class='uk-container'>
 	<ul class='title'>
@@ -21,13 +23,17 @@
 			<a href="" class="uk-icon-button uk-icon-save"
 				onclick='javascript:saveLayout()'></a>
 		</li>
+		<li>
+			<a href="#settings" class="uk-icon-button uk-icon-gears"
+				data-uk-modal></a>
+		</li>
 	</ul>
 </div>
 
 <style>
 body {
 	overflow: hidden;
-	background: #eee;
+	background: white;
 }
 
 .chart {
@@ -66,15 +72,46 @@ body {
 
 <script type="text/html" id="chart-template">
 <div class='chart' id='chart_id'>
-	<span class='handle'>Test
+	<span class='handle'>
+		<span class='title'></span>
+		<i class="uk-icon-gears" onclick='javascript:chartSettings(_id)'></i>
+		<i class="uk-icon-minus" onclick='javascript:chartMinimize(_id)'></i>
 	</span>
 </div>
 </script>
 
+
+<div id="chart-settings" class="uk-modal" data-chart-id="0">
+	<div class="uk-modal-dialog">
+		<a class="uk-modal-close uk-close"></a>
+		<h1>Settings</h1>
+		
+	</div>
+</div>
+
 <script>
 var _grid_size = 24;
 
+function chartSettings(k) {
+	$('#chart-setting').prop('data-chart-id', k);
+	var modal = $.UIkit.modal("#chart-settings");
+	modal.show();
+}
+
+function chartMinimize(k) {
+	$('#chart' + k).outerWidth('240px');
+	$('#chart' + k).outerHeight('120px');
+}
+
 $(document).ready(function() {
+	main();
+});
+
+$('body').on('mouseup', function() {
+	snapAll();
+});
+
+function main() {
 	<% for (var i = 0; i < charts.length; i++) { %>
 		createChart({ 
 			id:		<%= charts[i].id %>,
@@ -86,19 +123,9 @@ $(document).ready(function() {
 		});
 	<% } %>
 
-	// resizeChart();
 	snapAll();
-	
 	createCrossFilter();
-	
-	$('body').on('mouseup', function() {
-		snapAll();
-		$('.chart').css('opacity', '1.0');
-	});
-	$('body').on('mousedown', function() {
-		$('.chart').css('opacity', '0.8');
-	});
-});
+}
 
 var dashboard_ = '<%= dashboard.id %>';
 var dashboard = dashboard_ === '' ? 0 : parseInt(dashboard_);
@@ -114,9 +141,9 @@ function createChart(data) {
 	chart.drags({handle: '.handle'});
 	if (data.x) chart.css('left', data.x + 'px');
 	if (data.y) chart.css('top',  data.y + 'px');
-	
 	if (data.width)  chart.outerWidth(data.width + 'px');
 	if (data.height) chart.outerHeight(data.height + 'px');
+	chart.find(".title").text(data.name);
 	
    	if (data.id == null)
 		data.id = 0;
@@ -182,53 +209,55 @@ function snap(x) {
 		x = parseInt(x / grid) * grid;
 	}
 	
-	if (x % 24 !== 0)
+	if (x % _grid_size !== 0)
 		console.log('error ' + x);
 	return x;
 }
 
-</script>
-
-<script src="/js/d3.js"></script>
-<script src="/js/crossfilter.js"></script>
-<script src="/js/dc.js"></script>
-
-<script>
-
 function createCrossFilter() {
-var width	= $(window).width();
-var height	= $(window).height();
-var square	= width < height ? width : height;
-var keys = new Array();
+	var width	= $(window).width();
+	var height	= $(window).height();
+	var square	= width < height ? width : height;
+	var keys = new Array();
 
-d3.csv("/data/<%= dashboard.id %>", function(data) {
-	for (var k in data[0]) {
-		keys.push(k);
-	}
-	
-var w = $('#chart0').width();
-var h = $('#chart0').height();
-square = w < h ? w : h;
+	d3.csv("/data/<%= dashboard.id %>", function(data) {
+		for (var k in data[0]) {
+			keys.push(k);
+		}
 
-	var xf = crossfilter(data);
-	var dimension = new Array();
-	var group = new Array();
+		var w = $('#chart0').width();
+		var h = $('#chart0').height();
+		square = w < h ? w : h;
 
-	dimension[0]	= xf.dimension(dc.pluck(keys[0]));
-	group[0]		= dimension[0].group().reduceSum(dc.pluck(keys[1]));
+		var xf = crossfilter(data);
+		var dimension = new Array();
+		var group = new Array();
 
-	var transitionDuration = 1000;
+		dimension[0]	= xf.dimension(dc.pluck(keys[0]));
+		group[0]		= dimension[0].group().reduceSum(dc.pluck(keys[1]));
 
-	var c1 = dc.pieChart("#chart0")
-		.width(square - _grid_size).height(square - _grid_size)
-		.dimension(dimension[0])
-		.group(group[0])
-// 		.innerRadius(square / 10)
-		.transitionDuration(transitionDuration)
-		;
+		var transitionDuration = 1000;
 
-	dc.renderAll();
-});
+		var c1 = dc.pieChart("#chart0")
+			.width(square - _grid_size).height(square - _grid_size)
+			.dimension(dimension[0])
+			.group(group[0])
+	// 		.innerRadius(square / 10)
+			.transitionDuration(transitionDuration)
+			;
+
+		dimension[1]	= xf.dimension(dc.pluck(keys[2]));
+		group[1]		= dimension[1].group().reduceSum(dc.pluck(keys[1]));
+
+		var c2 = dc.rowChart('#chart1')
+			.width(square).height(square - _grid_size)
+			.dimension(dimension[1])
+			.group(group[1])
+			.transitionDuration(transitionDuration)
+			;
+
+		dc.renderAll();
+	});
 
 }
 
@@ -275,8 +304,15 @@ square = w < h ? w : h;
 	};
 })(jQuery);
 
-
 </script>
+
+
+<div id="settings" class="uk-modal">
+	<div class="uk-modal-dialog">
+		<a class="uk-modal-close uk-close"></a>
+		<h1>Settings</h1>
+	</div>
+</div>
 
 <%- include drawer.html %>
 <%- include footer.html %>

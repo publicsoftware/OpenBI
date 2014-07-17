@@ -54,26 +54,41 @@ router.post('/chart-save', function(req, res) {
 	var id = parseInt(req.body.id);
 	var dashboard = parseInt(req.body.dashboard);
 	
-	if (id === 0) {
-		// todo: check permission befor upsert
-		db.query("insert into charts(dashboard, name, x, y, width, height) " +
-				" values(?, ?, ?, ?, ?, ?)",
-		[dashboard, req.body.name,
-			req.body.x, req.body.y, req.body.width, req.body.height],
-		function(err, rows) {
-			res.send({result:'ok'});
-		});
+	if (req.session.info == null) {
+		res.send({result:'error'});
 	}
 	else {
-		db.query("update charts set " +
-				" name=?," +
-				" x=?, y=?, width=?, height=? " +
-				" where id = ?"
-		,[req.body.name,
-			req.body.x, req.body.y, req.body.width, req.body.height,
-			id],
-		function(err, rows) {
-			res.send({result:'ok'});
+		db.query("select * from dashboards where id=?", [id],
+		function(error, records) {
+			if (error == null && records[0].user === req.session.info.id) {
+				if (id === 0) {
+					db.query("insert into charts(dashboard, name, " + 
+							" x, y, width, height) " +
+							" values(?, ?, ?, ?, ?, ?)",
+					[dashboard, req.body.name,
+						req.body.x, req.body.y, 
+						req.body.width, req.body.height],
+					function(err, rows) {
+						res.send({result:'ok'});
+					});
+				}
+				else {
+					db.query("update charts set " +
+							" name=?," +
+							" x=?, y=?, width=?, height=? " +
+							" where id = ?"
+					,[req.body.name,
+						req.body.x, req.body.y, 
+						req.body.width, req.body.height,
+						id],
+					function(err, rows) {
+						res.send({result:'ok'});
+					});
+				}
+			}
+			else {
+				res.send({result:'error'});
+			}
 		});
 	}
 			
