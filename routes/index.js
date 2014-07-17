@@ -58,9 +58,9 @@ router.post('/chart-save', function(req, res) {
 		res.send({result:'error'});
 	}
 	else {
-		db.query("select user from dashboards where id=?", [id],
+		db.query("select user from dashboards where id=?", [dashboard],
 		function(error, records) {
-			if (records != [] && records[0].user === req.session.info.id) 
+			if (error == null && records[0].user === req.session.info.id) 
 			{
 				if (id === 0) {
 					db.query("insert into charts(dashboard, name, " + 
