@@ -10,56 +10,86 @@
 		</li>
 		<li>
 			<a href="" class="uk-icon-button uk-icon-refresh"
-				onclick='location.reload()'></a>
+				onclick='javascript:createCrossFilter()'></a>
 		</li>
-		<li>Demo
+		<li>
+			<a href="" class="uk-icon-button uk-icon-plus"
+				onclick='javascript:createChart({})'></a>
+		</li>
+		
+		<li>
+			<a href="" class="uk-icon-button uk-icon-save"
+				onclick='javascript:saveLayout()'></a>
 		</li>
 	</ul>
 </div>
 
 <style>
-	body {
-		overflow: hidden;
-		background: #eee;
-	}
-	
-	.chart {
-		position: absolute;
-		min-width: 240px;
-		min-height: 120px;
-		top: 72px;
-		left: 24px;
-		background: white;
-		resize: both;
-		overflow: hidden;
-		border-radius: 4px;
-		border: 1px solid #ddd;
-	}
-	
-	.handle {
-		width:100%; 
-		background:#f7f7f7; 
-		height:24px;
-		display:block;
-		margin: 0;
-		padding: 2px 4px;
-	}
+body {
+	overflow: hidden;
+	background: #eee;
+}
+
+.chart {
+	position: absolute;
+	min-width: 240px;
+	min-height: 120px;
+	top: 72px;
+	left: 24px;
+	background: white;
+	border-radius: 4px;
+	border: 1px solid #ddd;
+	border-bottom: 1px solid #ccc;
+	resize: both;
+	overflow: hidden;
+}
+
+.chart:hover {
+	width: 24px;
+	height: 24px;
+}
+
+.chart:hover .handle {
+	background: #f7f7f7;
+}
+
+.handle {
+	width:100%; 
+	background: none;
+	height:24px;
+	display:block;
+	margin: 0;
+	padding: 2px 4px;
+	transition: background 0.2s ease-in;
+}
 </style>
 
 <script type="text/html" id="chart-template">
-	<div class='chart' id='chart_id'>
-		<span class='handle'>Test</span>
-	</div>
+<div class='chart' id='chart_id'>
+	<span class='handle'>Test
+	</span>
+</div>
 </script>
 
 <script>
 var _grid_size = 24;
-	
+
 $(document).ready(function() {
-	for (var i = 1; i < 5; i++) {
-		createChart(i);
-	}
+	<% for (var i = 0; i < charts.length; i++) { %>
+		createChart({ 
+			id:		<%= charts[i].id %>,
+			name:	'<%= charts[i].name %>',
+			x:		<%= charts[i].x %>,
+			y:		<%= charts[i].y %>,
+			width:	<%= charts[i].width %>,
+			height:	<%= charts[i].height %>,
+		});
+	<% } %>
+
+	// resizeChart();
 	snapAll();
+	
+	createCrossFilter();
 	
 	$('body').on('mouseup', function() {
 		snapAll();
@@ -70,24 +100,68 @@ $(document).ready(function() {
 	});
 });
 
-function createChart(k) {	
+var dashboard_ = '<%= dashboard.id %>';
+var dashboard = dashboard_ === '' ? 0 : parseInt(dashboard_);
+var charts = new Array();
+
+function createChart(data) {	
 	var html = $('#chart-template').html();
-	html = html.replace(/_id/g, k);
+	var count = charts.length;
+	html = html.replace(/_id/g, count);
 	$('body').append(html);
-	$('#chart' + k).drags({handle: '.handle'});
+	
+	var chart = $('#chart' + count);
+	chart.drags({handle: '.handle'});
+	if (data.x) chart.css('left', data.x + 'px');
+	if (data.y) chart.css('top',  data.y + 'px');
+	
+	if (data.width)  chart.outerWidth(data.width + 'px');
+	if (data.height) chart.outerHeight(data.height + 'px');
+	
+   	if (data.id == null)
+		data.id = 0;
+	charts.push(data);
+
+}
+
+function resizeChart() {
+	for (var i = 0; i < charts.length; i++) {
+		var chart = $('#chart' + i);
+		chart.outerWidth( charts[i].width);
+		chart.outerHeight(charts[i].height);
+		chart.css('min-width',  '240px');
+		chart.css('min-height', '120px');
+		chart.prop('resize', 'both');
+	}
+}
+
+function saveLayout() {
+	for (var i = 0; i < charts.length; i++) {
+		var chart = $('#chart' + i);
+		var x = chart.position().left;
+		var y = chart.position().top;
+		var w = chart.outerWidth();
+		var h = chart.outerHeight();
+		
+		var data = {id: charts[i].id, dashboard: dashboard, 
+			name: "Hello",
+			x:x, y:y, width:w, height:h};
+		$.post('/chart-save', data, function(result) {
+			console.log(result);
+		});
+	}
 }
 
 function snapAll() {
 	$('.chart').each(function() {
 		var x = $(this).position().left;
 		var y = $(this).position().top;
-		x = snap(x);
-		y = snap(y);
 		var w = $(this).outerWidth();
 		var h = $(this).outerHeight();
+		x = snap(x);
+		y = snap(y);
 		w = snap(w);
 		h = snap(h);
-
 		$(this).css('left', x + 'px');
 		$(this).css('top',  y + 'px');
 		$(this).outerWidth(w + 'px');
@@ -120,20 +194,20 @@ function snap(x) {
 <script src="/js/dc.js"></script>
 
 <script>
-	
+
+function createCrossFilter() {
 var width	= $(window).width();
 var height	= $(window).height();
 var square	= width < height ? width : height;
 var keys = new Array();
-
 
 d3.csv("/data/<%= dashboard.id %>", function(data) {
 	for (var k in data[0]) {
 		keys.push(k);
 	}
 	
-var w = $('#chart1').width();
-var h = $('#chart1').height();
+var w = $('#chart0').width();
+var h = $('#chart0').height();
 square = w < h ? w : h;
 
 	var xf = crossfilter(data);
@@ -145,7 +219,7 @@ square = w < h ? w : h;
 
 	var transitionDuration = 1000;
 
-	var c1 = dc.pieChart("#chart1")
+	var c1 = dc.pieChart("#chart0")
 		.width(square - _grid_size).height(square - _grid_size)
 		.dimension(dimension[0])
 		.group(group[0])
@@ -155,6 +229,8 @@ square = w < h ? w : h;
 
 	dc.renderAll();
 });
+
+}
 
 (function($) {
 	$.fn.drags = function(opt) {
@@ -192,19 +268,10 @@ square = w < h ? w : h;
 			if(opt.handle === "") {
 				$(this).removeClass('draggable');
 			} else {
-				/*
-				var x = $(this).parent().position().left;
-				var y = $(this).parent().position().top;
-				x = snap(x, 24);
-				y = snap(y, 24);
-				$(this).parent().css('left', x + 'px');
-				$(this).parent().css('top',  y + 'px');
-				*/			   
 				$(this).removeClass('active-handle').parent().
 						removeClass('draggable');
 			}
 		});
-
 	};
 })(jQuery);
 

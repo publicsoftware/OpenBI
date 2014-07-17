@@ -49,8 +49,12 @@ drop table if exists charts;
 create table charts (
 	id			serial,
 	dashboard	bigint,
-	number		int,
 	name		nvarchar(1023),
+	x			int default 0,
+	y			int default 0,
+	z			int default 0,	-- reserved
+	width		int default 240,
+	height		int default 120,
 	type		varchar(255),	-- bar, line, pie
 	options		longtext,		-- json format
 	dimension	longtext,		-- code e.g. dc.pluck('column')

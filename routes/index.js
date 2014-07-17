@@ -32,15 +32,51 @@ router.get('/dashboard/:id', function(req, res) {
 	function (err, rows) {
 		if (rows != null && rows[0] != null) {
 			rows[0].data = '/' + rows[0].data;
-			res.render(rows[0].layout + '.html', { 
-				title: title + ' ' + rows[0].name,
-				dashboard: rows[0]
+			
+			db.query("select * from charts where dashboard=?",
+				[req.params.id],
+			function(err1, rows1) {
+				
+				res.render(rows[0].layout + '.html', { 
+					title: title + ' ' + rows[0].name,
+					dashboard: rows[0],
+					charts: rows1
+				});
 			});
 		}
 		else {
 			res.redirect("/");
 		}
 	});
+});
+
+router.post('/chart-save', function(req, res) {
+	var id = parseInt(req.body.id);
+	var dashboard = parseInt(req.body.dashboard);
+	
+	if (id === 0) {
+		// todo: check permission befor upsert
+		db.query("insert into charts(dashboard, name, x, y, width, height) " +
+				" values(?, ?, ?, ?, ?, ?)",
+		[dashboard, req.body.name,
+			req.body.x, req.body.y, req.body.width, req.body.height],
+		function(err, rows) {
+			res.send({result:'ok'});
+		});
+	}
+	else {
+		db.query("update charts set " +
+				" name=?," +
+				" x=?, y=?, width=?, height=? " +
+				" where id = ?"
+		,[req.body.name,
+			req.body.x, req.body.y, req.body.width, req.body.height,
+			id],
+		function(err, rows) {
+			res.send({result:'ok'});
+		});
+	}
+			
 });
 
 router.get('/data', function(req, res) {
