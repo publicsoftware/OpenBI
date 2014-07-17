@@ -25,74 +25,91 @@
 	
 	.chart {
 		position: absolute;
-		width: 408px;
-		height: 408px;
+		min-width: 240px;
+		min-height: 120px;
 		top: 72px;
 		left: 24px;
 		background: white;
 		resize: both;
 		overflow: hidden;
+		border-radius: 4px;
+		border: 1px solid #ddd;
 	}
 	
 	.handle {
 		width:100%; 
 		background:#f7f7f7; 
-		height:20px;
+		height:24px;
 		display:block;
 		margin: 0;
+		padding: 2px 4px;
 	}
 </style>
 
 <script type="text/html" id="chart-template">
-	<div class='chart' id='chart1'>
+	<div class='chart' id='chart_id'>
 		<span class='handle'>Test</span>
 	</div>
 </script>
 
 <script>
-$(document).ready(function() {
+var _grid_size = 24;
 	
-	var html = $('#chart-template').html();
-	$('body').append(html).trigger($.Event('resize'));
-	$('#chart1').drags({handle: '.handle'});
-
+$(document).ready(function() {
+	for (var i = 1; i < 5; i++) {
+		createChart(i);
+	}
+	snapAll();
+	
 	$('body').on('mouseup', function() {
 		snapAll();
+		$('.chart').css('opacity', '1.0');
 	});
-	// snapAll();
+	$('body').on('mousedown', function() {
+		$('.chart').css('opacity', '0.8');
+	});
 });
 
+function createChart(k) {	
+	var html = $('#chart-template').html();
+	html = html.replace(/_id/g, k);
+	$('body').append(html);
+	$('#chart' + k).drags({handle: '.handle'});
+}
+
 function snapAll() {
-	console.log('snapAll()');
 	$('.chart').each(function() {
 		var x = $(this).position().left;
 		var y = $(this).position().top;
-		x = snap(x, 24);
-		y = snap(y, 24);
-		var w = $(this).width();
-		var h = $(this).height();
-		w = snap(w, 24);
-		h = snap(h, 24);
+		x = snap(x);
+		y = snap(y);
+		var w = $(this).outerWidth();
+		var h = $(this).outerHeight();
+		w = snap(w);
+		h = snap(h);
 
 		$(this).css('left', x + 'px');
 		$(this).css('top',  y + 'px');
-		$(this).width(w + 'px');
-		$(this).height(h + 'px');
+		$(this).outerWidth(w + 'px');
+		$(this).outerHeight(h + 'px');
 	});
 }
 
-function snap(x, grid) {
+function snap(x) {
 	x = parseInt(x);
-	grid = parseInt(grid);
+	grid = parseInt(_grid_size);
 	
 	if (x % grid === 0) {
 	}
 	if (x % grid > grid / 2) {
-		x = parseInt(x / grid) * (grid + 1);
+		x = (parseInt(x / grid) + 1) * grid;
 	}
 	else {
 		x = parseInt(x / grid) * grid;
 	}
+	
+	if (x % 24 !== 0)
+		console.log('error ' + x);
 	return x;
 }
 
@@ -109,14 +126,16 @@ var height	= $(window).height();
 var square	= width < height ? width : height;
 var keys = new Array();
 
-square = 400;
 
-	
 d3.csv("/data/<%= dashboard.id %>", function(data) {
 	for (var k in data[0]) {
 		keys.push(k);
 	}
 	
+var w = $('#chart1').width();
+var h = $('#chart1').height();
+square = w < h ? w : h;
+
 	var xf = crossfilter(data);
 	var dimension = new Array();
 	var group = new Array();
@@ -127,10 +146,10 @@ d3.csv("/data/<%= dashboard.id %>", function(data) {
 	var transitionDuration = 1000;
 
 	var c1 = dc.pieChart("#chart1")
-		.width(square - 20).height(square - 20)
+		.width(square - _grid_size).height(square - _grid_size)
 		.dimension(dimension[0])
 		.group(group[0])
-		.innerRadius(square / 10)
+// 		.innerRadius(square / 10)
 		.transitionDuration(transitionDuration)
 		;
 
