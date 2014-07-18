@@ -9,6 +9,20 @@ Chart
 Quarters - Donut
 Days of Week - Row
 
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+Dimension
+date		year, quarter, day of week, weekend, season
+time		travelling, working, lunch, night
+location	city, country, region
+misc		dob, sex, education
+
+product		category, price, brand
+combination purchasing
+
+
+
+
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Dashboard option
 

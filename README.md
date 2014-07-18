@@ -16,7 +16,7 @@ Contribute
 ----------
 This project is a part of The Public Software Project. Please feel free to contribute this project, by visiting the following websites:
 - GitHub: https://github.com/publicsoftware/OpenBI.git
-- Trello: https://trello.com/b/9MGr6guZ/open-bi
+- Trello: https://trello.com/b/z68nfFvh/openbi
 - Demo:   http://openbi.publicsoftwareproject.org/dashboard/1
 
 Organization Websites

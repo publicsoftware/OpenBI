@@ -13,6 +13,8 @@ Git pull after committing code
 Isometric Chart
 File Drag & Drop
 Use SQLite as a primary database for standalone app
+Common Dashboard for Apache Log, Paypal Transaction
+Word cloud
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Doing
@@ -25,7 +27,6 @@ Installation page
 Table
 Home page
 Intro page
-Word cloud
 OGP
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
