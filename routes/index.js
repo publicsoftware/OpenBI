@@ -182,7 +182,10 @@ router.post('/login', function(req, res) {
 	db.query('select * from users where email=? or user=?',
 		[req.body.username, req.body.username],
 		function(error, rows) {
-			if (error == null && rows[0].password === digest) {
+			if (error == null && 
+				rows.length > 0 && 
+				rows[0].password === digest) 
+			{
 				req.session.info = rows[0];
 				res.send({result:'ok'});
 			}
