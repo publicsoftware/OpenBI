@@ -103,6 +103,22 @@ function chartMinimize(k) {
 	$('#chart' + k).outerHeight('120px');
 }
 
+function closeSettings() {
+	var modal = $.UIkit.modal("#settings");
+	modal.hide();
+}
+
+function saveSettings() {
+	var checked = $('#settings [name=public]').is(':checked');
+	var data = {
+		dashboard: dashboard,
+		public: checked ? 1 : 0
+	};
+	$.post('/dashboard-save', data, function(result) {
+		console.log(result);
+	});
+}
+
 $(document).ready(function() {
 	main();
 });
@@ -313,6 +329,18 @@ function createCrossFilter() {
 	<div class="uk-modal-dialog">
 		<a class="uk-modal-close uk-close"></a>
 		<h1>Settings</h1>
+		
+		<form class='uk-form' action='javascript:saveSettings()'>
+			<input type='checkbox' name='public' 
+				   <%= dashboard.public ? 'checked' : '' %> />
+			<label>Public</label>
+			
+			<hr/>
+			<input type='submit' value='Save'
+				   class='uk-button uk-button-primary' />
+			<input type='button' value='Cancel'
+				   class='uk-button' onclick='javascript:closeSettings()' />
+		</form>
 	</div>
 </div>
 

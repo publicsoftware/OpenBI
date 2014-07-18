@@ -46,13 +46,42 @@ router.get('/dashboard/:id', function(req, res) {
 					res.redirect("/");
 				}
 				else {
-					res.render(rows[0].layout + '.html', { 
+					res.render('absolute.html', { 
 						title: title + ' ' + rows[0].name,
 						dashboard: rows[0],
 						charts: charts
 					});
 				}
 			});
+		}
+	});
+});
+
+router.post('/dashboard-save', function(req, res) {
+	var user      = req.session.info.id;
+	var dashboard = parseInt(req.body.dashboard);
+	var public    = parseInt(req.body.public);
+	db.query("select user from dashboards where id=?",[dashboard], 
+	function(error, records) {
+		if (error || records.length === 0) {
+			res.send({result:'error', info:'dashboard not found'});
+		}
+		else {
+			if (records[0].user === user) {
+				db.query("update dashboards set public=? where id=?",
+				[public, dashboard],
+				function(errors, records) {
+					if (errors) {			
+						res.send({result:'error', info:'database error'});
+					}
+					else {
+						res.send({result:'ok'});
+					}
+				});
+			}
+			else {
+				res.send({result:'error', info:'permission denied'});
+			}
 		}
 	});
 });
