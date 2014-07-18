@@ -137,12 +137,19 @@ router.post('/chart-save', function(req, res) {
 			}
 			else
 			{
+				var type      = req.body.type;
+				var dimension = req.body.dimension;
+				var group     = req.body.group;
+				
 				if (records[0].user === req.session.info.id) {
 					if (id === 0) {
 						db.query("insert into charts(dashboard, name, " + 
+								" type, dimension, reduce, " +
 								" x, y, width, height) " +
-								" values(?, ?, ?, ?, ?, ?)",
-						[dashboard, req.body.name,
+								" values(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+						[dashboard, 
+							req.body.name, type, 
+							dimension, group,
 							req.body.x, req.body.y, 
 							req.body.width, req.body.height],
 						function(error, rows) {
@@ -151,10 +158,11 @@ router.post('/chart-save', function(req, res) {
 					}
 					else {
 						db.query("update charts set " +
-								" name=?," +
+								" name=?, type=?, dimension=?, reduce=?," +
 								" x=?, y=?, width=?, height=? " +
 								" where id = ?"
-						,[req.body.name,
+						,[req.body.name, type, 
+							dimension, group,
 							req.body.x, req.body.y, 
 							req.body.width, req.body.height,
 							id],
