@@ -87,6 +87,41 @@ router.post('/dashboard-save', function(req, res) {
 	});
 });
 
+
+router.post('/chart-delete', function(req, res) {
+	var id = parseInt(req.body.id);
+	var dashboard = parseInt(req.body.dashboard);
+	
+	if (req.session.info == null) {
+		res.send({result:'error'});
+	}
+	else {
+		db.query("select user from dashboards where id=?", [dashboard],
+		function(error, records) {
+			if (error) {
+				res.send({result:'error'});
+			}
+			else
+			{
+				if (records[0].user === req.session.info.id) {
+					db.query("delete from charts where id=?", [id], 
+					function(errors, records) {
+						if (errors) {
+							res.send({result:'error'});
+						}
+						else {
+							res.send({result:'ok'});
+						}
+					});
+				}
+				else {
+					res.send({result:'error'});
+				}
+			}
+		});
+	}
+});
+	
 router.post('/chart-save', function(req, res) {
 	var id = parseInt(req.body.id);
 	var dashboard = parseInt(req.body.dashboard);

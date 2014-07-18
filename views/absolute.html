@@ -71,14 +71,23 @@ body {
 	padding: 2px 4px;
 	transition: background 0.2s ease-in;
 }
+.chart .button {
+	float: right;
+}
+.chart .button i:hover {
+	color: dodgerblue;
+}
 </style>
 
 <script type="text/html" id="chart-template">
 <div class='chart' id='chart_id'>
 	<span class='handle'>
 		<span class='title'></span>
+		<span class='button'>
 		<i class="uk-icon-gears" onclick='javascript:chartSettings(_id)'></i>
 		<i class="uk-icon-minus" onclick='javascript:chartMinimize(_id)'></i>
+		<i class="uk-icon-trash-o" onclick='javascript:chartDelete(_id)'></i>
+		</span>
 	</span>
 </div>
 </script>
@@ -104,6 +113,11 @@ function chartSettings(k) {
 function chartMinimize(k) {
 	$('#chart' + k).outerWidth('240px');
 	$('#chart' + k).outerHeight('120px');
+}
+
+function chartDelete(k) {
+	charts[k].deleted = true;
+	$('#chart' + k).fadeOut();
 }
 
 function closeSettings() {
@@ -169,7 +183,6 @@ function createChart(data) {
    	if (data.id == null)
 		data.id = 0;
 	charts.push(data);
-
 }
 
 function resizeChart() {
@@ -185,18 +198,26 @@ function resizeChart() {
 
 function saveLayout() {
 	for (var i = 0; i < charts.length; i++) {
-		var chart = $('#chart' + i);
-		var x = chart.position().left;
-		var y = chart.position().top;
-		var w = chart.outerWidth();
-		var h = chart.outerHeight();
-		
-		var data = {id: charts[i].id, dashboard: dashboard, 
-			name: "Hello",
-			x:x, y:y, width:w, height:h};
-		$.post('/chart-save', data, function(result) {
-			console.log(result);
-		});
+		if (charts[i].deleted) {
+			var data = { id: charts[i].id, dashboard: dashboard };
+			$.post('/chart-delete', data, function(result) {
+				// console.log(result);
+			});
+		}
+		else {
+			var chart = $('#chart' + i);
+			var x = chart.position().left;
+			var y = chart.position().top;
+			var w = chart.outerWidth();
+			var h = chart.outerHeight();
+
+			var data = {id: charts[i].id, dashboard: dashboard, 
+				name: "Hello",
+				x:x, y:y, width:w, height:h};
+			$.post('/chart-save', data, function(result) {
+				// console.log(result);
+			});
+		}
 	}
 }
 
