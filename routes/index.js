@@ -34,7 +34,7 @@ router.get('/dashboard/:id', function(req, res) {
 	db.query("select * from dashboards where id=? and (user=? or public=1)",
 	[req.params.id, user],
 	function (error, rows) {
-		if (error) {
+		if (error || rows.length === 0) {
 			res.redirect("/");
 		}
 		else {
