@@ -264,7 +264,7 @@ function createCrossFilter() {
 (function($) {
 	$.fn.drags = function(opt) {
 
-		opt = $.extend({handle:"",cursor:"move"}, opt);
+		// opt = $.extend({handle:"",cursor:"move"}, opt);
 
 		if(opt.handle === "") {
 			var $el = this;
@@ -273,6 +273,7 @@ function createCrossFilter() {
 		}
 
 		return $el.css('cursor', opt.cursor).on("mousedown", function(e) {
+			$(this).css('cursor', 'move');
 			if(opt.handle === "") {
 				var $drag = $(this).addClass('draggable');
 			} else {
@@ -294,6 +295,7 @@ function createCrossFilter() {
 			});
 			e.preventDefault(); // disable selection
 		}).on("mouseup", function() {
+			$(this).css('cursor', 'default');
 			if(opt.handle === "") {
 				$(this).removeClass('draggable');
 			} else {
