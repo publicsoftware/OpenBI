@@ -48,6 +48,7 @@ router.get('/dashboard/:id', function(req, res) {
 				else {
 					res.render('absolute.html', { 
 						title: title + ' ' + rows[0].name,
+						user: user,
 						dashboard: rows[0],
 						charts: charts
 					});
