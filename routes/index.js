@@ -33,12 +33,12 @@ router.get('/dashboard/:id', function(req, res) {
 	var user = req.session.info ? req.session.info.id : 0;
 	db.query("select * from dashboards where id=? and (user=? or public=1)",
 	[req.params.id, user],
-	function (error, rows) {
-		if (error || rows.length === 0) {
+	function (error, records) {
+		if (error || records.length === 0) {
 			res.redirect("/");
 		}
 		else {
-			rows[0].data = '/' + rows[0].data;
+			records[0].data = '/' + records[0].data;
 			db.query("select * from charts where dashboard=?",
 				[req.params.id],
 			function(error, charts) {
@@ -47,9 +47,9 @@ router.get('/dashboard/:id', function(req, res) {
 				}
 				else {
 					res.render('absolute.html', { 
-						title: title + ' ' + rows[0].name,
+						title: title + ' ' + records[0].name,
 						user: user,
-						dashboard: rows[0],
+						dashboard: records[0],
 						charts: charts
 					});
 				}
@@ -69,8 +69,8 @@ router.post('/dashboard-save', function(req, res) {
 		}
 		else {
 			if (records[0].user === user) {
-				db.query("update dashboards set public=? where id=?",
-				[public, dashboard],
+				db.query("update dashboards set name=?, public=? where id=?",
+				[req.body.name, public, dashboard],
 				function(errors, records) {
 					if (errors) {			
 						res.send({result:'error', info:'database error'});

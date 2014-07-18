@@ -115,6 +115,7 @@ function saveSettings() {
 	var checked = $('#settings [name=public]').is(':checked');
 	var data = {
 		dashboard: dashboard,
+		name: $('#settings [name=name]').val(),
 		public: checked ? 1 : 0
 	};
 	$.post('/dashboard-save', data, function(result) {
@@ -335,15 +336,32 @@ function createCrossFilter() {
 		<h1>Settings</h1>
 		
 		<form class='uk-form' action='javascript:saveSettings()'>
-			<input type='checkbox' name='public' 
-				   <%= dashboard.public ? 'checked' : '' %> />
-			<label>Public</label>
-			
-			<hr/>
-			<input type='submit' value='Save'
-				   class='uk-button uk-button-primary' />
-			<input type='button' value='Cancel'
-				   class='uk-button' onclick='javascript:closeSettings()' />
+			<div class='uk-grid uk-grid-preserve'>
+				<div class='uk-width-3-10'>
+					<label>Name</label>
+				</div>
+				<div class='uk-width-7-10'>
+					<input type='text' name='name' class='uk-width-1-1'
+					   value='<%= dashboard.name %>' />
+				</div>
+				<div class='uk-width-3-10'>
+					<label>Public</label>
+				</div>
+				<div class='uk-width-7-10'>
+					<input type='checkbox' name='public' 
+					   <%= dashboard.public ? 'checked' : '' %> />	
+				</div>
+				
+				<div class='uk-width-1-1'>&nbsp;</div>
+				
+				<div class='uk-width-1-1'>
+					<input type='submit' value='Save'
+					   class='uk-button uk-button-primary' />
+					<input type='button' value='Cancel'
+					   class='uk-button' onclick='javascript:closeSettings()' />
+					<input type='hidden' />
+				</div>
+			</div>
 		</form>
 	</div>
 </div>
