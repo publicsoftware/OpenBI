@@ -315,40 +315,47 @@ function createCrossFilter() {
 	var keys = new Array();
 
 	d3.csv("/data/<%= dashboard.id %>", function(data) {
+		/*
 		for (var k in data[0]) {
 			keys.push(k);
 		}
-
-		var w = $('#chart0').width();
-		var h = $('#chart0').height();
-		square = w < h ? w : h;
+		*/
+	   
 
 		var xf = crossfilter(data);
 		var dimension = new Array();
 		var group = new Array();
+		
+		for (var i = 0; i < charts.length; i++) {
+			
+			dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
+			group[i] = dimension[i].group().reduceSum(dc.pluck(charts[i].group));
 
-		dimension[0]	= xf.dimension(dc.pluck(keys[0]));
-		group[0]		= dimension[0].group().reduceSum(dc.pluck(keys[1]));
 
-		var transitionDuration = 1000;
-
-		var c1 = dc.pieChart("#chart0")
-			.width(square - _grid_size).height(square - _grid_size)
-			.dimension(dimension[0])
-			.group(group[0])
-	// 		.innerRadius(square / 10)
-			.transitionDuration(transitionDuration)
-			;
-
-		dimension[1]	= xf.dimension(dc.pluck(keys[2]));
-		group[1]		= dimension[1].group().reduceSum(dc.pluck(keys[1]));
-
-		var c2 = dc.rowChart('#chart1')
-			.width(square).height(square - _grid_size)
-			.dimension(dimension[1])
-			.group(group[1])
-			.transitionDuration(transitionDuration)
-			;
+			var w = $('#chart' + i).width();
+			var h = $('#chart' + i).height();
+			square = w < h ? w : h;
+			var transitionDuration = 1000;
+			
+			if (charts[i].type === 'pie') {
+				charts[i].chart = dc.pieChart("#chart" + i)
+					.width(square - _grid_size).height(square - _grid_size)
+					.dimension(dimension[i])
+					.group(group[i])
+			// 		.innerRadius(square / 10)
+					.transitionDuration(transitionDuration)
+					;
+			}
+			else
+			if (charts[i].type === 'row') {
+				charts[i].chart = dc.rowChart('#chart' + i)
+					.width(square).height(square - _grid_size)
+					.dimension(dimension[i])
+					.group(group[i])
+					.transitionDuration(transitionDuration)
+					;
+			}
+		}
 
 		dc.renderAll();
 	});
