@@ -34,52 +34,6 @@
 	</ul>
 </div>
 
-<style>
-body {
-	overflow: hidden;
-	background: white;
-}
-
-.chart {
-	position: absolute;
-	min-width: 240px;
-	min-height: 120px;
-	top: 72px;
-	left: 24px;
-	background: white;
-	border-radius: 4px;
-	border: 1px solid #ddd;
-	border-bottom: 1px solid #ccc;
-	resize: both;
-	overflow: hidden;
-}
-
-.chart:hover {
-	width: 24px;
-	height: 24px;
-}
-
-.chart:hover .handle {
-	background: #f7f7f7;
-}
-
-.handle {
-	width:100%; 
-	background: none;
-	height: 24px;
-	display:block;
-	margin: 0;
-	padding: 2px 4px;
-	transition: background 0.2s ease-in;
-}
-.chart .button {
-	float: right;
-}
-.chart .button i:hover {
-	color: dodgerblue;
-}
-</style>
-
 <script type="text/html" id="chart-template">
 <div class='chart' id='chart_id'>
 	<span class='handle'>
@@ -206,6 +160,7 @@ $(document).ready(function() {
 });
 
 function main() {
+	// TODO: load charts from ajax not the backend code
 	<% for (var i = 0; i < charts.length; i++) { %>
 		createChart({ 
 			id:		<%= charts[i].id %>,
@@ -314,14 +269,15 @@ function createCrossFilter() {
 	var square	= width < height ? width : height;
 	var keys = new Array();
 
+	// TODO: load data only first time then
+	// create data preparation, get the available dimension
+	// display dimension & group to user
 	d3.csv("/data/<%= dashboard.id %>", function(data) {
 		/*
 		for (var k in data[0]) {
 			keys.push(k);
 		}
 		*/
-	   
-
 		var xf = crossfilter(data);
 		var dimension = new Array();
 		var group = new Array();
@@ -331,10 +287,10 @@ function createCrossFilter() {
 			dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
 			group[i] = dimension[i].group().reduceSum(dc.pluck(charts[i].group));
 
-
 			var w = $('#chart' + i).width();
 			var h = $('#chart' + i).height();
 			square = w < h ? w : h;
+			square -= _grid_size;
 			var transitionDuration = 1000;
 			
 			if (charts[i].type === 'pie') {
@@ -342,7 +298,7 @@ function createCrossFilter() {
 					.width(square - _grid_size).height(square - _grid_size)
 					.dimension(dimension[i])
 					.group(group[i])
-			// 		.innerRadius(square / 10)
+					.innerRadius(square / 10)
 					.transitionDuration(transitionDuration)
 					;
 			}

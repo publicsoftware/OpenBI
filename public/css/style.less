@@ -51,3 +51,59 @@ ul.title {
 	list-style: none;
 	font-size: 1rem;
 }
+
+
+// chart style
+
+svg {
+	padding: 4px;
+}
+
+.chart {
+	position: absolute;
+	min-width: 240px;
+	min-height: 120px;
+	top: 72px;
+	left: 24px;
+	background: white;
+	border-radius: 4px;
+	border: 1px solid #f7f7f7;
+	resize: both;
+	overflow: hidden;
+}
+
+.chart:hover {
+	width: 24px;
+	height: 24px;
+	border: 1px solid #ddd;
+	border-bottom: 1px solid #ccc;
+	
+}
+
+.chart .handle {
+	width:100%; 
+	background: none;
+	height: 24px;
+	display: block;
+	margin: 0;
+	padding: 2px 6px;
+	transition: background 0.2s ease-in;
+}
+
+.chart:hover .handle {
+	background: #f7f7f7;
+}
+
+.chart .button {
+	float: right;
+	display: none;
+}
+
+.chart:hover .button {
+	display: block;
+	opacity: 0.8;
+}
+
+.chart .button i:hover {
+	color: dodgerblue;
+}
