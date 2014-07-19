@@ -263,6 +263,11 @@ function snapAll() {
 	});
 }
 
+
+var data = new Object();
+var xf = new Object();
+var dimension = new Array();
+var group = new Array();
 function createCrossFilter() {
 	/*
 	var width	= $(window).width();
@@ -275,15 +280,12 @@ function createCrossFilter() {
 		keys.push(k);
 	}
 	*/
-	   
 	// TODO: load data only first time then
 	// create data preparation, get the available dimension
 	// display dimension & group to user
-	d3.csv("/data/<%= dashboard.id %>", function(data) {
-		console.log(data);
-		var xf = crossfilter(data);
-		var dimension = new Array();
-		var group = new Array();
+	d3.csv("/data/<%= dashboard.id %>", function(data_) {
+		data = data_;
+		xf = crossfilter(data);
 		
 		for (var i = 0; i < charts.length; i++) {
 			
