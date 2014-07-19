@@ -264,20 +264,23 @@ function snapAll() {
 }
 
 function createCrossFilter() {
+	/*
 	var width	= $(window).width();
 	var height	= $(window).height();
 	var square	= width < height ? width : height;
+	*/
+	/*
 	var keys = new Array();
-
+	for (var k in data[0]) {
+		keys.push(k);
+	}
+	*/
+	   
 	// TODO: load data only first time then
 	// create data preparation, get the available dimension
 	// display dimension & group to user
 	d3.csv("/data/<%= dashboard.id %>", function(data) {
-		/*
-		for (var k in data[0]) {
-			keys.push(k);
-		}
-		*/
+		console.log(data);
 		var xf = crossfilter(data);
 		var dimension = new Array();
 		var group = new Array();
@@ -287,15 +290,15 @@ function createCrossFilter() {
 			dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
 			group[i] = dimension[i].group().reduceSum(dc.pluck(charts[i].group));
 
-			var w = $('#chart' + i).outerWidth();
-			var h = $('#chart' + i).outerHeight();
-			square = w < h ? w : h;
-			console.log('square = ' + square);
+			var width  = $('#chart' + i).outerWidth();
+			var height = $('#chart' + i).outerHeight();
+			height -= _grid_size;
+			var square = Math.min(width, height);
 			var transitionDuration = 1000;
 			
 			if (charts[i].type === 'pie') {
 				charts[i].chart = dc.pieChart("#chart" + i)
-					.width(square - _grid_size).height(square - _grid_size)
+					.width(width).height(height)
 					.dimension(dimension[i])
 					.group(group[i])
 					.radius(square / 2 - _grid_size)
@@ -306,7 +309,7 @@ function createCrossFilter() {
 			else
 			if (charts[i].type === 'row') {
 				charts[i].chart = dc.rowChart('#chart' + i)
-					.width(square - _grid_size).height(square - _grid_size)
+					.width(width).height(height)
 					.dimension(dimension[i])
 					.group(group[i])
 					.transitionDuration(transitionDuration)
