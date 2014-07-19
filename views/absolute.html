@@ -287,10 +287,10 @@ function createCrossFilter() {
 			dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
 			group[i] = dimension[i].group().reduceSum(dc.pluck(charts[i].group));
 
-			var w = $('#chart' + i).width();
-			var h = $('#chart' + i).height();
+			var w = $('#chart' + i).outerWidth();
+			var h = $('#chart' + i).outerHeight();
 			square = w < h ? w : h;
-			square -= _grid_size;
+			console.log('square = ' + square);
 			var transitionDuration = 1000;
 			
 			if (charts[i].type === 'pie') {
@@ -298,6 +298,7 @@ function createCrossFilter() {
 					.width(square - _grid_size).height(square - _grid_size)
 					.dimension(dimension[i])
 					.group(group[i])
+					.radius(square / 2 - _grid_size)
 					.innerRadius(square / 10)
 					.transitionDuration(transitionDuration)
 					;
@@ -305,7 +306,7 @@ function createCrossFilter() {
 			else
 			if (charts[i].type === 'row') {
 				charts[i].chart = dc.rowChart('#chart' + i)
-					.width(square).height(square - _grid_size)
+					.width(square - _grid_size).height(square - _grid_size)
 					.dimension(dimension[i])
 					.group(group[i])
 					.transitionDuration(transitionDuration)
