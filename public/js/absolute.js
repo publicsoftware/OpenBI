@@ -1,4 +1,5 @@
-var _grid_size = 24;
+var _grid_size = 12;
+var _chart_padding = 24;
 
 function snap(x) {
 	x = parseInt(x);
@@ -43,36 +44,36 @@ function snap(x) {
 				
 				var z = $(this).css('z-index');
 				$(this).css('z-index', z + 1000);
+				
 				$(this).parents().on("mousemove", function(e) {
-					var width  = e.pageX - x;
-					var height = e.pageY - y;
-					width  = snap(width);
-					height = snap(height);
+					var width  = snap(e.pageX - x);
+					var height = snap(e.pageY - y);
 					$('.resizable')
 					.outerWidth(width + 'px')
 					.outerHeight(height + 'px');
 				});
 				$(this).parents().on("mouseup", function() {
-					$('.resizable').css('z-index', z).removeClass('resizable');
+					$('.resizable')
+					.css('z-index', z)
+					.css('cursor', 'default')
+					.removeClass('resizable');
 				});
 			}
-			e.preventDefault(); // disable selection
+			e.preventDefault();
 		});
 		
-		/*
 		$(this).on("mouseup", function() {
-			$(this).css('cursor', 'default');
-			$(this).removeClass('resizable');
-			snapAll();
+			$(this).css('cursor', 'default')
+			.removeClass('resizable');
+			// snapAll();
 		});
-		*/
 
 		return $(this);
 	};
 })(jQuery);
 
 (function($) {
-	$.fn.drags = function(opt) {
+	$.fn.draggable = function(opt) {
 
 		// opt = $.extend({handle:"",cursor:"move"}, opt);
 
@@ -103,7 +104,7 @@ function snap(x) {
 					$(this).removeClass('draggable').css('z-index', z_idx);
 				});
 			});
-			e.preventDefault(); // disable selection
+			e.preventDefault();
 		}).on("mouseup", function() {
 			$(this).css('cursor', 'default');
 			if(opt.handle === "") {

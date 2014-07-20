@@ -34,26 +34,6 @@
 	</ul>
 </div>
 
-<!--
-
-  <div style="resize:both; overflow:scroll; width:300px; height:300px; border:1px solid black">
-    <p style="resize:both; overflow:scroll; width:200px; height:200px; border:1px solid black">
-      This paragraph is resizable, because the CSS resize property is set to 'both' on this
-      element.
-    </p>
-  </div>
--->
-
-<script type="text/html" id="chart-template1">
-<div class='chart' id='chart_id'>
-	<span class="handle">
-		<i class="uk-icon-gears" onclick='javascript:chartSettings(_id)'></i>
-		<i class="uk-icon-minus" onclick='javascript:chartMinimize(_id)'></i>
-		<i class="uk-icon-trash-o" onclick='javascript:chartDelete(_id)'></i>
-	</span>
-</div>
-</script>
-
 <script type="text/html" id="chart-template">
 <div class='chart ui-widget-content' id='chart_id'>
 	<span class='handle'>
@@ -65,7 +45,6 @@
 	</span>
 </div>
 </script>
-
 
 <div id="chart-settings" class="uk-modal" data-chart-id="0">
 	<div class="uk-modal-dialog">
@@ -212,7 +191,7 @@ function createChart(data) {
 	$('body').append(html);
 	
 	var chart = $('#chart' + count);
-	chart.drags({handle: '.handle'});
+	chart.draggable({handle: '.handle'});
 	chart.resizable();
 	
 	if (data.x) chart.css('left', data.x + 'px');
@@ -288,7 +267,6 @@ function snapAll() {
 	});
 }
 
-
 var data;
 var xf;
 var dimension;
@@ -316,16 +294,17 @@ function createCrossFilter() {
 
 			var width  = $('#chart' + i).outerWidth();
 			var height = $('#chart' + i).outerHeight();
-			height -= _grid_size;
+			height -= _chart_padding;
 			var square = Math.min(width, height);
 			var transitionDuration = 1000;
 			
 			if (charts[i].type === 'pie') {
 				charts[i].chart = dc.pieChart("#chart" + i)
-					.width(width).height(height)
+					.width(width)
+					.height(height)
 					.dimension(dimension[i])
 					.group(group[i])
-					.radius(square / 2 - _grid_size)
+					.radius(square / 2 - _chart_padding / 2)
 					.innerRadius(square / 10)
 					.transitionDuration(transitionDuration)
 					;
@@ -333,7 +312,8 @@ function createCrossFilter() {
 			else
 			if (charts[i].type === 'row') {
 				charts[i].chart = dc.rowChart('#chart' + i)
-					.width(width).height(height)
+					.width(width)
+					.height(height - _chart_padding)
 					.dimension(dimension[i])
 					.group(group[i])
 					.transitionDuration(transitionDuration)

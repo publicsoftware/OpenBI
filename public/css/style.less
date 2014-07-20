@@ -65,15 +65,12 @@ ul.title {
 	overflow: hidden;
 	transition: background 0.25s ease-in;
 	transition: border 0.25s ease-in;
-	z-index: 800;
-	// resize: both;
 }
 
 .chart:hover,
 .resizable {
 	border: 1px solid #ddd;
 	border-bottom: 1px solid #ccc;
-	
 	background:
 		url(/images/resize.png)
 		100% 100% no-repeat;
@@ -83,13 +80,17 @@ ul.title {
 }
 
 .chart .handle {
-	width:100%;
+	width: 100%;
 	display: block;
-	height: 24px;
+	height: 32px;
 	padding: 2px 4px;
+	transition: background 0.25s ease-in;
 }
 
-//.chart:hover .handle {}
+.chart:hover .handle,
+.resize .handle {
+	background: #f7f7f7;
+}
 
 .chart .title {
 	float: left;
