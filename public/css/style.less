@@ -59,47 +59,57 @@ ul.title {
 	position: absolute;
 	min-width: 240px;
 	min-height: 120px;
-	top: 72px;
-	left: 24px;
-	background: white;
+	// background: white;
 	border-radius: 4px;
 	border: 1px solid #f7f7f7;
-	resize: both;
 	overflow: hidden;
+	transition: background 0.25s ease-in;
+	transition: border 0.25s ease-in;
+	z-index: 800;
+	// resize: both;
 }
 
 .chart:hover {
-	width: 24px;
-	height: 24px;
 	border: 1px solid #ddd;
 	border-bottom: 1px solid #ccc;
 	
+	background:
+		url(/images/resize.png)
+		100% 100% no-repeat;
+	
+
 }
 
 .chart .handle {
-	width:100%; 
-	background: none;
-	height: 24px;
+	width:100%;
 	display: block;
-	margin: 0;
-	padding: 2px 6px;
-	transition: background 0.2s ease-in;
+	height: 24px;
+	padding: 2px 4px;
 }
 
-.chart:hover .handle {
-	background: #f7f7f7;
+//.chart:hover .handle {}
+
+.chart .title {
+	float: left;
+	margin: 4px;
 }
 
 .chart .button {
 	float: right;
-	display: none;
+	opacity: 0;
+	transition: opacity 0.25s ease-in;
+	margin: 4px;
 }
 
 .chart:hover .button {
-	display: block;
-	opacity: 0.8;
+	opacity: 1.0;
+}
+
+.chart .button i {
+	transition: all 0.25s ease-in;
 }
 
 .chart .button i:hover {
 	color: dodgerblue;
+	cursor: pointer;
 }

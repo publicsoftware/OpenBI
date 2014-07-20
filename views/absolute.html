@@ -34,13 +34,32 @@
 	</ul>
 </div>
 
-<script type="text/html" id="chart-template">
+<!--
+
+  <div style="resize:both; overflow:scroll; width:300px; height:300px; border:1px solid black">
+    <p style="resize:both; overflow:scroll; width:200px; height:200px; border:1px solid black">
+      This paragraph is resizable, because the CSS resize property is set to 'both' on this
+      element.
+    </p>
+  </div>
+-->
+
+<script type="text/html" id="chart-template1">
 <div class='chart' id='chart_id'>
+	<span class="handle">
+		<i class="uk-icon-gears" onclick='javascript:chartSettings(_id)'></i>
+		<i class="uk-icon-minus" onclick='javascript:chartMinimize(_id)'></i>
+		<i class="uk-icon-trash-o" onclick='javascript:chartDelete(_id)'></i>
+	</span>
+</div>
+</script>
+
+<script type="text/html" id="chart-template">
+<div class='chart ui-widget-content' id='chart_id'>
 	<span class='handle'>
 		<span class='title'></span>
 		<span class='button'>
 		<i class="uk-icon-gears" onclick='javascript:chartSettings(_id)'></i>
-		<i class="uk-icon-minus" onclick='javascript:chartMinimize(_id)'></i>
 		<i class="uk-icon-trash-o" onclick='javascript:chartDelete(_id)'></i>
 		</span>
 	</span>
@@ -101,6 +120,29 @@
 
 <script>
 
+$(document).ready(function() {
+	main();
+});
+
+function main() {
+	// TODO: load charts from ajax not the backend code
+	<% for (var i = 0; i < charts.length; i++) { %>
+		createChart({ 
+			id:		<%= charts[i].id %>,
+			name:		'<%= charts[i].name %>',
+			type:		'<%= charts[i].type %>',
+			dimension:	'<%= charts[i].dimension %>',
+			group:		'<%= charts[i].reduce %>',
+			x:		<%= charts[i].x %>,
+			y:		<%= charts[i].y %>,
+			width:	<%= charts[i].width %>,
+			height:	<%= charts[i].height %>
+		});
+	<% } %>
+
+	createCrossFilter();
+}
+
 var dashboard_ = '<%= dashboard.id %>';
 var dashboard = dashboard_ === '' ? 0 : parseInt(dashboard_);
 var charts = new Array();
@@ -155,29 +197,6 @@ function saveSettings() {
 	});
 }
 
-$(document).ready(function() {
-	main();
-});
-
-function main() {
-	// TODO: load charts from ajax not the backend code
-	<% for (var i = 0; i < charts.length; i++) { %>
-		createChart({ 
-			id:		<%= charts[i].id %>,
-			name:		'<%= charts[i].name %>',
-			type:		'<%= charts[i].type %>',
-			dimension:	'<%= charts[i].dimension %>',
-			group:		'<%= charts[i].reduce %>',
-			x:		<%= charts[i].x %>,
-			y:		<%= charts[i].y %>,
-			width:	<%= charts[i].width %>,
-			height:	<%= charts[i].height %>
-		});
-	<% } %>
-
-	createCrossFilter();
-}
-
 function createChart(data) {
    	if (data.id == null) {
 		data.id = 0;
@@ -194,6 +213,8 @@ function createChart(data) {
 	
 	var chart = $('#chart' + count);
 	chart.drags({handle: '.handle'});
+	chart.resizable();
+	
 	if (data.x) chart.css('left', data.x + 'px');
 	if (data.y) chart.css('top',  data.y + 'px');
 	if (data.width)  chart.outerWidth(data.width + 'px');
@@ -243,7 +264,11 @@ function saveLayout() {
 }
 
 $('body').on('mouseup', function() {
+	console.log('body mouseup');
+	$('.resizable').css('cursor', 'default');
+	$('.resizable').removeClass('resizable');
 	snapAll();
+	
 });
 
 function snapAll() {
@@ -264,28 +289,25 @@ function snapAll() {
 }
 
 
-var data = new Object();
-var xf = new Object();
-var dimension = new Array();
-var group = new Array();
+var data;
+var xf;
+var dimension;
+var group;
+var keys;
+
 function createCrossFilter() {
-	/*
-	var width	= $(window).width();
-	var height	= $(window).height();
-	var square	= width < height ? width : height;
-	*/
-	/*
-	var keys = new Array();
-	for (var k in data[0]) {
-		keys.push(k);
-	}
-	*/
 	// TODO: load data only first time then
 	// create data preparation, get the available dimension
 	// display dimension & group to user
 	d3.csv("/data/<%= dashboard.id %>", function(data_) {
-		data = data_;
+		data = data_;		
 		xf = crossfilter(data);
+		dimension = new Array();
+		group = new Array();
+		keys = new Array();
+		for (var k in data[0]) {
+			keys.push(k);
+		}
 		
 		for (var i = 0; i < charts.length; i++) {
 			
