@@ -1,6 +1,148 @@
 var _grid_size = 8;
 var _chart_padding = 16;
 
+function chartSettings(k) {
+	$('#chart-settings').prop('data-chart-id', k);
+	$('#chart-settings [name=id]'       ).val(k);
+	$('#chart-settings [name=name]'     ).val(charts[k].name);
+	$('#chart-settings [name=type]'     ).val(charts[k].type);
+	$('#chart-settings [name=dimension]').val(charts[k].dimension);
+	$('#chart-settings [name=group]'    ).val(charts[k].group);
+	var modal = $.UIkit.modal("#chart-settings");
+	modal.show();
+}
+
+function chartSave() {
+	var id               = $('#chart-settings [name=id]'       ).val();
+	charts[id].name      = $('#chart-settings [name=name]'     ).val();
+	charts[id].type      = $('#chart-settings [name=type]'     ).val();
+	charts[id].dimension = $('#chart-settings [name=dimension]').val();
+	charts[id].group     = $('#chart-settings [name=group]'    ).val();
+	$('#chart' + id + ' .title').text(charts[id].name);
+	var modal = $.UIkit.modal("#chart-settings");
+	modal.hide();
+}
+
+function chartMinimize(k) {
+	$('#chart' + k).outerWidth('240px');
+	$('#chart' + k).outerHeight('120px');
+}
+
+function chartDelete(k) {
+	charts[k].deleted = true;
+	$('#chart' + k).fadeOut();
+}
+
+function closeSettings() {
+	var modal = $.UIkit.modal("#settings");
+	modal.hide();
+}
+
+function saveSettings() {
+	var checked = $('#settings [name=public]').is(':checked');
+	var data = {
+		dashboard: dashboard,
+		name: $('#settings [name=name]').val(),
+		public: checked ? 1 : 0
+	};
+	$.post('/dashboard-save', data, function(result) {
+		closeSettings();
+	});
+}
+
+function createChart(data) {
+   	if (data.id == null) {
+		data.id = 0;
+		data.name = 'New Chart';
+		data.type = 'pie';
+		data.dimension = '';
+		data.group = '';
+	}
+	
+	var html = $('#chart-template').html();
+	var count = charts.length;
+	html = html.replace(/_id/g, count);
+	$('body').append(html);
+	
+	var chart = $('#chart' + count);
+	chart.draggable({handle: '.handle'});
+	chart.resizable();
+	
+	if (data.x) chart.css('left', data.x + 'px');
+	if (data.y) chart.css('top',  data.y + 'px');
+	if (data.width)  chart.outerWidth(data.width + 'px');
+	if (data.height) chart.outerHeight(data.height + 'px');
+	chart.find(".title").text(data.name);
+	
+	charts.push(data);
+}
+
+function saveLayout() {
+	var count = 0;
+	for (var i = 0; i < charts.length; i++) {
+		if (charts[i].deleted) {
+			var data = { id: charts[i].id, dashboard: dashboard };
+			$.post('/chart-delete', data, function(result) {
+				// console.log(result);
+				count++;
+				if (count === charts.length) {
+					location.reload();
+				}
+			});
+		}
+		else {
+			var chart = $('#chart' + i);
+			var x = chart.position().left;
+			var y = chart.position().top;
+			var w = chart.outerWidth();
+			var h = chart.outerHeight();
+
+			var data = {
+				dashboard: dashboard,
+				id:        charts[i].id, 
+				name:      charts[i].name,
+				type:      charts[i].type,
+				dimension: charts[i].dimension,
+				group:     charts[i].group,
+				x:x, y:y, width:w, height:h};
+			$.post('/chart-save', data, function(result) {
+				// console.log(result);
+				count++;
+				if (count === charts.length) {
+					location.reload();
+				}
+			});
+		}
+	}
+}
+
+$('body').on('mouseup', function() {
+	/*
+	$('.resizable').css('cursor', 'default');
+	$('.resizable').removeClass('resizable');
+	*/
+	snapAll();
+});
+
+function snapAll() {
+	$('body').css('width', '100%');
+	$('.chart').each(function() {
+		var x = $(this).position().left;
+		var y = $(this).position().top;
+		var w = $(this).outerWidth();
+		var h = $(this).outerHeight();
+		x = snap(x);
+		y = snap(y);
+		w = snap(w);
+		h = snap(h);
+		$(this).css('left', x + 'px');
+		$(this).css('top',  y + 'px');
+		$(this).outerWidth(w + 'px');
+		$(this).outerHeight(h + 'px');
+	});
+}
+
+
 function snap(x) {
 	x = parseInt(x);
 	grid = parseInt(_grid_size);
@@ -18,8 +160,6 @@ function snap(x) {
 		console.log('error ' + x);
 	return x;
 }
-
-
 
 (function($) {
 	$.fn.resizable = function() {

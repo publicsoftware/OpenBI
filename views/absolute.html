@@ -4,6 +4,12 @@
 <script src="/js/crossfilter.js"></script>
 <script src="/js/dc.js"></script>
 <script src="/js/absolute.js"></script>
+<style>
+	
+body {
+	background: #eee;
+}
+</style>
 
 <div class='uk-container'>
 	<ul class='title'>
@@ -67,6 +73,7 @@
 				</div>
 				<div class="uk-width-2-3">
 					<select class="uk-width-1-1" name="type">
+						<option value="none">None</option>
 						<option value="pie">Pie</option>
 						<option value="row">Row</option>
 					</select>
@@ -126,147 +133,6 @@ var dashboard_ = '<%= dashboard.id %>';
 var dashboard = dashboard_ === '' ? 0 : parseInt(dashboard_);
 var charts = new Array();
 
-function chartSettings(k) {
-	$('#chart-settings').prop('data-chart-id', k);
-	$('#chart-settings [name=id]'       ).val(k);
-	$('#chart-settings [name=name]'     ).val(charts[k].name);
-	$('#chart-settings [name=type]'     ).val(charts[k].type);
-	$('#chart-settings [name=dimension]').val(charts[k].dimension);
-	$('#chart-settings [name=group]'    ).val(charts[k].group);
-	var modal = $.UIkit.modal("#chart-settings");
-	modal.show();
-}
-
-function chartSave() {
-	var id               = $('#chart-settings [name=id]'       ).val();
-	charts[id].name      = $('#chart-settings [name=name]'     ).val();
-	charts[id].type      = $('#chart-settings [name=type]'     ).val();
-	charts[id].dimension = $('#chart-settings [name=dimension]').val();
-	charts[id].group     = $('#chart-settings [name=group]'    ).val();
-	$('#chart' + id + ' .title').text(charts[id].name);
-	var modal = $.UIkit.modal("#chart-settings");
-	modal.hide();
-}
-
-function chartMinimize(k) {
-	$('#chart' + k).outerWidth('240px');
-	$('#chart' + k).outerHeight('120px');
-}
-
-function chartDelete(k) {
-	charts[k].deleted = true;
-	$('#chart' + k).fadeOut();
-}
-
-function closeSettings() {
-	var modal = $.UIkit.modal("#settings");
-	modal.hide();
-}
-
-function saveSettings() {
-	var checked = $('#settings [name=public]').is(':checked');
-	var data = {
-		dashboard: dashboard,
-		name: $('#settings [name=name]').val(),
-		public: checked ? 1 : 0
-	};
-	$.post('/dashboard-save', data, function(result) {
-		// console.log(result);
-		closeSettings();
-	});
-}
-
-function createChart(data) {
-   	if (data.id == null) {
-		data.id = 0;
-		data.name = 'New Chart';
-		data.type = 'pie';
-		data.dimension = '';
-		data.group = '';
-	}
-	
-	var html = $('#chart-template').html();
-	var count = charts.length;
-	html = html.replace(/_id/g, count);
-	$('body').append(html);
-	
-	var chart = $('#chart' + count);
-	chart.draggable({handle: '.handle'});
-	chart.resizable();
-	
-	if (data.x) chart.css('left', data.x + 'px');
-	if (data.y) chart.css('top',  data.y + 'px');
-	if (data.width)  chart.outerWidth(data.width + 'px');
-	if (data.height) chart.outerHeight(data.height + 'px');
-	chart.find(".title").text(data.name);
-	
-	charts.push(data);
-}
-
-function saveLayout() {
-	var count = 0;
-	for (var i = 0; i < charts.length; i++) {
-		if (charts[i].deleted) {
-			var data = { id: charts[i].id, dashboard: dashboard };
-			$.post('/chart-delete', data, function(result) {
-				// console.log(result);
-				count++;
-				if (count === charts.length) {
-					location.reload();
-				}
-			});
-		}
-		else {
-			var chart = $('#chart' + i);
-			var x = chart.position().left;
-			var y = chart.position().top;
-			var w = chart.outerWidth();
-			var h = chart.outerHeight();
-
-			var data = {
-				dashboard: dashboard,
-				id:        charts[i].id, 
-				name:      charts[i].name,
-				type:      charts[i].type,
-				dimension: charts[i].dimension,
-				group:     charts[i].group,
-				x:x, y:y, width:w, height:h};
-			$.post('/chart-save', data, function(result) {
-				// console.log(result);
-				count++;
-				if (count === charts.length) {
-					location.reload();
-				}
-			});
-		}
-	}
-}
-
-$('body').on('mouseup', function() {
-	/*
-	$('.resizable').css('cursor', 'default');
-	$('.resizable').removeClass('resizable');
-	*/
-	snapAll();
-});
-
-function snapAll() {
-	$('.chart').each(function() {
-		var x = $(this).position().left;
-		var y = $(this).position().top;
-		var w = $(this).outerWidth();
-		var h = $(this).outerHeight();
-		x = snap(x);
-		y = snap(y);
-		w = snap(w);
-		h = snap(h);
-		$(this).css('left', x + 'px');
-		$(this).css('top',  y + 'px');
-		$(this).outerWidth(w + 'px');
-		$(this).outerHeight(h + 'px');
-	});
-}
-
 var data;
 var xf;
 var dimension;
@@ -278,7 +144,7 @@ function createCrossFilter() {
 	// create data preparation, get the available dimension
 	// display dimension & group to user
 	d3.csv("/data/<%= dashboard.id %>", function(data_) {
-		data = data_;		
+		data = data_;
 		xf = crossfilter(data);
 		dimension = new Array();
 		group = new Array();
