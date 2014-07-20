@@ -217,22 +217,46 @@ function createCrossFilter() {
 				charts[i].chart = dc.barChart('#chart' + i)
 					.width(width)
 					.height(height - _chart_padding)
+					// .margins({left: 30 ,top: 30, bottom: 30, right: 30})
 					.dimension(dimension[i])
 					.group(group[i])
+					.centerBar(true)
+					.brushOn(true)
 					.elasticY(true)
 					.transitionDuration(transitionDuration)
-					.brushOn(true)
 					.x(d3.scale.ordinal())
 					.xUnits(dc.units.ordinal)
-					.barPadding(.8)
+					.renderHorizontalGridLines(true)
+					.barPadding(1)
 					.outerPadding(.5)
-					.centerBar(true)
-					.gap(40)
+					.gap(1)
 					;
 			}
 		}
 		
 		dc.renderAll();
+/*
+		// rotate the x Axis labels
+		d3.selectAll("g.x text")
+			.attr("class", "campusLabel")
+			.style("text-anchor", "end") 
+			.attr("transform", "translate(-10,0)rotate(315)");
+
+		d3.selectAll("g.row").call(tip);
+		d3.selectAll("g.row").on('mouseover', tip.show)
+			.on('mouseout', tip.hide);
+
+		d3.selectAll(".pie-slice").call(pieTip);
+		d3.selectAll(".pie-slice").on('mouseover', pieTip.show)
+			.on('mouseout', pieTip.hide);
+
+		d3.selectAll(".bar").call(barTip);
+		d3.selectAll(".bar").on('mouseover', barTip.show)
+			.on('mouseout', barTip.hide);  
+*/
+
+
+
 	});
 
 }
