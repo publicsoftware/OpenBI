@@ -1,5 +1,5 @@
-var _grid_size = 12;
-var _chart_padding = 24;
+var _grid_size = 8;
+var _chart_padding = 16;
 
 function snap(x) {
 	x = parseInt(x);

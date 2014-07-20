@@ -54,29 +54,31 @@ ul.title {
 
 
 // chart style
-
+body {
+	background: #eee;
+}
 .chart {
 	position: absolute;
 	min-width: 240px;
 	min-height: 120px;
-	// background: white;
+	background: white;
 	border-radius: 4px;
 	border: 1px solid #f7f7f7;
 	overflow: hidden;
 	transition: background 0.25s ease-in;
 	transition: border 0.25s ease-in;
+	border: 1px solid #ddd;
+	border-bottom: 1px solid #ccc;
 }
 
 .chart:hover,
 .resizable {
-	border: 1px solid #ddd;
-	border-bottom: 1px solid #ccc;
+	border: 1px solid #ccc;
+	border-bottom: 1px solid #bbb;
 	background:
 		url(/images/resize.png)
 		100% 100% no-repeat;
 	background-color: rgb(255, 255, 255, 0.3);
-	
-
 }
 
 .chart .handle {

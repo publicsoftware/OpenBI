@@ -301,10 +301,10 @@ function createCrossFilter() {
 			if (charts[i].type === 'pie') {
 				charts[i].chart = dc.pieChart("#chart" + i)
 					.width(width)
-					.height(height)
+					.height(height - _chart_padding)
 					.dimension(dimension[i])
 					.group(group[i])
-					.radius(square / 2 - _chart_padding / 2)
+					.radius(square / 2 - _chart_padding)
 					.innerRadius(square / 10)
 					.transitionDuration(transitionDuration)
 					;
