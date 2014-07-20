@@ -184,6 +184,7 @@ function createCrossFilter() {
 					.radius(square / 2 - _chart_padding)
 					.innerRadius(square / 10)
 					.transitionDuration(transitionDuration)
+					// .legend(dc.legend())
 					;
 			}
 			else
@@ -199,7 +200,6 @@ function createCrossFilter() {
 			}
 			else
 			if (charts[i].type === 'line') {
-				var domain = new Object();
 				charts[i].chart = dc.lineChart('#chart' + i)
 					.width(width)
 					.height(height - _chart_padding)
@@ -208,13 +208,12 @@ function createCrossFilter() {
 					.elasticY(true)
 					.transitionDuration(transitionDuration)
 					.brushOn(true)
-					.x(d3.scale.ordinal().domain(domain))
+					.x(d3.scale.ordinal())
 					.xUnits(dc.units.ordinal)
 					;
 			}
 			else
 			if (charts[i].type === 'bar') {
-				var domain = new Object();
 				charts[i].chart = dc.barChart('#chart' + i)
 					.width(width)
 					.height(height - _chart_padding)
@@ -223,10 +222,12 @@ function createCrossFilter() {
 					.elasticY(true)
 					.transitionDuration(transitionDuration)
 					.brushOn(true)
-					.x(d3.scale.ordinal().domain(domain))
+					.x(d3.scale.ordinal())
 					.xUnits(dc.units.ordinal)
+					.barPadding(.8)
+					.outerPadding(.5)
 					.centerBar(true)
-					.gap(200)
+					.gap(40)
 					;
 			}
 		}
