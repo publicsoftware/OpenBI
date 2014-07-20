@@ -5,7 +5,7 @@
 <script src="/js/dc.js"></script>
 <script src="/js/absolute.js"></script>
 <style>
-	
+
 body {
 	background: #eee;
 }
@@ -16,6 +16,9 @@ body {
 		<li>
 			<a href="#drawer" class="uk-icon-button uk-icon-navicon" 
 			   id='navicon' data-uk-offcanvas></a>
+		</li>
+		<li>
+			<a href="/" class="uk-icon-button uk-icon-home"></a>
 		</li>
 		<li>
 			<a href="" class="uk-icon-button uk-icon-refresh"
@@ -37,8 +40,14 @@ body {
 				data-uk-modal></a>
 		</li>
 		<% } %>
+		
+		<!-- <li style='width:2rem;'></li> -->
+		<li style=''>
+			<h2 style='margin:0;'><%= dashboard.name %></h2>
+		</li>
 	</ul>
 </div>
+
 
 <script type="text/html" id="chart-template">
 <div class='chart ui-widget-content' id='chart_id'>
@@ -76,6 +85,8 @@ body {
 						<option value="none">None</option>
 						<option value="pie">Pie</option>
 						<option value="row">Row</option>
+						<option value="bar">Bar</option>
+						<option value="line">Line</option>
 					</select>
 				</div>
 				
@@ -182,11 +193,44 @@ function createCrossFilter() {
 					.height(height - _chart_padding)
 					.dimension(dimension[i])
 					.group(group[i])
+					.elasticX(true)
 					.transitionDuration(transitionDuration)
 					;
 			}
+			else
+			if (charts[i].type === 'line') {
+				var domain = new Object();
+				charts[i].chart = dc.lineChart('#chart' + i)
+					.width(width)
+					.height(height - _chart_padding)
+					.dimension(dimension[i])
+					.group(group[i])
+					.elasticY(true)
+					.transitionDuration(transitionDuration)
+					.brushOn(true)
+					.x(d3.scale.ordinal().domain(domain))
+					.xUnits(dc.units.ordinal)
+					;
+			}
+			else
+			if (charts[i].type === 'bar') {
+				var domain = new Object();
+				charts[i].chart = dc.barChart('#chart' + i)
+					.width(width)
+					.height(height - _chart_padding)
+					.dimension(dimension[i])
+					.group(group[i])
+					.elasticY(true)
+					.transitionDuration(transitionDuration)
+					.brushOn(true)
+					.x(d3.scale.ordinal().domain(domain))
+					.xUnits(dc.units.ordinal)
+					.centerBar(true)
+					.gap(200)
+					;
+			}
 		}
-
+		
 		dc.renderAll();
 	});
 
@@ -194,6 +238,20 @@ function createCrossFilter() {
 
 </script>
 
+<!--
+dc.dataCount("#data-count")
+	.dimension(xf)
+	.group(group[0])
+	.html({
+		some:"<strong>%filter-count</strong> selected out of <strong>%total-count</strong> records | <a href='javascript:dc.filterAll(); dc.renderAll();''>Reset All</a>",
+		all:"All records selected. Please click on the graph to apply filters."
+	});
+
+<div id="data-count" style="z-index: 2000;">
+<span class="filter-count"></span> selected out of 
+<span class="total-count"></span> records
+</div>
+-->
 
 <div id="settings" class="uk-modal">
 	<div class="uk-modal-dialog">

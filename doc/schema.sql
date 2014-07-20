@@ -52,13 +52,13 @@ create table charts (
 	name		nvarchar(1023),
 	x			int default 0,
 	y			int default 0,
-	z			int default 0,	-- reserved
+	z			int default 0,					-- reserved
 	width		int default 240,
 	height		int default 120,
-	type		varchar(255) default = 'none',	-- none, bar, line, pie
-	options		longtext,		-- json format
-	dimension	longtext,		-- code e.g. dc.pluck('column')
-	reduce		longtext		-- code e.g. reduceSum(dc.pluck('column'))
+	type		varchar(255) default 'none',	-- none, bar, line, pie
+	options		longtext,						-- json format
+	dimension	longtext,						-- code e.g. dc.pluck('column')
+	reduce		longtext			-- code e.g. reduceSum(dc.pluck('column'))
 );
 
 

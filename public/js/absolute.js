@@ -1,6 +1,8 @@
 var _grid_size = 8;
 var _chart_padding = 16;
 
+// TODO: FIX ISSUE WHEN SCROLL PAGE
+
 function chartSettings(k) {
 	$('#chart-settings').prop('data-chart-id', k);
 	$('#chart-settings [name=id]'       ).val(k);
