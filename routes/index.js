@@ -59,43 +59,46 @@ router.get('/dashboard/:id', function(req, res) {
 });
 
 router.post('/dashboard-save', function(req, res) {
-	var user      = req.session.info.id;
-	var dashboard = parseInt(req.body.dashboard);
-	var public    = parseInt(req.body.public);
-	db.query("select user from dashboards where id=?",[dashboard], 
-	function(error, records) {
-		if (error || records.length === 0) {
-			res.send({result:'error', info:'dashboard not found'});
-		}
-		else {
-			if (records[0].user === user) {
-				db.query("update dashboards set name=?, public=? where id=?",
-				[req.body.name, public, dashboard],
-				function(errors, records) {
-					if (errors) {			
-						res.send({result:'error', info:'database error'});
-					}
-					else {
-						res.send({result:'ok'});
-					}
-				});
-			}
-			else {
-				res.send({result:'error', info:'permission denied'});
-			}
-		}
-	});
-});
-
-
-router.post('/chart-delete', function(req, res) {
-	var id = parseInt(req.body.id);
-	var dashboard = parseInt(req.body.dashboard);
-	
 	if (req.session.info == null) {
 		res.send({result:'error'});
 	}
 	else {
+		var user      = req.session.info.id;
+		var dashboard = parseInt(req.body.dashboard);
+		var public    = parseInt(req.body.public);
+		db.query("select user from dashboards where id=?",[dashboard], 
+		function(error, records) {
+			if (error || records.length === 0) {
+				res.send({result:'error', info:'invalid dashboard'});
+			}
+			else {
+				if (records[0].user === user) {
+					db.query("update dashboards set name=?, public=? where id=?",
+					[req.body.name, public, dashboard],
+					function(errors, records) {
+						if (errors) {			
+							res.send({result:'error', info:'database error'});
+						}
+						else {
+							res.send({result:'ok'});
+						}
+					});
+				}
+				else {
+					res.send({result:'error', info:'permission denied'});
+				}
+			}
+		});
+	}
+});
+
+router.post('/chart-delete', function(req, res) {
+	if (req.session.info == null) {
+		res.send({result:'error'});
+	}
+	else {
+		var id = parseInt(req.body.id);
+		var dashboard = parseInt(req.body.dashboard);
 		db.query("select user from dashboards where id=?", [dashboard],
 		function(error, records) {
 			if (error) {
@@ -188,16 +191,17 @@ router.get('/data/:id', function(req, res) {
 	var user = req.session.info ? req.session.info.id : 0;
 	db.query("select * from dashboards where id=? and (user=? or public=1)",
 	[req.params.id, user],
-	function (error, rows) {
-		if (error) {
+	function (error, records) {
+		if (error || records.length === 0) {
 			res.send([]);
 		}
 		else {
-			res.sendfile(rows[0].data);
+			res.sendfile(records[0].data);
 		}
 	});
 });
 
+// TODO: ALL POST METHOD MUST RETURN JSON
 router.post('/dashboard-create', function(req, res) {
 	// console.log(req.files);
 	if (req.session.info == null) {
@@ -215,7 +219,6 @@ router.post('/dashboard-create', function(req, res) {
 				res.redirect("/");
 			});
 	}
-	
 });
 
 router.get('/dashboard-list', function(req, res) {
@@ -225,13 +228,8 @@ router.get('/dashboard-list', function(req, res) {
 	else {
 		db.query("select * from dashboards where user=?",
 		[req.session.info.id],
-		function(error, rows) {
-			if (error) {
-				res.send([]);
-			}
-			else {
-				res.send(rows);
-			}
+		function(error, records) {
+			res.send(records);
 		});
 	}
 });
@@ -274,12 +272,13 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/debug', function(req, res) {
-	/*
-	db.query("select * from users",
+
+	db.query("select * from dashboards where false;",
 		function(err, rows) {
+			console.log(err);
+			console.log(rows);
 			res.send(rows);
 		});
-	*/
 });
 
 module.exports = router;

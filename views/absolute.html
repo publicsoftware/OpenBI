@@ -1,11 +1,7 @@
 <%- include header.html %>
 
-<script src="/js/d3.js"></script>
-<script src="/js/crossfilter.js"></script>
-<script src="/js/dc.js"></script>
 <script src="/js/absolute.js"></script>
 <style>
-
 body {
 	background: #eee;
 }
@@ -43,11 +39,12 @@ body {
 		
 		<!-- <li style='width:2rem;'></li> -->
 		<li style=''>
-			<h2 style='margin:0;'><%= dashboard.name %></h2>
+			<h2 style='margin:0; text-shadow: 0 1px white;'>
+				<%= dashboard.name %>
+			</h2>
 		</li>
 	</ul>
 </div>
-
 
 <script type="text/html" id="chart-template">
 <div class='chart ui-widget-content' id='chart_id'>
@@ -167,7 +164,8 @@ function createCrossFilter() {
 		for (var i = 0; i < charts.length; i++) {
 			
 			dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
-			group[i] = dimension[i].group().reduceSum(dc.pluck(charts[i].group));
+			group[i] = dimension[i].group().reduceSum(
+					dc.pluck(charts[i].group));
 
 			var width  = $('#chart' + i).outerWidth();
 			var height = $('#chart' + i).outerHeight();
@@ -217,7 +215,6 @@ function createCrossFilter() {
 				charts[i].chart = dc.barChart('#chart' + i)
 					.width(width)
 					.height(height - _chart_padding)
-					// .margins({left: 30 ,top: 30, bottom: 30, right: 30})
 					.dimension(dimension[i])
 					.group(group[i])
 					.centerBar(true)
@@ -268,7 +265,9 @@ dc.dataCount("#data-count")
 	.dimension(xf)
 	.group(group[0])
 	.html({
-		some:"<strong>%filter-count</strong> selected out of <strong>%total-count</strong> records | <a href='javascript:dc.filterAll(); dc.renderAll();''>Reset All</a>",
+		some:"<strong>%filter-count</strong> selected out of 
+<strong>%total-count</strong> records | 
+<a href='javascript:dc.filterAll(); dc.renderAll();''>Reset All</a>",
 		all:"All records selected. Please click on the graph to apply filters."
 	});
 
@@ -297,7 +296,7 @@ dc.dataCount("#data-count")
 				</div>
 				<div class='uk-width-7-10'>
 					<input type='checkbox' name='public' 
-					   <%= dashboard.public ? 'checked' : '' %> />	
+						<%= dashboard.public ? 'checked' : '' %> />	
 				</div>
 				
 				<div class='uk-width-1-1'>&nbsp;</div>
