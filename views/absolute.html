@@ -162,7 +162,7 @@ function createCrossFilter() {
 		}
 		
 		for (var i = 0; i < charts.length; i++) {
-			
+			var color = d3.scale.category20();
 			dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
 			group[i] = dimension[i].group().reduceSum(
 					dc.pluck(charts[i].group));
@@ -183,6 +183,7 @@ function createCrossFilter() {
 					.innerRadius(square / 10)
 					.transitionDuration(transitionDuration)
 					// .legend(dc.legend())
+					.colors(color)
 					;
 			}
 			else
@@ -194,6 +195,7 @@ function createCrossFilter() {
 					.group(group[i])
 					.elasticX(true)
 					.transitionDuration(transitionDuration)
+					.colors(color)
 					;
 			}
 			else
@@ -208,6 +210,7 @@ function createCrossFilter() {
 					.brushOn(true)
 					.x(d3.scale.ordinal())
 					.xUnits(dc.units.ordinal)
+					.colors(color)
 					;
 			}
 			else
@@ -227,32 +230,16 @@ function createCrossFilter() {
 					.barPadding(1)
 					.outerPadding(.5)
 					.gap(1)
+					.colors(color)
 					;
 			}
 		}
 		
 		dc.renderAll();
-/*
-		// rotate the x Axis labels
 		d3.selectAll("g.x text")
 			.attr("class", "campusLabel")
 			.style("text-anchor", "end") 
 			.attr("transform", "translate(-10,0)rotate(315)");
-
-		d3.selectAll("g.row").call(tip);
-		d3.selectAll("g.row").on('mouseover', tip.show)
-			.on('mouseout', tip.hide);
-
-		d3.selectAll(".pie-slice").call(pieTip);
-		d3.selectAll(".pie-slice").on('mouseover', pieTip.show)
-			.on('mouseout', pieTip.hide);
-
-		d3.selectAll(".bar").call(barTip);
-		d3.selectAll(".bar").on('mouseover', barTip.show)
-			.on('mouseout', barTip.hide);  
-*/
-
-
 
 	});
 

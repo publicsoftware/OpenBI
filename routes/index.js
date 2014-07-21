@@ -2,6 +2,7 @@ var express	= require('express');
 var router	= express.Router();
 var mysql	= require('mysql');
 var crypto	= require('crypto');
+var http    = require('http');
 
 var db = mysql.createConnection({
 	host		: 'localhost',
@@ -281,6 +282,23 @@ router.get('/debug', function(req, res) {
 		});
 });
 
+/*
+router.get('/get-stock-data', function(req, res) {
+	// http://download.finance.yahoo.com/d/quotes.csv?s=%40%5EDJI,GOOG&f=nsl1op&e=.csv
+	var url = "http://download.finance.yahoo.com/d/quotes.csv?" + 
+			"s=%40%5EDJI,GOOG,MSFT&f=nsl1op&e=.csv";
+	
+	http.get(url, function(response) {
+		// console.log(res);
+		// console.log("Got response: " + res.statusCode);
+		response.on('data', function(chunk) {
+			console.log(chunk.toString());
+			res.send([]);
+		});
+	});
+});
+*/
+
 module.exports = router;
 
 
@@ -316,13 +334,13 @@ NOTE:
 /*
 req.files = 
 { file: 
-   { fieldname: 'file',
-     originalname: 'ndx.csv',
-     name: 'ba7c2f5b698c5f1d0b0a37afddc78c1c.csv',
-     encoding: '7bit',
-     mimetype: 'text/csv',
-     path: 'uploads/ba7c2f5b698c5f1d0b0a37afddc78c1c.csv',
-     extension: 'csv',
-     size: 347229,
-     truncated: false } }
+	 { fieldname: 'file',
+		 originalname: 'ndx.csv',
+		 name: 'ba7c2f5b698c5f1d0b0a37afddc78c1c.csv',
+		 encoding: '7bit',
+		 mimetype: 'text/csv',
+		 path: 'uploads/ba7c2f5b698c5f1d0b0a37afddc78c1c.csv',
+		 extension: 'csv',
+		 size: 347229,
+		 truncated: false } }
 */
