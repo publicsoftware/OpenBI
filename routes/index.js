@@ -282,22 +282,25 @@ router.get('/debug', function(req, res) {
 		});
 });
 
-/*
+
 router.get('/get-stock-data', function(req, res) {
-	// http://download.finance.yahoo.com/d/quotes.csv?s=%40%5EDJI,GOOG&f=nsl1op&e=.csv
-	var url = "http://download.finance.yahoo.com/d/quotes.csv?" + 
-			"s=%40%5EDJI,GOOG,MSFT&f=nsl1op&e=.csv";
+	var url = "http://query.yahooapis.com/v1/public/yql";
+	var symbol = 'aapl,msft,goog,king';
+	var data = encodeURIComponent("select * from yahoo.finance.quotes where " +
+		" symbol in ('" + symbol + "') " + 
+		// " and startDate='2014-06-01' and endDate='2014-06-30'" + 
+		"");
+	url = url + '?q=' + data + "&format=json&diagnostics=true&" + 
+			"env=http://datatables.org/alltables.env";
 	
 	http.get(url, function(response) {
-		// console.log(res);
-		// console.log("Got response: " + res.statusCode);
 		response.on('data', function(chunk) {
-			console.log(chunk.toString());
-			res.send([]);
+			// console.log(chunk.toString());
 		});
 	});
+	res.send({result:'ok'});
 });
-*/
+
 
 module.exports = router;
 
@@ -308,15 +311,34 @@ module.exports = router;
 
 
 
+/*
+// Using Connection Pool
 
+	var mysql =  require('mysql');
+	var pool =  mysql.createPool({
+		host : 'host',
+		user : 'username',
+		password: 'password'
+	});	
 
+	pool.getConnection(function(error, connection) {
+		if (error) {
 
+		else {
+			connection.query('select * from users',  function(error, records) {
+				if (error) {
+					//throw err;
+				}
+				else {
+					console.log(records);
+				}
+			});
+		}
 
+		connection.release();
+	});
 
-
-
-
-
+*/
 
 
 
