@@ -263,30 +263,27 @@ router.get('/data/:id', function(req, res) {
 });
 
 router.post('/document-create', function(req, res) {
-	// console.log(req.files);
 	if (req.session.info == null) {
 		res.redirect("/login");
 	}
 	else {
 		pool.getConnection(function(error, connection) {
 			if (error) {
-
+				res.redirect("/");
 			}
 			else {
 				var path = req.files.file ? req.files.file.path : '';
 				var name = req.files.file ? req.files.file.originalname : '';
 				connection.query("insert into documents(user, name, layout, " + 
-						  " data_type, data_name, data) "
-						+ " values(?, ?, ?, 'file', ?, ?)",
+					" data_type, data_name, data) " + 
+					" values(?, ?, ?, 'file', ?, ?)",
 					[req.session.info.id, req.body.name, req.body.layout,
-						name, path],
-					function(error, rows) {
-						res.redirect("/");
-						// redirect to the new document?
-						connection.release();
-					});
+					name, path],
+				function(error, result) {
+					res.redirect("/document/" + result.insertId);
+					connection.release();
+				});
 			}
-
 		});
 	}
 });
