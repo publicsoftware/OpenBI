@@ -18,7 +18,7 @@ body {
 		</li>
 		<li>
 			<a href="" class="uk-icon-button uk-icon-refresh"
-				onclick='javascript:createCrossFilter()'></a>
+				onclick='javascript:restart();'></a>
 		</li>
 		
 		<% if (user === document.user) { %>
@@ -29,7 +29,7 @@ body {
 		
 		<li>
 			<a href="" class="uk-icon-button uk-icon-save"
-				onclick='javascript:saveLayout()'></a>
+				onclick='javascript:documentSaveLayout()'></a>
 		</li>
 		<li>
 			<a href="#settings" class="uk-icon-button uk-icon-gears"
@@ -46,8 +46,53 @@ body {
 	</ul>
 </div>
 
+<script>
+
+var ids = '<%= document.id %>';
+var id = ids === '' ? 0 : parseInt(ids);
+var charts = new Array();
+var data;
+var xf;
+var dimension;
+var group;
+var keys;
+
+function main() {
+	$('.chart').remove();
+	while (charts.length > 0) {		
+		var chart = charts.pop();
+	}
+	
+	// TODO: load charts from ajax not the backend code
+	<% for (var i = 0; i < charts.length; i++) { %>
+		createChart({ 
+			id:		<%= charts[i].id %>,
+			name:		'<%= charts[i].name %>',
+			type:		'<%= charts[i].type %>',
+			dimension:	'<%= charts[i].dimension %>',
+			group:		'<%= charts[i].reduce %>',
+			x:		<%= charts[i].x %>,
+			y:		<%= charts[i].y %>,
+			width:	<%= charts[i].width %>,
+			height:	<%= charts[i].height %>
+		});
+	<% } %>
+
+	restart();
+}
+
+function restart() {
+	createCrossFilter("/data/<%= document.id %>");
+}
+
+$(document).ready(function() {
+	main();
+});
+
+</script>
+
 <script type="text/html" id="chart-template">
-<div class='chart ui-widget-content' id='chart_id'>
+<div class='chart' id='chart_id'>
 	<span class='handle'>
 		<span class='title'></span>
 		<span class='button'>
@@ -62,7 +107,7 @@ body {
 	<div class="uk-modal-dialog">
 		<a class="uk-modal-close uk-close"></a>
 		<h1>Settings</h1>
-		<form class="uk-form" action="javascript:chartSave()">
+		<form class="uk-form" action="javascript:chartSettingsSave()">
 			<input type="hidden" name="id" value="0" />
 			<div class="uk-grid uk-grid-preserve">
 				
@@ -112,182 +157,12 @@ body {
 	</div>
 </div>
 
-<script>
-
-$(document).ready(function() {
-	main();
-});
-
-function main() {
-	// TODO: load charts from ajax not the backend code
-	<% for (var i = 0; i < charts.length; i++) { %>
-		createChart({ 
-			id:		<%= charts[i].id %>,
-			name:		'<%= charts[i].name %>',
-			type:		'<%= charts[i].type %>',
-			dimension:	'<%= charts[i].dimension %>',
-			group:		'<%= charts[i].reduce %>',
-			x:		<%= charts[i].x %>,
-			y:		<%= charts[i].y %>,
-			width:	<%= charts[i].width %>,
-			height:	<%= charts[i].height %>
-		});
-	<% } %>
-
-	createCrossFilter();
-}
-
-var ids = '<%= document.id %>';
-var id = ids === '' ? 0 : parseInt(ids);
-var charts = new Array();
-var data;
-var xf;
-var dimension;
-var group;
-var keys;
-
-function createCrossFilter() {
-	// TODO: load data only first time then
-	// create data preparation, get the available dimension
-	// display dimension & group to user
-	d3.csv("/data/<%= document.id %>", function(data_) {
-		data = data_;
-		xf = crossfilter(data);
-		dimension = new Array();
-		group = new Array();
-		keys = new Array();
-		for (var k in data[0]) {
-			keys.push(k);
-		}
-		
-		for (var i = 0; i < charts.length; i++) {
-			var color = d3.scale.category20();
-			dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
-			group[i] = dimension[i].group().reduceSum(
-					dc.pluck(charts[i].group));
-
-			var width  = $('#chart' + i).outerWidth();
-			var height = $('#chart' + i).outerHeight();
-			height -= _chart_padding;
-			var square = Math.min(width, height);
-			var transitionDuration = 1000;
-			
-			if (charts[i].type === 'pie') {
-				charts[i].chart = dc.pieChart("#chart" + i)
-					.width(width)
-					.height(height - _chart_padding)
-					.dimension(dimension[i])
-					.group(group[i])
-					.radius(square / 2 - _chart_padding)
-					.innerRadius(square / 10)
-					.transitionDuration(transitionDuration)
-					// .legend(dc.legend())
-					.colors(color)
-					;
-			}
-			else
-			if (charts[i].type === 'row') {
-				charts[i].chart = dc.rowChart('#chart' + i)
-					.width(width)
-					.height(height - _chart_padding)
-					.dimension(dimension[i])
-					.group(group[i])
-					.elasticX(true)
-					.transitionDuration(transitionDuration)
-					.colors(color)
-					;
-			}
-			else
-			if (charts[i].type === 'line') {
-				charts[i].chart = dc.lineChart('#chart' + i)
-					.width(width)
-					.height(height - _chart_padding)
-					.dimension(dimension[i])
-					.group(group[i])
-					.elasticY(true)
-					.transitionDuration(transitionDuration)
-					.brushOn(true)
-					.x(d3.scale.ordinal())
-					.xUnits(dc.units.ordinal)
-					.colors(color)
-					;
-			}
-			else
-			if (charts[i].type === 'bar') {
-				charts[i].chart = dc.barChart('#chart' + i)
-					.width(width)
-					.height(height - _chart_padding)
-					.dimension(dimension[i])
-					.group(group[i])
-					.centerBar(true)
-					.brushOn(true)
-					.elasticY(true)
-					.transitionDuration(transitionDuration)
-					.x(d3.scale.ordinal())
-					.xUnits(dc.units.ordinal)
-					.renderHorizontalGridLines(true)
-					.barPadding(1)
-					.outerPadding(.5)
-					.gap(1)
-					.colors(color)
-					;
-			}
-		}
-		
-		dc.renderAll();
-		/*
-		d3.selectAll("g.x text")
-			.attr("class", "campusLabel")
-			.style("text-anchor", "end") 
-			.attr("transform", "translate(-10,0)rotate(315)");
-		*/
-	});
-
-}
-
-function getData() {
-	var url = "http://query.yahooapis.com/v1/public/yql";
-	var symbol = 'aapl,msft,goog,king';
-	var data = encodeURIComponent("select * from yahoo.finance.quotes where " +
-		" symbol in ('" + symbol + "') " + 
-		// " and startDate='2014-06-01' and endDate='2014-06-30'" + 
-		"");
-	$.getJSON(url + '?q=' + data + "&format=json&diagnostics=true&" + 
-			"env=http://datatables.org/alltables.env"
-		)
-	.done(function (data) {
-		console.log(data);
-		// $("#result").text("Bid Price: " + data.query.results.quote.LastTradePriceOnly);
-	})
-	.fail(function (jqxhr, textStatus, error) {
-	});
-}
-
-</script>
-
-<!--
-dc.dataCount("#data-count")
-	.dimension(xf)
-	.group(group[0])
-	.html({
-		some:"<strong>%filter-count</strong> selected out of 
-<strong>%total-count</strong> records | 
-<a href='javascript:dc.filterAll(); dc.renderAll();''>Reset All</a>",
-		all:"All records selected. Please click on the graph to apply filters."
-	});
-
-<div id="data-count" style="z-index: 2000;">
-<span class="filter-count"></span> selected out of 
-<span class="total-count"></span> records
-</div>
--->
-
 <div id="settings" class="uk-modal">
 	<div class="uk-modal-dialog">
 		<a class="uk-modal-close uk-close"></a>
 		<h1>Settings</h1>
 		
-		<form class='uk-form' action='javascript:saveSettings()'>
+		<form class='uk-form' action='javascript:documentSettingsSave()'>
 			<div class='uk-grid uk-grid-preserve'>
 				<div class='uk-width-3-10'>
 					<label>Name</label>
@@ -310,7 +185,8 @@ dc.dataCount("#data-count")
 					<input type='submit' value='Save'
 					   class='uk-button uk-button-primary' />
 					<input type='button' value='Cancel'
-					   class='uk-button' onclick='javascript:closeSettings()' />
+					   class='uk-button' 
+					   onclick='javascript:documentSettingsClose()' />
 					<input type='hidden' />
 				</div>
 			</div>

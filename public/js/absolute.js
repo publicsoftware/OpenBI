@@ -1,6 +1,123 @@
 var _grid_size = 8;
 var _chart_padding = 16;
 
+function createCrossFilter(dataPath) {
+	// TODO: load data only first time then
+	// create data preparation, get the available dimension
+	// display dimension & group to user
+	d3.csv(dataPath, function(data_) {
+		data = data_;
+		xf = crossfilter(data);
+		dimension = new Array();
+		group = new Array();
+		keys = new Array();
+		for (var k in data[0]) {
+			keys.push(k);
+		}
+		
+		for (var i = 0; i < charts.length; i++) {
+			var color = d3.scale.category20();
+			dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
+			group[i] = dimension[i].group().reduceSum(
+					dc.pluck(charts[i].group));
+
+			var width  = $('#chart' + i).outerWidth();
+			var height = $('#chart' + i).outerHeight();
+			height -= _chart_padding;
+			var square = Math.min(width, height);
+			var transitionDuration = 1000;
+			
+			if (charts[i].type === 'pie') {
+				charts[i].chart = dc.pieChart("#chart" + i)
+					.width(width)
+					.height(height - _chart_padding)
+					.dimension(dimension[i])
+					.group(group[i])
+					.radius(square / 2 - _chart_padding)
+					.innerRadius(square / 10)
+					.transitionDuration(transitionDuration)
+					// .legend(dc.legend())
+					.colors(color)
+					;
+			}
+			else
+			if (charts[i].type === 'row') {
+				charts[i].chart = dc.rowChart('#chart' + i)
+					.width(width)
+					.height(height - _chart_padding)
+					.dimension(dimension[i])
+					.group(group[i])
+					.elasticX(true)
+					.transitionDuration(transitionDuration)
+					.colors(color)
+					;
+			}
+			else
+			if (charts[i].type === 'line') {
+				charts[i].chart = dc.lineChart('#chart' + i)
+					.width(width)
+					.height(height - _chart_padding)
+					.dimension(dimension[i])
+					.group(group[i])
+					.elasticY(true)
+					.transitionDuration(transitionDuration)
+					.brushOn(true)
+					.x(d3.scale.ordinal())
+					.xUnits(dc.units.ordinal)
+					.colors(color)
+					;
+			}
+			else
+			if (charts[i].type === 'bar') {
+				charts[i].chart = dc.barChart('#chart' + i)
+					.width(width)
+					.height(height - _chart_padding)
+					.dimension(dimension[i])
+					.group(group[i])
+					.centerBar(true)
+					.brushOn(true)
+					.elasticY(true)
+					.transitionDuration(transitionDuration)
+					.x(d3.scale.ordinal())
+					.xUnits(dc.units.ordinal)
+					.renderHorizontalGridLines(true)
+					.barPadding(1)
+					.outerPadding(.5)
+					.gap(1)
+					.colors(color)
+					;
+			}
+		}
+		
+		dc.renderAll();
+		/*
+		d3.selectAll("g.x text")
+			.attr("class", "campusLabel")
+			.style("text-anchor", "end") 
+			.attr("transform", "translate(-10,0)rotate(315)");
+		*/
+	});
+
+}
+
+function getData() {
+	var url = "http://query.yahooapis.com/v1/public/yql";
+	var symbol = 'aapl,msft,goog,king';
+	var data = encodeURIComponent("select * from yahoo.finance.quotes where " +
+		" symbol in ('" + symbol + "') " + 
+		// " and startDate='2014-06-01' and endDate='2014-06-30'" + 
+		"");
+	$.getJSON(url + '?q=' + data + "&format=json&diagnostics=true&" + 
+			"env=http://datatables.org/alltables.env"
+		)
+	.done(function (data) {
+		console.log(data);
+		// $("#result").text("Bid Price: " + data.query.results.quote.LastTradePriceOnly);
+	})
+	.fail(function (jqxhr, textStatus, error) {
+	});
+}
+
 // TODO: Add right and bottom padding automatically
 
 function chartSettings(k) {
@@ -14,21 +131,15 @@ function chartSettings(k) {
 	modal.show();
 }
 
-function chartSave() {
-	var id               = $('#chart-settings [name=id]'       ).val();
-	charts[id].name      = $('#chart-settings [name=name]'     ).val();
-	charts[id].type      = $('#chart-settings [name=type]'     ).val();
-	charts[id].dimension = $('#chart-settings [name=dimension]').val();
-	charts[id].group     = $('#chart-settings [name=group]'    ).val();
-	$('#chart' + id + ' .title').text(charts[id].name);
+function chartSettingsSave() {
+	var id					= $('#chart-settings [name=id]'       ).val();
+	charts[id].name			= $('#chart-settings [name=name]'     ).val();
+	charts[id].type			= $('#chart-settings [name=type]'     ).val();
+	charts[id].dimension	= $('#chart-settings [name=dimension]').val();
+	charts[id].group		= $('#chart-settings [name=group]'    ).val();
 	var modal = $.UIkit.modal("#chart-settings");
 	modal.hide();
-}
-
-// remove?
-function chartMinimize(k) {
-	$('#chart' + k).outerWidth('240px');
-	$('#chart' + k).outerHeight('120px');
+	restart();
 }
 
 function chartDelete(k) {
@@ -67,52 +178,48 @@ function createChart(data) {
 	charts.push(data);
 }
 
-function saveLayout() {
-	var count = 0;
-	for (var i = 0; i < charts.length; i++) {
-		if (charts[i].deleted) {
-			var data = { id: charts[i].id, document: id };
-			$.post('/object-delete', data, function(result) {
-				// console.log(result);
-				count++;
-				if (count === charts.length) {
-					location.reload();
-				}
-			});
-		}
-		else {
-			var chart = $('#chart' + i);
-			var x = chart.position().left;
-			var y = chart.position().top;
-			var w = chart.outerWidth();
-			var h = chart.outerHeight();
+function saveChart(index) {
+	if (charts[index].deleted) {
+		var data = { id: charts[i].id, document: id };
+		$.post('/object-delete', data, function(result) {
+			// console.log(result);
+			count++;
+			if (count === charts.length) {
+				location.reload();
+			}
+		});
+	}
+	else {
+		var chart = $('#chart' + index);
+		var x = chart.position().left;
+		var y = chart.position().top;
+		var w = chart.outerWidth();
+		var h = chart.outerHeight();
 
-			var data = {
-				document:  id,
-				id:        charts[i].id, 
-				name:      charts[i].name,
-				type:      charts[i].type,
-				dimension: charts[i].dimension,
-				group:     charts[i].group,
-				x:x, y:y, width:w, height:h };
-			// console.log(data);
-			$.post('/object-save', data, function(result) {
-				// console.log(result);
-				count++;
-				if (count === charts.length) {
-					location.reload();
-				}
-			});
-		}
+		var data = {
+			document:  id,
+			id:        charts[index].id, 
+			name:      charts[index].name,
+			type:      charts[index].type,
+			dimension: charts[index].dimension,
+			group:     charts[index].group,
+			x:x, y:y, width:w, height:h };
+		$.post('/object-save', data);
+	}
+}
+	
+function documentSaveLayout() {
+	for (var i = 0; i < charts.length; i++) {
+		saveChart(i);
 	}
 }
 
-function closeSettings() {
+function documentSettingsClose() {
 	var modal = $.UIkit.modal("#settings");
 	modal.hide();
 }
 
-function saveSettings() {
+function documentSettingsSave() {
 	var checked = $('#settings [name=public]').is(':checked');
 	var data = {
 		dashboard: dashboard,
@@ -121,15 +228,10 @@ function saveSettings() {
 	};
 	$.post('/dashboard-save', data, function(result) {
 		closeSettings();
-		// reload?
 	});
 }
 
 $('body').on('mouseup', function() {
-	/*
-	$('.resizable').css('cursor', 'default');
-	$('.resizable').removeClass('resizable');
-	*/
 	snapAll();
 });
 
@@ -150,7 +252,6 @@ function snapAll() {
 		$(this).outerHeight(h + 'px');
 	});
 }
-
 
 function snap(x) {
 	x = parseInt(x);

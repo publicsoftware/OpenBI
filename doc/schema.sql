@@ -4,9 +4,6 @@
 
 use openbi;
 
-drop table if exists dashboards;
-drop table if exists charts;
-
 drop table if exists users;
 create table users (
 	id				serial,
@@ -27,8 +24,8 @@ create table documents (
 	user		bigint,
 	name		nvarchar(1023),
 	public		int default 0,
-	layout		nvarchar(255),
-	style		nvarchar(16383),				-- css styling
+	theme		nvarchar(255),
+	style		nvarchar(16383),				-- custom css styling
 	data_type	 varchar(255) default 'none',	-- none file url query
 	data_name	nvarchar(1023),					-- original file name or name
 	data		nvarchar(2047)					-- file path on server
@@ -59,15 +56,23 @@ create table objects (
 	z			int default 0,					-- reserved
 	width		int default 240,
 	height		int default 120,
-	style		nvarchar(16383),				-- css styling
+	style		nvarchar(16383),				-- custom css styling
 	type		varchar(255) default 'none',	-- none, bar, line, pie
 	options		longtext,						-- json format
 	dimension	longtext,						-- code e.g. dc.pluck('column')
 	reduce		longtext			-- code e.g. reduceSum(dc.pluck('column'))
 );
 
+drop table if exists themes;
+create table themes (
+	id			serial,
+	name		nvarchar(255),
+	style		nvarchar(16383)
+);
 
 
+insert into themes(name, style) values('Light', 'background: #ccc;');
+insert into themes(name, style) values('Dark', 'background: black;');
 
 
 /*

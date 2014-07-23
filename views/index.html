@@ -32,7 +32,7 @@ function DashboardController($scope, $http) {
 		</li>
 		
 		<li><a href="/">Home</a></li>
-		<li><a href='#new-dashboard' data-uk-modal>New Dashboard</a></li>
+		<li><a href='#new-dashboard' data-uk-modal>New</a></li>
 	</ul>
 </div>
 
@@ -51,30 +51,31 @@ function chooseFile() {
 	$('[name=file]').click();
 }
 
-function layout(l) {
-	$('[name=layout]').val(l);
+function theme(t) {
+	$('[name=theme]').val(t);
 }
 </script>
 
 <div id="new-dashboard" class="uk-modal">
 	<div class="uk-modal-dialog">
 		<a class="uk-modal-close uk-close"></a>
-		<h2>Dashboard</h2>
+		<h2>New</h2>
 		
-		<form method="post" action="/document-create" enctype="multipart/form-data" 
+		<form method="post" action="/document-create" 
+			enctype="multipart/form-data" 
 				class="uk-form" >
 			
 			<input type="text" name="name" placeholder="Title" autofocus
-				   class="uk-width-1-1" />
+					class="uk-width-1-1" />
 			
 			<h3>Layout</h3>
 			<div data-uk-button-radio>
-				<a href="javascript:layout('layout-1')" class="uk-button">
-					Layout 1
+				<a href="javascript:theme('Light')" class="uk-button">
+					Light
 				</a>
 
-				<a href="javascript:layout('layout-1-2')" class="uk-button">
-					Layout 1-2
+				<a href="javascript:theme('Dark')" class="uk-button">
+					Dark
 				</a>
 				
 			</div>
@@ -84,7 +85,7 @@ function layout(l) {
 				Choose File
 			</a>
 			
-			<input type="hidden" name="layout" value="layout-1" />
+			<input type="hidden" name="layout" value='Light' />
 			<input type="file" name="file"  style="display:none;" />
 			
 			<hr/>
