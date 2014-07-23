@@ -48,8 +48,8 @@ body {
 
 <script>
 
-var ids = '<%= document.id %>';
-var id = ids === '' ? 0 : parseInt(ids);
+var doc_s = '<%= document.id %>';
+var doc = doc_s === '' ? 0 : parseInt(doc_s);
 var charts = new Array();
 var data;
 var xf;
@@ -60,7 +60,7 @@ var keys;
 function main() {
 	$('.chart').remove();
 	while (charts.length > 0) {		
-		var chart = charts.pop();
+		charts.pop();
 	}
 	
 	// TODO: load charts from ajax not the backend code
@@ -184,10 +184,12 @@ $(document).ready(function() {
 				<div class='uk-width-1-1'>
 					<input type='submit' value='Save'
 					   class='uk-button uk-button-primary' />
+					<!--
 					<input type='button' value='Cancel'
 					   class='uk-button' 
 					   onclick='javascript:documentSettingsClose()' />
 					<input type='hidden' />
+					-->
 				</div>
 			</div>
 		</form>

@@ -137,6 +137,7 @@ function chartSettingsSave() {
 	charts[id].type			= $('#chart-settings [name=type]'     ).val();
 	charts[id].dimension	= $('#chart-settings [name=dimension]').val();
 	charts[id].group		= $('#chart-settings [name=group]'    ).val();
+	$('#chart' + id + " .title").text(charts[id].name);
 	var modal = $.UIkit.modal("#chart-settings");
 	modal.hide();
 	restart();
@@ -180,14 +181,8 @@ function createChart(data) {
 
 function saveChart(index) {
 	if (charts[index].deleted) {
-		var data = { id: charts[i].id, document: id };
-		$.post('/object-delete', data, function(result) {
-			// console.log(result);
-			count++;
-			if (count === charts.length) {
-				location.reload();
-			}
-		});
+		var data = { id: charts[index].id, document: doc };
+		$.post('/object-delete', data);
 	}
 	else {
 		var chart = $('#chart' + index);
@@ -197,7 +192,7 @@ function saveChart(index) {
 		var h = chart.outerHeight();
 
 		var data = {
-			document:  id,
+			document:  doc,
 			id:        charts[index].id, 
 			name:      charts[index].name,
 			type:      charts[index].type,
@@ -222,12 +217,12 @@ function documentSettingsClose() {
 function documentSettingsSave() {
 	var checked = $('#settings [name=public]').is(':checked');
 	var data = {
-		dashboard: dashboard,
+		document: doc,
 		name: $('#settings [name=name]').val(),
 		public: checked ? 1 : 0
 	};
-	$.post('/dashboard-save', data, function(result) {
-		closeSettings();
+	$.post('/document-save', data, function(result) {
+		documentSettingsSave();
 	});
 }
 

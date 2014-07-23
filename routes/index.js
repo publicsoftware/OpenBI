@@ -11,26 +11,6 @@ var pool = mysql.createPool({
 	database	: 'openbi'
 });
 
-/*
-	pool.getConnection(function(error, connection) {
-		if (error) {
-
-		}
-		else {
-			connection.query('select * from users',  function(error, records) {
-				if (error) {
-					// throw err;
-				}
-				else {
-					// console.log(records);
-				}
-			});
-		}
-
-		connection.release();
-	});
-*/
-
 pool.on('error', function(err) {
 	console.log(err.code);
 });
@@ -414,6 +394,15 @@ module.exports = router;
 
 
 
+/*
+NOTE:
+
+
+
+
+
+
+*/
 
 /*
 // Using Connection Pool
@@ -447,16 +436,6 @@ module.exports = router;
 
 
 
-/*
-NOTE:
-
-
-
-
-
-
-
-*/
 
 /*
 req.files = 
