@@ -60,12 +60,11 @@ router.get('/document/:id', function(req, res) {
 								charts: objects
 							});
 						}
+						connection.release();
 					});
 				}
 			});
 		}
-
-		connection.release();
 	});
 });
 
@@ -101,6 +100,7 @@ router.post('/document-save', function(req, res) {
 								else {
 									res.send({result:'ok'});
 								}
+								connection.release();
 							});
 						}
 						else {
@@ -110,8 +110,6 @@ router.post('/document-save', function(req, res) {
 					}
 				});
 			}
-
-			connection.release();
 		});
 	}
 });
@@ -146,6 +144,7 @@ router.post('/object-delete', function(req, res) {
 								else {
 									res.send({result:'ok'});
 								}
+								connection.release();
 							});
 						}
 						else {
@@ -154,8 +153,6 @@ router.post('/object-delete', function(req, res) {
 					}
 				});
 			}
-
-			connection.release();
 		});
 	}
 });
@@ -223,6 +220,7 @@ router.post('/object-save', function(req, res) {
 									else {
 										res.send({result:'ok'});
 									}
+									connection.release();
 								});
 							}
 						}
@@ -232,8 +230,6 @@ router.post('/object-save', function(req, res) {
 					}
 				});
 			}
-
-			connection.release();
 		});
 	}
 			
@@ -260,9 +256,9 @@ router.get('/data/:id', function(req, res) {
 				else {
 					res.sendfile(records[0].data);
 				}
+				connection.release();
 			});
-		}
-		connection.release();
+		}		
 	});
 });
 
@@ -287,10 +283,10 @@ router.post('/document-create', function(req, res) {
 					function(error, rows) {
 						res.redirect("/");
 						// redirect to the new document?
+						connection.release();
 					});
 			}
 
-			connection.release();
 		});
 	}
 });
@@ -309,9 +305,9 @@ router.get('/document-list', function(req, res) {
 				[req.session.info.id],
 				function(error, records) {
 					res.send(records);
+					connection.release();
 				});
 			}
-			connection.release();
 		});
 	}
 });
@@ -350,9 +346,9 @@ router.post('/login', function(req, res) {
 				else {
 					res.send({result:'error'});
 				}
+				connection.release();
 			});
 		}
-		connection.release();
 	});
 	
 });
