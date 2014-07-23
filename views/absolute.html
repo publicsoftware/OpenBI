@@ -21,7 +21,7 @@ body {
 				onclick='javascript:createCrossFilter()'></a>
 		</li>
 		
-		<% if (user === dashboard.user) { %>
+		<% if (user === document.user) { %>
 		<li>
 			<a href="" class="uk-icon-button uk-icon-plus"
 				onclick='javascript:createChart({})'></a>
@@ -40,7 +40,7 @@ body {
 		<!-- <li style='width:2rem;'></li> -->
 		<li style=''>
 			<h2 style='margin:0; text-shadow: 0 1px white;'>
-				<%= dashboard.name %>
+				<%= document.name %>
 			</h2>
 		</li>
 	</ul>
@@ -137,10 +137,9 @@ function main() {
 	createCrossFilter();
 }
 
-var dashboard_ = '<%= dashboard.id %>';
-var dashboard = dashboard_ === '' ? 0 : parseInt(dashboard_);
+var ids = '<%= document.id %>';
+var id = ids === '' ? 0 : parseInt(ids);
 var charts = new Array();
-
 var data;
 var xf;
 var dimension;
@@ -151,7 +150,7 @@ function createCrossFilter() {
 	// TODO: load data only first time then
 	// create data preparation, get the available dimension
 	// display dimension & group to user
-	d3.csv("/data/<%= dashboard.id %>", function(data_) {
+	d3.csv("/data/<%= document.id %>", function(data_) {
 		data = data_;
 		xf = crossfilter(data);
 		dimension = new Array();
@@ -295,14 +294,14 @@ dc.dataCount("#data-count")
 				</div>
 				<div class='uk-width-7-10'>
 					<input type='text' name='name' class='uk-width-1-1'
-					   value='<%= dashboard.name %>' />
+					   value='<%= document.name %>' />
 				</div>
 				<div class='uk-width-3-10'>
 					<label>Public</label>
 				</div>
 				<div class='uk-width-7-10'>
 					<input type='checkbox' name='public' 
-						<%= dashboard.public ? 'checked' : '' %> />	
+						<%= document.public ? 'checked' : '' %> />	
 				</div>
 				
 				<div class='uk-width-1-1'>&nbsp;</div>

@@ -4,6 +4,9 @@
 
 use openbi;
 
+drop table if exists dashboards;
+drop table if exists charts;
+
 drop table if exists users;
 create table users (
 	id				serial,
@@ -18,13 +21,14 @@ insert into users(user, email, name, role, password)
 	values('root', 'email@email.com', 'System Administrator', 'root',
 		sha2('password', 256));
 
-drop table if exists dashboards;
-create table dashboards (
+drop table if exists documents;
+create table documents (
 	id			serial,
 	user		bigint,
 	name		nvarchar(1023),
 	public		int default 0,
 	layout		nvarchar(255),
+	style		nvarchar(16383),				-- css styling
 	data_type	 varchar(255) default 'none',	-- none file url query
 	data_name	nvarchar(1023),					-- original file name or name
 	data		nvarchar(2047)					-- file path on server
@@ -45,16 +49,17 @@ if (data_type == 'query') {
 }
 */
 
-drop table if exists charts;
-create table charts (
+drop table if exists objects;
+create table objects (
 	id			serial,
-	dashboard	bigint,
+	document	bigint,
 	name		nvarchar(1023),
 	x			int default 0,
 	y			int default 0,
 	z			int default 0,					-- reserved
 	width		int default 240,
 	height		int default 120,
+	style		nvarchar(16383),				-- css styling
 	type		varchar(255) default 'none',	-- none, bar, line, pie
 	options		longtext,						-- json format
 	dimension	longtext,						-- code e.g. dc.pluck('column')

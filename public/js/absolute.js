@@ -1,7 +1,7 @@
 var _grid_size = 8;
 var _chart_padding = 16;
 
-// TODO: FIX ISSUE WHEN SCROLL PAGE
+// TODO: Add right and bottom padding automatically
 
 function chartSettings(k) {
 	$('#chart-settings').prop('data-chart-id', k);
@@ -25,6 +25,7 @@ function chartSave() {
 	modal.hide();
 }
 
+// remove?
 function chartMinimize(k) {
 	$('#chart' + k).outerWidth('240px');
 	$('#chart' + k).outerHeight('120px');
@@ -35,30 +36,17 @@ function chartDelete(k) {
 	$('#chart' + k).fadeOut();
 }
 
-function closeSettings() {
-	var modal = $.UIkit.modal("#settings");
-	modal.hide();
-}
-
-function saveSettings() {
-	var checked = $('#settings [name=public]').is(':checked');
-	var data = {
-		dashboard: dashboard,
-		name: $('#settings [name=name]').val(),
-		public: checked ? 1 : 0
-	};
-	$.post('/dashboard-save', data, function(result) {
-		closeSettings();
-	});
-}
-
 function createChart(data) {
    	if (data.id == null) {
 		data.id = 0;
-		data.name = 'New Chart';
-		data.type = 'pie';
+		data.name = 'New';
+		data.type = 'none';
 		data.dimension = '';
 		data.group = '';
+		data.x = _grid_size;
+		data.y = _grid_size * 8;
+		data.width = 240;
+		data.height = 120;
 	}
 	
 	var html = $('#chart-template').html();
@@ -83,8 +71,8 @@ function saveLayout() {
 	var count = 0;
 	for (var i = 0; i < charts.length; i++) {
 		if (charts[i].deleted) {
-			var data = { id: charts[i].id, dashboard: dashboard };
-			$.post('/chart-delete', data, function(result) {
+			var data = { id: charts[i].id, document: id };
+			$.post('/object-delete', data, function(result) {
 				// console.log(result);
 				count++;
 				if (count === charts.length) {
@@ -100,14 +88,15 @@ function saveLayout() {
 			var h = chart.outerHeight();
 
 			var data = {
-				dashboard: dashboard,
+				document:  id,
 				id:        charts[i].id, 
 				name:      charts[i].name,
 				type:      charts[i].type,
 				dimension: charts[i].dimension,
 				group:     charts[i].group,
-				x:x, y:y, width:w, height:h};
-			$.post('/chart-save', data, function(result) {
+				x:x, y:y, width:w, height:h };
+			// console.log(data);
+			$.post('/object-save', data, function(result) {
 				// console.log(result);
 				count++;
 				if (count === charts.length) {
@@ -116,6 +105,24 @@ function saveLayout() {
 			});
 		}
 	}
+}
+
+function closeSettings() {
+	var modal = $.UIkit.modal("#settings");
+	modal.hide();
+}
+
+function saveSettings() {
+	var checked = $('#settings [name=public]').is(':checked');
+	var data = {
+		dashboard: dashboard,
+		name: $('#settings [name=name]').val(),
+		public: checked ? 1 : 0
+	};
+	$.post('/dashboard-save', data, function(result) {
+		closeSettings();
+		// reload?
+	});
 }
 
 $('body').on('mouseup', function() {

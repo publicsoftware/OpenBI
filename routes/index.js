@@ -4,14 +4,34 @@ var mysql	= require('mysql');
 var crypto	= require('crypto');
 var http    = require('http');
 
-var db = mysql.createConnection({
+var pool = mysql.createPool({
 	host		: 'localhost',
 	user		: 'openbi',
 	password	: 'p@ssword',
 	database	: 'openbi'
 });
 
-db.on('error', function(err) {
+/*
+	pool.getConnection(function(error, connection) {
+		if (error) {
+
+		}
+		else {
+			connection.query('select * from users',  function(error, records) {
+				if (error) {
+					// throw err;
+				}
+				else {
+					// console.log(records);
+				}
+			});
+		}
+
+		connection.release();
+	});
+*/
+
+pool.on('error', function(err) {
 	console.log(err.code);
 });
 
@@ -26,159 +46,214 @@ router.get('/', function(req, res) {
 	}
 });
 
-router.get('/dashboard', function(req, res) {
+router.get('/document', function(req, res) {
 	res.redirect('/');
 });
 
-router.get('/dashboard/:id', function(req, res) {
-	var user = req.session.info ? req.session.info.id : 0;
-	db.query("select * from dashboards where id=? and (user=? or public=1)",
-	[req.params.id, user],
-	function (error, records) {
-		if (error || records.length === 0) {
+router.get('/document/:id', function(req, res) {
+	pool.getConnection(function(error, connection) {
+		if (error) {
 			res.redirect("/");
 		}
 		else {
-			records[0].data = '/' + records[0].data;
-			db.query("select * from charts where dashboard=?",
-				[req.params.id],
-			function(error, charts) {
-				if (error) {
+			var user = req.session.info ? req.session.info.id : 0;
+			connection.query(
+			"select * from documents where id=? and (user=? or public=1)",
+				[req.params.id, user],
+			function (error, records) {
+				if (error || records.length === 0) {
 					res.redirect("/");
 				}
 				else {
-					res.render('absolute.html', { 
-						title: title + ' ' + records[0].name,
-						user: user,
-						dashboard: records[0],
-						charts: charts
+					records[0].data = '/' + records[0].data;
+					connection.query("select * from objects where document=?",
+						[req.params.id],
+					function(error, objects) {
+						if (error) {
+							res.redirect("/");
+						}
+						else {
+							res.render('absolute.html', { 
+								title: title + ' ' + records[0].name,
+								user: user,
+								document: records[0],
+								charts: objects
+							});
+						}
 					});
 				}
 			});
 		}
+
+		connection.release();
 	});
 });
 
-router.post('/dashboard-save', function(req, res) {
+router.post('/document-save', function(req, res) {
 	if (req.session.info == null) {
 		res.send({result:'error'});
 	}
 	else {
 		var user      = req.session.info.id;
-		var dashboard = parseInt(req.body.dashboard);
+		var document  = parseInt(req.body.document);
 		var public    = parseInt(req.body.public);
-		db.query("select user from dashboards where id=?",[dashboard], 
-		function(error, records) {
-			if (error || records.length === 0) {
-				res.send({result:'error', info:'invalid dashboard'});
+		pool.getConnection(function(error, connection) {
+			if (error) {
+
 			}
 			else {
-				if (records[0].user === user) {
-					db.query("update dashboards set name=?, public=? where id=?",
-					[req.body.name, public, dashboard],
-					function(errors, records) {
-						if (errors) {			
-							res.send({result:'error', info:'database error'});
+				connection.query("select user from documents where id=?",
+				[document], 
+				function(error, records) {
+					if (error || records.length === 0) {
+						res.send({result:'error', info:'invalid document'});
+					}
+					else {
+						if (records[0].user === user) {
+							connection.query(
+							"update documents set name=?, public=? where id=?",
+							[req.body.name, public, document],
+							function(errors, records) {
+								if (errors) {			
+									res.send({result:'error', 
+										info:'database error'});
+								}
+								else {
+									res.send({result:'ok'});
+								}
+							});
 						}
 						else {
-							res.send({result:'ok'});
+							res.send({result:'error', 
+								info:'permission denied'});
 						}
-					});
-				}
-				else {
-					res.send({result:'error', info:'permission denied'});
-				}
+					}
+				});
 			}
+
+			connection.release();
 		});
 	}
 });
 
-router.post('/chart-delete', function(req, res) {
+router.post('/object-delete', function(req, res) {
 	if (req.session.info == null) {
 		res.send({result:'error'});
 	}
 	else {
-		var id = parseInt(req.body.id);
-		var dashboard = parseInt(req.body.dashboard);
-		db.query("select user from dashboards where id=?", [dashboard],
-		function(error, records) {
+		pool.getConnection(function(error, connection) {
 			if (error) {
 				res.send({result:'error'});
 			}
-			else
-			{
-				if (records[0].user === req.session.info.id) {
-					db.query("delete from charts where id=?", [id], 
-					function(errors, records) {
-						if (errors) {
-							res.send({result:'error'});
+			else {
+				var id = parseInt(req.body.id);
+				var document = parseInt(req.body.document);
+				connection.query("select user from documents where id=?", 
+				[document],
+				function(error, records) {
+					if (error) {
+						res.send({result:'error'});
+					}
+					else
+					{
+						if (records[0].user === req.session.info.id) {
+							connection.query("delete from objects where id=?", 
+							[id], 
+							function(errors, records) {
+								if (errors) {
+									res.send({result:'error'});
+								}
+								else {
+									res.send({result:'ok'});
+								}
+							});
 						}
 						else {
-							res.send({result:'ok'});
+							res.send({result:'error'});
 						}
-					});
-				}
-				else {
-					res.send({result:'error'});
-				}
+					}
+				});
 			}
+
+			connection.release();
 		});
 	}
 });
 	
-router.post('/chart-save', function(req, res) {
+router.post('/object-save', function(req, res) {
 	var id = parseInt(req.body.id);
-	var dashboard = parseInt(req.body.dashboard);
+	var document = parseInt(req.body.document);
 	
 	if (req.session.info == null) {
 		res.send({result:'error'});
 	}
 	else {
-		db.query("select user from dashboards where id=?", [dashboard],
-		function(error, records) {
+		pool.getConnection(function(error, connection) {
 			if (error) {
 				res.send({result:'error'});
 			}
-			else
-			{
-				var type      = req.body.type;
-				var dimension = req.body.dimension;
-				var group     = req.body.group;
-				
-				if (records[0].user === req.session.info.id) {
-					if (id === 0) {
-						db.query("insert into charts(dashboard, name, " + 
-								" type, dimension, reduce, " +
-								" x, y, width, height) " +
-								" values(?, ?, ?, ?, ?, ?, ?, ?, ?)",
-						[dashboard, 
-							req.body.name, type, 
-							dimension, group,
-							req.body.x, req.body.y, 
-							req.body.width, req.body.height],
-						function(error, rows) {
-							res.send({result:'ok'});
-						});
+			else {
+				connection.query("select user from documents where id=?", 
+				[document],
+				function(error, records) {
+					if (error) {
+						res.send({result:'error'});
 					}
-					else {
-						db.query("update charts set " +
-								" name=?, type=?, dimension=?, reduce=?," +
-								" x=?, y=?, width=?, height=? " +
-								" where id = ?"
-						,[req.body.name, type, 
-							dimension, group,
-							req.body.x, req.body.y, 
-							req.body.width, req.body.height,
-							id],
-						function(error, rows) {
-							res.send({result:'ok'});
-						});
+					else
+					{
+						var type      = req.body.type;
+						var dimension = req.body.dimension;
+						var group     = req.body.group;
+
+						if (records[0].user === req.session.info.id) {
+							if (id === 0) {
+								connection.query(
+										"insert into objects(document, name, " + 
+										" type, dimension, reduce, " +
+										" x, y, width, height) " +
+										" values(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+								[document, 
+									req.body.name, type, 
+									dimension, group,
+									req.body.x, req.body.y, 
+									req.body.width, req.body.height],
+								function(error, rows) {
+									if (error) {
+										res.send({result:'error'});
+									}
+									else {
+										res.send({result:'ok'});
+									}
+								});
+							}
+							else {
+								connection.query("update objects set " +
+									" name=?, type=?, dimension=?, reduce=?," +
+									" x=?, y=?, width=?, height=? " +
+									" where id = ?"
+								,[req.body.name, type, 
+									dimension, group,
+									req.body.x, req.body.y, 
+									req.body.width, req.body.height,
+									id],
+								function(error, rows) {
+									if (error) {
+										res.send({result:'error'});
+									}
+									else {
+										res.send({result:'ok'});
+									}
+								});
+							}
+						}
+						else {
+							res.send({result:'error'});
+						}
 					}
-				}
-				else {
-					res.send({result:'error'});
-				}
+				});
 			}
+
+			connection.release();
 		});
 	}
 			
@@ -189,48 +264,74 @@ router.get('/data', function(req, res) {
 });
 
 router.get('/data/:id', function(req, res) {
-	var user = req.session.info ? req.session.info.id : 0;
-	db.query("select * from dashboards where id=? and (user=? or public=1)",
-	[req.params.id, user],
-	function (error, records) {
-		if (error || records.length === 0) {
+	pool.getConnection(function(error, connection) {
+		if (error) {
 			res.send([]);
 		}
 		else {
-			res.sendfile(records[0].data);
+			var user = req.session.info ? req.session.info.id : 0;
+			connection.query(
+			"select * from documents where id=? and (user=? or public=1)",
+			[req.params.id, user],
+			function (error, records) {
+				if (error || records.length === 0) {
+					res.send([]);
+				}
+				else {
+					res.sendfile(records[0].data);
+				}
+			});
 		}
+		connection.release();
 	});
 });
 
-// TODO: ALL POST METHOD MUST RETURN JSON
-router.post('/dashboard-create', function(req, res) {
+router.post('/document-create', function(req, res) {
 	// console.log(req.files);
 	if (req.session.info == null) {
 		res.redirect("/login");
 	}
 	else {
-		var path = req.files.file ? req.files.file.path : '';
-		var name = req.files.file ? req.files.file.originalname : '';
-		db.query("insert into dashboards(user, name, layout, " + 
-				  " data_type, data_name, data) "
-				+ " values(?, ?, ?, 'file', ?, ?)",
-			[req.session.info.id, req.body.name, req.body.layout,
-				name, path],
-			function(error, rows) {
-				res.redirect("/");
-			});
+		pool.getConnection(function(error, connection) {
+			if (error) {
+
+			}
+			else {
+				var path = req.files.file ? req.files.file.path : '';
+				var name = req.files.file ? req.files.file.originalname : '';
+				connection.query("insert into documents(user, name, layout, " + 
+						  " data_type, data_name, data) "
+						+ " values(?, ?, ?, 'file', ?, ?)",
+					[req.session.info.id, req.body.name, req.body.layout,
+						name, path],
+					function(error, rows) {
+						res.redirect("/");
+						// redirect to the new document?
+					});
+			}
+
+			connection.release();
+		});
 	}
 });
 
-router.get('/dashboard-list', function(req, res) {
+router.get('/document-list', function(req, res) {
 	if (req.session.info == null) {
 		res.send([]);
 	}
 	else {
-		db.query("select * from dashboards where user=?",
-		[req.session.info.id],
-		function(error, records) {
-			res.send(records);
+		pool.getConnection(function(error, connection) {
+			if (error) {
+				res.send([]);
+			}
+			else {
+				connection.query("select * from documents where user=?",
+				[req.session.info.id],
+				function(error, records) {
+					res.send(records);
+				});
+			}
+			connection.release();
 		});
 	}
 });
@@ -249,22 +350,31 @@ router.get('/login', function(req, res) {
 });
 
 router.post('/login', function(req, res) {
-	var digest = crypto.createHash('sha256').update(req.body.password)
+	pool.getConnection(function(error, connection) {
+		if (error) {
+			res.send({result:'error'});
+		}
+		else {
+			var digest = crypto.createHash('sha256').update(req.body.password)
 					.digest("hex");
-	db.query('select * from users where email=? or user=?',
-		[req.body.username, req.body.username],
-		function(error, rows) {
-			if (error == null && 
-				rows.length > 0 && 
-				rows[0].password === digest) 
-			{
-				req.session.info = rows[0];
-				res.send({result:'ok'});
-			}
-			else {
-				res.send({result:'error'});
-			}
-		});
+			connection.query('select * from users where email=? or user=?',
+			[req.body.username, req.body.username],
+			function(error, rows) {
+				if (error == null && 
+					rows.length > 0 && 
+					rows[0].password === digest) 
+				{
+					req.session.info = rows[0];
+					res.send({result:'ok'});
+				}
+				else {
+					res.send({result:'error'});
+				}
+			});
+		}
+		connection.release();
+	});
+	
 });
 
 router.get('/logout', function(req, res) {
@@ -273,13 +383,7 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/debug', function(req, res) {
-
-	db.query("select * from dashboards where false;",
-		function(err, rows) {
-			console.log(err);
-			console.log(rows);
-			res.send(rows);
-		});
+	res.send([]);
 });
 
 
@@ -324,13 +428,14 @@ module.exports = router;
 	pool.getConnection(function(error, connection) {
 		if (error) {
 
+		}
 		else {
 			connection.query('select * from users',  function(error, records) {
 				if (error) {
-					//throw err;
+					// throw err;
 				}
 				else {
-					console.log(records);
+					// console.log(records);
 				}
 			});
 		}
