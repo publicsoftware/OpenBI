@@ -46,19 +46,19 @@ div.dc-chart {
 
 .dc-chart .selected path {
     stroke-width: 3;
-    stroke: #ccc;
+    stroke: #ddd;
     fill-opacity: 1;
 }
 
 .dc-chart .deselected path {
     stroke: none;
     fill-opacity: .5;
-    fill: #ccc;
+    fill: #ddd;
 }
 
 .dc-chart .axis path, .axis line {
     fill: none;
-    stroke: #000;
+    stroke: #222;
     shape-rendering: crispEdges;
 }
 
