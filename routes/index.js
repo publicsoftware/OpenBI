@@ -53,7 +53,7 @@ router.get('/document/:id', function(req, res) {
 							res.redirect("/");
 						}
 						else {
-							res.render('absolute.html', { 
+							res.render('absolute.html', {
 								title: title + ' ' + records[0].name,
 								user: user,
 								document: records[0],
@@ -82,7 +82,7 @@ router.post('/document-save', function(req, res) {
 			}
 			else {
 				connection.query("select user from documents where id=?",
-				[document], 
+				[document],
 				function(error, records) {
 					if (error || records.length === 0) {
 						res.send({result:'error', info:'invalid document'});
@@ -93,8 +93,8 @@ router.post('/document-save', function(req, res) {
 							"update documents set name=?, public=? where id=?",
 							[req.body.name, public, document],
 							function(errors, records) {
-								if (errors) {			
-									res.send({result:'error', 
+								if (errors) {
+									res.send({result:'error',
 										info:'database error'});
 								}
 								else {
@@ -104,7 +104,7 @@ router.post('/document-save', function(req, res) {
 							});
 						}
 						else {
-							res.send({result:'error', 
+							res.send({result:'error',
 								info:'permission denied'});
 						}
 					}
@@ -126,7 +126,7 @@ router.post('/object-delete', function(req, res) {
 			else {
 				var id = parseInt(req.body.id);
 				var document = parseInt(req.body.document);
-				connection.query("select user from documents where id=?", 
+				connection.query("select user from documents where id=?",
 				[document],
 				function(error, records) {
 					if (error) {
@@ -135,8 +135,8 @@ router.post('/object-delete', function(req, res) {
 					else
 					{
 						if (records[0].user === req.session.info.id) {
-							connection.query("delete from objects where id=?", 
-							[id], 
+							connection.query("delete from objects where id=?",
+							[id],
 							function(errors, records) {
 								if (errors) {
 									res.send({result:'error'});
@@ -156,11 +156,11 @@ router.post('/object-delete', function(req, res) {
 		});
 	}
 });
-	
+
 router.post('/object-save', function(req, res) {
 	var id = parseInt(req.body.id);
 	var document = parseInt(req.body.document);
-	
+
 	if (req.session.info == null) {
 		res.send({result:'error'});
 	}
@@ -170,7 +170,7 @@ router.post('/object-save', function(req, res) {
 				res.send({result:'error'});
 			}
 			else {
-				connection.query("select user from documents where id=?", 
+				connection.query("select user from documents where id=?",
 				[document],
 				function(error, records) {
 					if (error) {
@@ -185,14 +185,14 @@ router.post('/object-save', function(req, res) {
 						if (records[0].user === req.session.info.id) {
 							if (id === 0) {
 								connection.query(
-										"insert into objects(document, name, " + 
+										"insert into objects(document, name, " +
 										" type, dimension, reduce, " +
 										" x, y, width, height) " +
 										" values(?, ?, ?, ?, ?, ?, ?, ?, ?)",
-								[document, 
-									req.body.name, type, 
+								[document,
+									req.body.name, type,
 									dimension, group,
-									req.body.x, req.body.y, 
+									req.body.x, req.body.y,
 									req.body.width, req.body.height],
 								function(error, rows) {
 									if (error) {
@@ -208,9 +208,9 @@ router.post('/object-save', function(req, res) {
 									" name=?, type=?, dimension=?, reduce=?," +
 									" x=?, y=?, width=?, height=? " +
 									" where id = ?"
-								,[req.body.name, type, 
+								,[req.body.name, type,
 									dimension, group,
-									req.body.x, req.body.y, 
+									req.body.x, req.body.y,
 									req.body.width, req.body.height,
 									id],
 								function(error, rows) {
@@ -232,7 +232,7 @@ router.post('/object-save', function(req, res) {
 			}
 		});
 	}
-			
+
 });
 
 router.get('/data', function(req, res) {
@@ -258,7 +258,7 @@ router.get('/data/:id', function(req, res) {
 				}
 				connection.release();
 			});
-		}		
+		}
 	});
 });
 
@@ -274,8 +274,8 @@ router.post('/document-create', function(req, res) {
 			else {
 				var path = req.files.file ? req.files.file.path : '';
 				var name = req.files.file ? req.files.file.originalname : '';
-				connection.query("insert into documents(user, name, layout, " + 
-					" data_type, data_name, data) " + 
+				connection.query("insert into documents(user, name, layout, " +
+					" data_type, data_name, data) " +
 					" values(?, ?, ?, 'file', ?, ?)",
 					[req.session.info.id, req.body.name, req.body.layout,
 					name, path],
@@ -333,9 +333,9 @@ router.post('/login', function(req, res) {
 			connection.query('select * from users where email=? or user=?',
 			[req.body.username, req.body.username],
 			function(error, rows) {
-				if (error == null && 
-					rows.length > 0 && 
-					rows[0].password === digest) 
+				if (error == null &&
+					rows.length > 0 &&
+					rows[0].password === digest)
 				{
 					req.session.info = rows[0];
 					res.send({result:'ok'});
@@ -347,7 +347,7 @@ router.post('/login', function(req, res) {
 			});
 		}
 	});
-	
+
 });
 
 router.get('/logout', function(req, res) {
@@ -356,7 +356,8 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/debug', function(req, res) {
-	res.send([]);
+	// res.send([]);
+	res.render('debug.html', { title: title });
 });
 
 
@@ -364,12 +365,12 @@ router.get('/get-stock-data', function(req, res) {
 	var url = "http://query.yahooapis.com/v1/public/yql";
 	var symbol = 'aapl,msft,goog,king';
 	var data = encodeURIComponent("select * from yahoo.finance.quotes where " +
-		" symbol in ('" + symbol + "') " + 
-		// " and startDate='2014-06-01' and endDate='2014-06-30'" + 
+		" symbol in ('" + symbol + "') " +
+		// " and startDate='2014-06-01' and endDate='2014-06-30'" +
 		"");
-	url = url + '?q=' + data + "&format=json&diagnostics=true&" + 
+	url = url + '?q=' + data + "&format=json&diagnostics=true&" +
 			"env=http://datatables.org/alltables.env";
-	
+
 	http.get(url, function(response) {
 		response.on('data', function(chunk) {
 			// console.log(chunk.toString());
@@ -405,7 +406,7 @@ NOTE:
 		host : 'host',
 		user : 'username',
 		password: 'password'
-	});	
+	});
 
 	pool.getConnection(function(error, connection) {
 		if (error) {
@@ -431,8 +432,8 @@ NOTE:
 
 
 /*
-req.files = 
-{ file: 
+req.files =
+{ file:
 	 { fieldname: 'file',
 		 originalname: 'ndx.csv',
 		 name: 'ba7c2f5b698c5f1d0b0a37afddc78c1c.csv',

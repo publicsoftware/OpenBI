@@ -14,19 +14,19 @@ function createCrossFilter(dataPath) {
 		for (var k in data[0]) {
 			keys.push(k);
 		}
-		
+
 		for (var i = 0; i < charts.length; i++) {
 			var color = d3.scale.category20();
 			dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
-			group[i] = dimension[i].group().reduceSum(
-					dc.pluck(charts[i].group));
-
+			group[i] = dimension[i].group()
+					.reduceSum(dc.pluck(charts[i].group))
+					;
 			var width  = $('#chart' + i).outerWidth();
 			var height = $('#chart' + i).outerHeight();
 			height -= _chart_padding;
 			var square = Math.min(width, height);
 			var transitionDuration = 1000;
-			
+
 			if (charts[i].type === 'pie') {
 				charts[i].chart = dc.pieChart("#chart" + i)
 					.width(width)
@@ -50,6 +50,10 @@ function createCrossFilter(dataPath) {
 					.elasticX(true)
 					.transitionDuration(transitionDuration)
 					.colors(color)
+					.ordering(function(d){ return -d.value; })
+					.data(function(group) {
+						return group.top(25);
+						})
 					;
 			}
 			else
@@ -88,12 +92,12 @@ function createCrossFilter(dataPath) {
 					;
 			}
 		}
-		
+
 		dc.renderAll();
 		/*
 		d3.selectAll("g.x text")
 			.attr("class", "campusLabel")
-			.style("text-anchor", "end") 
+			.style("text-anchor", "end")
 			.attr("transform", "translate(-10,0)rotate(315)");
 		*/
 	});
@@ -104,10 +108,10 @@ function getData() {
 	var url = "http://query.yahooapis.com/v1/public/yql";
 	var symbol = 'aapl,msft,goog,king';
 	var data = encodeURIComponent("select * from yahoo.finance.quotes where " +
-		" symbol in ('" + symbol + "') " + 
-		// " and startDate='2014-06-01' and endDate='2014-06-30'" + 
+		" symbol in ('" + symbol + "') " +
+		// " and startDate='2014-06-01' and endDate='2014-06-30'" +
 		"");
-	$.getJSON(url + '?q=' + data + "&format=json&diagnostics=true&" + 
+	$.getJSON(url + '?q=' + data + "&format=json&diagnostics=true&" +
 			"env=http://datatables.org/alltables.env"
 		)
 	.done(function (data) {
@@ -160,22 +164,22 @@ function createChart(data) {
 		data.width = 240;
 		data.height = 120;
 	}
-	
+
 	var html = $('#chart-template').html();
 	var count = charts.length;
 	html = html.replace(/_id/g, count);
 	$('body').append(html);
-	
+
 	var chart = $('#chart' + count);
 	chart.draggable({handle: '.handle'});
 	chart.resizable();
-	
+
 	if (data.x) chart.css('left', data.x + 'px');
 	if (data.y) chart.css('top',  data.y + 'px');
 	if (data.width)  chart.outerWidth(data.width + 'px');
 	if (data.height) chart.outerHeight(data.height + 'px');
 	chart.find(".title").text(data.name);
-	
+
 	charts.push(data);
 }
 
@@ -193,7 +197,7 @@ function saveChart(index) {
 
 		var data = {
 			document:  doc,
-			id:        charts[index].id, 
+			id:        charts[index].id,
 			name:      charts[index].name,
 			type:      charts[index].type,
 			dimension: charts[index].dimension,
@@ -202,7 +206,7 @@ function saveChart(index) {
 		$.post('/object-save', data);
 	}
 }
-	
+
 function documentSaveLayout() {
 	for (var i = 0; i < charts.length; i++) {
 		saveChart(i);
@@ -251,7 +255,7 @@ function snapAll() {
 function snap(x) {
 	x = parseInt(x);
 	grid = parseInt(_grid_size);
-	
+
 	if (x % grid === 0) {
 	}
 	if (x % grid > grid / 2) {
@@ -260,7 +264,7 @@ function snap(x) {
 	else {
 		x = parseInt(x / grid) * grid;
 	}
-	
+
 	if (x % _grid_size !== 0)
 		console.log('error ' + x);
 	return x;
@@ -286,10 +290,10 @@ function snap(x) {
 
 				var x = $(this).offset().left;
 				var y = $(this).offset().top;
-				
+
 				var z = $(this).css('z-index');
 				$(this).css('z-index', z + 1000);
-				
+
 				$(this).parents().on("mousemove", function(e) {
 					var width  = snap(e.pageX - x);
 					var height = snap(e.pageY - y);
@@ -306,7 +310,7 @@ function snap(x) {
 			}
 			e.preventDefault();
 		});
-		
+
 		$(this).on("mouseup", function() {
 			$(this).css('cursor', 'default')
 			.removeClass('resizable');
@@ -361,4 +365,3 @@ function snap(x) {
 		});
 	};
 })(jQuery);
-
