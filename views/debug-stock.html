@@ -25,11 +25,13 @@ $.get(url, function(response) {
 	var columns = ["Symbol", "Type", "StockExchange", "Name",
 	 "MarketCapitalization", "EBITDA" /*, "Volume"*/];
 
+	var result = "";
 	var line = "";
 	for (var j = 0; j < columns.length; j++) {
 		line += columns[j] + "\t";
 	}
-	console.log(line);
+	// console.log(line);
+	result += line + "\n";
 
 	for (var i = 0; i < data.length; i++) {
 		line = "";
@@ -68,10 +70,24 @@ $.get(url, function(response) {
 				line += info + "\t";
 			}
 		}
-		console.log(line);
+		// console.log(line);
+		result += line + "\n";
 	}
+
+	$('textarea').val(result);
 });
 </script>
+
+<style>
+textarea {
+	width: 100%;
+	font-family: Courier;
+}
+</style>
+
+<form class='uk-form'>
+	<textarea rows='20'></textarea>
+</form>
 
 <%- include drawer.html %>
 <%- include footer.html %>

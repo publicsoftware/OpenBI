@@ -356,27 +356,12 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/debug', function(req, res) {
-	// res.send([]);
-	res.render('debug.html', { title: title });
+	res.send([]);
 });
 
-
-router.get('/get-stock-data', function(req, res) {
-	var url = "http://query.yahooapis.com/v1/public/yql";
-	var symbol = 'aapl,msft,goog,king';
-	var data = encodeURIComponent("select * from yahoo.finance.quotes where " +
-		" symbol in ('" + symbol + "') " +
-		// " and startDate='2014-06-01' and endDate='2014-06-30'" +
-		"");
-	url = url + '?q=' + data + "&format=json&diagnostics=true&" +
-			"env=http://datatables.org/alltables.env";
-
-	http.get(url, function(response) {
-		response.on('data', function(chunk) {
-			// console.log(chunk.toString());
-		});
-	});
-	res.send({result:'ok'});
+router.get('/debug-stock', function(req, res) {
+	// res.send([]);
+	res.render('debug-stock.html', { title: title });
 });
 
 
