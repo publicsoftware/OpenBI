@@ -5,13 +5,13 @@ var url = "http://query.yahooapis.com/v1/public/yql";
 var symbol = "aapl,msft,goog,ibm,orcl,fb,amzn,ebay,pcln,aol,yhoo,lnkd,twtr"
 	+ ",intc,znga,grpn,yndx,adbe,bidu,king,nflx,renn,zen"
 	+ ",adsk,symc,vmw,rht,ea,intu,fisv,ctxs,csco,ncr,dbd,hpq"
-	+ ",amd,sndk,wdc,stx,nvda,txn,irdm"
-	+ ",xlnx,altr,mchp,atml,cy,mscc,lscc"
-	+ ",ba,gm,f,hog,cpb,ko,pep,jnj,pg,pfe"
-	+ ",xom,ge,cvx,wmt,t,c,wfc,jpm,bac,pm";
+	+ ",amd,sndk,wdc,stx,nvda,txn,irdm,t"
+	+ ",xlnx,altr,mchp,atml,cy,mscc,lscc,"; // must ending with ,
+var other ="xom,ba,gm,f,hog,cpb,ko,pep,jnj,pg,pfe"
+	+ ",ge,cvx,wmt,c,wfc,jpm,bac,pm";
 
 var data = encodeURIComponent("select * from yahoo.finance.quotes where " +
-	" symbol in ('" + symbol + "') " +
+	" symbol in ('" + symbol + other + "') " +
 	// " and startDate='2014-06-01' and endDate='2014-06-30'" +
 	"");
 url = url + '?q=' + data + "&format=json&diagnostics=false"
@@ -22,8 +22,8 @@ url = url + '?q=' + data + "&format=json&diagnostics=false"
 $.get(url, function(response) {
 	// console.log(response.query.results.quote);
 	var data = response.query.results.quote;
-	var columns = ["Symbol", "StockExchange", "Name", "MarketCapitalization",
-	 "EBITDA" /*, "Volume"*/];
+	var columns = ["Symbol", "Type", "StockExchange", "Name",
+	 "MarketCapitalization", "EBITDA" /*, "Volume"*/];
 
 	var line = "";
 	for (var j = 0; j < columns.length; j++) {
@@ -35,19 +35,38 @@ $.get(url, function(response) {
 		line = "";
 		for (var j = 0; j < columns.length; j++) {
 			var info = data[i][columns[j]];
+
 			if (columns[j] === "MarketCapitalization" ||
 				columns[j] === "EBITDA") {
 				if (info.indexOf('B') > 0) {
 					info = info.replace(/B/g, '');
-					info = (parseFloat(info) * 1000000000).toFixed(0);
+					info = (parseFloat(info) * 1000).toFixed(2);
 				}
 				else
 				if (info.indexOf('M') > 0) {
 					info = info.replace(/M/g, '');
-					info = (parseFloat(info) * 1000000).toFixed(0);
+					info = (parseFloat(info) * 1).toFixed(2);
 				}
 			}
-			line += info + "\t";
+			else
+			if (columns[j] === 'Symbol') {
+				var x_symbol = ',' + symbol;
+				var x_info = ',' + info.toLowerCase() + ',';
+				if (x_symbol.indexOf(x_info) >= 0) {
+					info += "\tTechnology";
+				}
+				else {
+					info += "\tOther";
+				}
+			}
+
+			if (info === 'NasdaqNM') {
+				info = 'NASDAQ';
+			}
+
+			if (columns[j] !== "Type") {
+				line += info + "\t";
+			}
 		}
 		console.log(line);
 	}
