@@ -145,8 +145,8 @@ function chartSettings(k) {
 	$('#chart-settings [name=sort]'     ).val(charts[k].sort);
 	$('#chart-settings [name=top]'      ).val(charts[k].top);
 	$('#chart-settings [name=top-value]').val(charts[k].top_value);
-	var modal = $.UIkit.modal("#chart-settings");
-	modal.show();
+	topChange();
+	var modal = $.UIkit.modal("#chart-settings").show();
 }
 
 function chartSettingsSave() {
@@ -162,6 +162,16 @@ function chartSettingsSave() {
 	var modal = $.UIkit.modal("#chart-settings");
 	modal.hide();
 	restart();
+}
+
+function topChange() {
+	var val = $('select[name=top]').val();
+	if (val === 'top' || val === 'bottom') {
+		$('input[name=top-value]').fadeIn();
+	}
+	else {
+		$('input[name=top-value]').fadeOut();
+	}
 }
 
 function chartDelete(id) {
