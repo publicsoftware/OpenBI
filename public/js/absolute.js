@@ -96,6 +96,14 @@ function createCrossFilter(dataPath) {
 					;
 			}
 
+			if (charts[i].sort === 'asc') {
+				charts[i].chart.ordering(function(d){ return d.value; })
+			}
+			else
+			if (charts[i].sort === 'desc') {
+				charts[i].chart.ordering(function(d){ return -d.value; })
+			}
+
 			if (charts[i].top === 'top') {
 				group[i].value = parseInt(charts[i].top_value);
 				charts[i].chart.data(function(group) {
@@ -109,17 +117,6 @@ function createCrossFilter(dataPath) {
 					return group.top(Infinity).splice(group.value);
 					});
 			}
-
-/*
-			if (charts[i].sort === 'asc') {
-				charts[i].chart.ordering(function(d){ return d.value; })
-			}
-			else
-			if (charts[i].sort === 'desc') {
-				charts[i].chart.ordering(function(d){ return -d.value; })
-			}
-*/
-
 		}
 
 		dc.renderAll();
@@ -164,10 +161,19 @@ function chartSettingsSave() {
 	restart();
 }
 
+function sortChange() {
+	var val = $('select[name=sort]').val();
+	if (val === 'asc' || val === 'desc') {
+		$('select[name=top]').val('none');
+		topChange();
+	}
+}
+
 function topChange() {
 	var val = $('select[name=top]').val();
 	if (val === 'top' || val === 'bottom') {
 		$('input[name=top-value]').fadeIn();
+		$('select[name=sort]').val('none');
 	}
 	else {
 		$('input[name=top-value]').fadeOut();
