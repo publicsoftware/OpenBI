@@ -187,12 +187,14 @@ router.post('/object-save', function(req, res) {
 								connection.query(
 										"insert into objects(document, name, " +
 										" type, dimension, reduce, sort, " +
+										" top, top_value, " +
 										" x, y, width, height) " +
-										" values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+									" values(?,?,?,?,?,?,?,?,?,?,?,?)",
 								[document,
 									req.body.name, type,
 									dimension, group,
 									req.body.sort,
+									req.body.top, req.body.top_value,
 									req.body.x, req.body.y,
 									req.body.width, req.body.height],
 								function(error, rows) {
@@ -207,12 +209,13 @@ router.post('/object-save', function(req, res) {
 							else {
 								connection.query("update objects set " +
 									" name=?, type=?, dimension=?, reduce=?," +
-									" sort = ?," +
+									" sort=?, top=?, top_value=?," +
 									" x=?, y=?, width=?, height=? " +
 									" where id = ?"
 								,[req.body.name, type,
 									dimension, group,
 									req.body.sort,
+									req.body.top, req.body.top_value,
 									req.body.x, req.body.y,
 									req.body.width, req.body.height,
 									id],

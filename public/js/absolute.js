@@ -50,20 +50,7 @@ function createCrossFilter(dataPath) {
 					.elasticX(true)
 					.transitionDuration(transitionDuration)
 					.colors(color)
-					/*
-					.data(function(group) {
-						return group.top(10);
-						})
-					*/
 					;
-
-				if (charts[i].sort === 'asc') {
-					charts[i].chart.ordering(function(d){ return d.value; })
-				}
-				else
-				if (charts[i].sort === 'desc') {
-					charts[i].chart.ordering(function(d){ return -d.value; })
-				}
 			}
 			else
 			if (charts[i].type === 'line') {
@@ -100,6 +87,31 @@ function createCrossFilter(dataPath) {
 					.colors(color)
 					;
 			}
+
+			if (charts[i].top === 'top') {
+				var value = parseInt(charts[i].top_value);
+				charts[i].chart.data(function(group) {
+					return group.top(value);
+					});
+			}
+			else
+			if (charts[i].top === 'bottom') {
+				var value = -parseInt(charts[i].top_value);
+				charts[i].chart.data(function(group) {
+					return group.top(Infinity).splice(value);
+					});
+			}
+
+/*
+			if (charts[i].sort === 'asc') {
+				charts[i].chart.ordering(function(d){ return d.value; })
+			}
+			else
+			if (charts[i].sort === 'desc') {
+				charts[i].chart.ordering(function(d){ return -d.value; })
+			}
+*/
+
 		}
 
 		dc.renderAll();
@@ -123,6 +135,8 @@ function chartSettings(k) {
 	$('#chart-settings [name=dimension]').val(charts[k].dimension);
 	$('#chart-settings [name=group]'    ).val(charts[k].group);
 	$('#chart-settings [name=sort]'     ).val(charts[k].sort);
+	$('#chart-settings [name=top]'      ).val(charts[k].top);
+	$('#chart-settings [name=top-value]').val(charts[k].top_value);
 	var modal = $.UIkit.modal("#chart-settings");
 	modal.show();
 }
@@ -134,6 +148,8 @@ function chartSettingsSave() {
 	charts[id].dimension	= $('#chart-settings [name=dimension]').val();
 	charts[id].group		= $('#chart-settings [name=group]'    ).val();
 	charts[id].sort			= $('#chart-settings [name=sort]'     ).val();
+	charts[id].top			= $('#chart-settings [name=top]'      ).val();
+	charts[id].top_value	= $('#chart-settings [name=top-value]').val();
 	$('#chart' + id + " .title").text(charts[id].name);
 	var modal = $.UIkit.modal("#chart-settings");
 	modal.hide();
@@ -156,6 +172,9 @@ function createChart(data) {
 		data.y = _grid_size * 8;
 		data.width = 240;
 		data.height = 120;
+		data.sort = '';
+		data.top = '';
+		data.top_value = '0';
 	}
 
 	var html = $('#chart-template').html();
@@ -196,6 +215,8 @@ function saveChart(index) {
 			dimension: charts[index].dimension,
 			group:     charts[index].group,
 			sort:      charts[index].sort,
+		 	top:       charts[index].top,
+			top_value: charts[index].top_value,
 			x:x, y:y, width:w, height:h };
 		$.post('/object-save', data);
 	}
