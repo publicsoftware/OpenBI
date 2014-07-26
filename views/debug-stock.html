@@ -1,14 +1,25 @@
 <%- include header.html %>
 
 <script>
+/*
+http://finance.yahoo.com/q?s=yhoo (to get Company & Exchange)
+http://finance.yahoo.com/q/pr?s=yhoo (to get Sector, Industry, # Employees)
+http://finance.yahoo.com/q/hp?s=yhoo (to get historical prices date range)
+*/
+//type: tech pharm airline semi medi finance telecom software it web
 var url = "http://query.yahooapis.com/v1/public/yql";
 var symbol = "aapl,msft,goog,ibm,orcl,fb,amzn,ebay,pcln,aol,yhoo,lnkd,twtr"
 	+ ",intc,znga,grpn,yndx,adbe,bidu,king,nflx,renn,zen"
-	+ ",adsk,symc,vmw,rht,ea,intu,fisv,ctxs,csco,ncr,dbd,hpq"
-	+ ",amd,sndk,wdc,stx,nvda,txn,irdm,t"
-	+ ",xlnx,altr,mchp,atml,cy,mscc,lscc,"; // must ending with ,
-var other ="xom,ba,gm,f,hog,cpb,ko,pep,jnj,pg,pfe"
-	+ ",ge,cvx,wmt,c,wfc,jpm,bac,pm";
+	+ ",adsk,symc,vmw,rht,ea,sap,ca,intu,fisv,ctxs,csco,ncr,dbd,hpq"
+	+ ",amd,sndk,wdc,stx,nvda,txn,irdm,emc,xrx,jnpr"
+	+ ",nok,t,vod,vz,ter,mu,amat,alu"
+	+ ",xlnx,altr,qcom,mchp,atml,cy,mscc,lscc,brcm,mrvl,stm,"; // ending with ,
+var other ="xom,ba,gm,f,hog,cpb,ko,pep,jnj,pg,pfe,gsk,mrk,lly,abt,bmy"
+	+ ",ge,cvx,wmt,c,wfc,jpm,bac,pm,jcp,dis,v,gs,axp,ms"
+	+ ",fox,cbs,viab,twx"
+	+ ",dal,ual,aal,luv"
+	+ ",sbux,brk-a"
+	;
 
 var data = encodeURIComponent("select * from yahoo.finance.quotes where " +
 	" symbol in ('" + symbol + other + "') " +
@@ -20,10 +31,11 @@ url = url + '?q=' + data + "&format=json&diagnostics=false"
 		;
 
 $.get(url, function(response) {
-	// console.log(response.query.results.quote);
+	console.log(response.query.results.quote);
 	var data = response.query.results.quote;
 	var columns = ["Symbol", "Type", "StockExchange", "Name",
-	 "MarketCapitalization", "EBITDA" /*, "Volume"*/];
+	 "MarketCapitalization", "EBITDA"/*, "PERatio" , "Volume"*/
+	];
 
 	var result = "";
 	var line = "";

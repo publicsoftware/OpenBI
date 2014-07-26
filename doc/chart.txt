@@ -1,8 +1,17 @@
 
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+ISO 8601:
+2014-07-23
+2014-07-23T08:39:14+00:00
+2014-07-23T08:39:14Z
+
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 How much revenue per sales person per week?
 How much [ revenue ] per [ sales person ] per [ week    ]
-         [ profit  ]     [ product type ]     [ quarter ]
+		 [ profit  ]     [ product type ]     [ quarter ]
 
 
 Chart
@@ -24,47 +33,6 @@ combination purchasing
 
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-Dashboard option
-
-Global variables:
-var records    = new Array();
-var dimensions = new Array();
-var groups     = new Array();
-var charts     = new Array();
-
-dimension[i] = field // first version has no custom dimension, use initializer
-
-group[i].reduce = reduceSum | reduceCount | reduce
-group[i].reduceCode = dc.pluck('field');
-
-Tab: Data
-  [URL or Spreadsheet]
-
-Tab: Initialize
-
-Tab: Chart
-  transitionDuration
-
--- -- -- --
-Each Chart option
-Dimension
-Group
-
-
-dimension pluck
-group - pluck or custom
-transitionDuration
-width, height
-
-options that depends on chart type
-
-barChart
-x, xUnit
-elasticY(true)
-
-rowChart
-elasticX(true)
-innerRadius
 
 
 
@@ -73,9 +41,4 @@ innerRadius
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-
-
-
-
-
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
