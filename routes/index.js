@@ -280,13 +280,18 @@ router.post('/document-create', function(req, res) {
 			else {
 				var path = req.files.file ? req.files.file.path : '';
 				var name = req.files.file ? req.files.file.originalname : '';
-				connection.query("insert into documents(user, name, layout, " +
+				connection.query("insert into documents(user, name, theme, " +
 					" data_type, data_name, data) " +
 					" values(?, ?, ?, 'file', ?, ?)",
-					[req.session.info.id, req.body.name, req.body.layout,
+					[req.session.info.id, req.body.name, req.body.theme,
 					name, path],
 				function(error, result) {
-					res.redirect("/document/" + result.insertId);
+					if (result == null) {
+						res.redirect("/");
+					}
+					else {
+						res.redirect("/document/" + result.insertId);
+					}
 					connection.release();
 				});
 			}

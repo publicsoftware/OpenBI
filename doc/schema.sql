@@ -26,9 +26,9 @@ create table documents (
 	public		int default 0,
 	theme		nvarchar(255),
 	style		nvarchar(16383),				-- custom css styling
-	data_type	 varchar(255) default 'none',	-- none file url query
+	data_type	 varchar(255) default 'none',	-- none, file, url, query, yql
 	data_name	nvarchar(1023),					-- original file name or name
-	data		nvarchar(2047)					-- file path on server
+	data		longtext						-- file path on server
 );
 
 /*
@@ -44,6 +44,10 @@ if (data_type == 'query') {
 	data_name	is the name or description of data
 	data		is the query string
 }
+if (data_type == 'code') {
+	data_name	is the description of data
+	data		is the code to load and return data
+}
 */
 
 drop table if exists objects;
@@ -53,14 +57,17 @@ create table objects (
 	name		nvarchar(1023),
 	x			int default 0,
 	y			int default 0,
-	z			int default 0,					-- reserved
+	z			int default 0,					-- z-index
 	width		int default 240,
 	height		int default 120,
 	style		nvarchar(16383),				-- custom css styling
-	type		varchar(255) default 'none',	-- none, bar, line, pie
-	options		longtext,						-- json format
+	type		varchar(255) default 'none',	-- none, bar, line, pie, row
+	options		longtext,						-- json format for the chart
 	dimension	longtext,						-- code e.g. dc.pluck('column')
-	reduce		longtext			-- code e.g. reduceSum(dc.pluck('column'))
+	reduce		longtext,			-- code e.g. reduceSum(dc.pluck('column'))
+	sort		varchar(255) default '',
+	top			varchar(255) default '',
+	top_value	bigint default 0
 );
 
 drop table if exists themes;
