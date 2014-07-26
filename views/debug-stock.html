@@ -8,21 +8,74 @@ http://finance.yahoo.com/q/hp?s=yhoo (to get historical prices date range)
 */
 //type: tech pharm airline semi medi finance telecom software it web
 var url = "http://query.yahooapis.com/v1/public/yql";
-var symbol = "aapl,msft,goog,ibm,orcl,fb,amzn,ebay,pcln,aol,yhoo,lnkd,twtr"
-	+ ",intc,znga,grpn,yndx,adbe,bidu,king,nflx,renn,zen"
-	+ ",adsk,symc,vmw,rht,ea,sap,ca,intu,fisv,ctxs,csco,ncr,dbd,hpq"
-	+ ",amd,sndk,wdc,stx,nvda,txn,irdm,emc,xrx,jnpr"
-	+ ",nok,t,vod,vz,ter,mu,amat,alu"
-	+ ",xlnx,altr,qcom,mchp,atml,cy,mscc,lscc,brcm,mrvl,stm,"; // ending with ,
-var other ="xom,ba,gm,f,hog,cpb,ko,pep,jnj,pg,pfe,gsk,mrk,lly,abt,bmy"
-	+ ",ge,cvx,wmt,c,wfc,jpm,bac,pm,jcp,dis,v,gs,axp,ms"
-	+ ",fox,cbs,viab,twx"
-	+ ",dal,ual,aal,luv"
-	+ ",sbux,brk-a"
-	;
+var symbols = [
+	{
+		type: 'System',
+		list: ['aapl','goog','msft', 'ibm', 'orcl', 'hpq', 'ncr', 'dbd', 'emc',
+			'xrx']
+	},
+	{
+		type: 'Software',
+		list: ['adbe','adsk','symc','vmw','rht','sap', 'intu','fisv', 'ctxs']
+	},
+	{
+		type: 'Web',
+		list: ['fb', 'amzn', 'ebay', 'pcln', 'aol', 'yhoo', 'lnkd', 'twtr',
+			'grpn', 'yndx', 'bidu', 'nflx', 'renn', 'zen']
+	},
+	{
+		type: 'Electronics',
+		list: ['intc', 'amd', 'ndva', 'txn', 'ter', 'mu', 'amat', 'alu',
+			'xlnx', 'altr', 'qcom', 'mchp', 'atml', 'cy', 'mscc', 'lscc',
+			'brcm', 'mrvl', 'stm']
+	},
+	{
+		type: 'Storage',
+		list: ['sndk', 'wdc', 'stx']
+	},
+	{
+		type: 'Game',
+		list: ['ea', 'znga', 'king']
+	},
+	{
+		type: 'Networking',
+		list: ['csco', 'jnpr']
+	},
+	{
+		type: 'IT Services',
+		list: ['ca', 'acn']
+	},
+	{
+		type: 'Telecom',
+		list: ['irdm', 'nok', 't', 'vod', 'vz' ]
+	},
+	{
+		type: 'Others',
+		list: ['xom', 'ba', 'gm', 'f', 'hog','cpb',
+		'ko', 'pep', 'jnj', 'pg', 'pfe', 'gsk', 'mrk', 'lly', 'abt', 'bmy',
+		'ge', 'cvx', 'wmt', 'c', 'wfc', 'jpm', 'bac', 'pm', 'jcp', 'dis',
+		'v', 'gs', 'axp', 'ms', 'fox', 'cbs', 'viab', 'twx',
+		'dal', 'ual', 'aal', 'luv', 'sbux', 'brk-a']
+	}
+	/* ,
+	{
+		type: '',
+		list: []
+	}
+	*/
+];
+
+// build symbol list
+var list = "";
+for (var i = 0; i < symbols.length; i++) {
+	for (var j = 0; j < symbols[i].list.length; j++) {
+		list += symbols[i].list[j] + ',';
+	}
+}
+
 
 var data = encodeURIComponent("select * from yahoo.finance.quotes where " +
-	" symbol in ('" + symbol + other + "') " +
+	" symbol in ('" + list + "') " +
 	// " and startDate='2014-06-01' and endDate='2014-06-30'" +
 	"");
 url = url + '?q=' + data + "&format=json&diagnostics=false"
@@ -31,7 +84,7 @@ url = url + '?q=' + data + "&format=json&diagnostics=false"
 		;
 
 $.get(url, function(response) {
-	console.log(response.query.results.quote);
+	// console.log(response.query.results.quote);
 	var data = response.query.results.quote;
 	var columns = ["Symbol", "Type", "StockExchange", "Name",
 	 "MarketCapitalization", "EBITDA"/*, "PERatio" , "Volume"*/
@@ -49,6 +102,8 @@ $.get(url, function(response) {
 		line = "";
 		for (var j = 0; j < columns.length; j++) {
 			var info = data[i][columns[j]];
+			if (info == null)
+				info = "";
 
 			if (columns[j] === "MarketCapitalization" ||
 				columns[j] === "EBITDA") {
@@ -64,13 +119,12 @@ $.get(url, function(response) {
 			}
 			else
 			if (columns[j] === 'Symbol') {
-				var x_symbol = ',' + symbol;
-				var x_info = ',' + info.toLowerCase() + ',';
-				if (x_symbol.indexOf(x_info) >= 0) {
-					info += "\tTechnology";
-				}
-				else {
-					info += "\tOther";
+				var symbol = data[i].Symbol.toLowerCase();
+				for (var t = 0; t < symbols.length; t++) {
+					if (symbols[t].list.indexOf(symbol) >= 0) {
+						info += '\t' + symbols[t].type;
+						break;
+					}
 				}
 			}
 
@@ -98,7 +152,7 @@ textarea {
 </style>
 
 <form class='uk-form'>
-	<textarea rows='20'></textarea>
+	<textarea rows='20'>Loading...</textarea>
 </form>
 
 <%- include drawer.html %>
