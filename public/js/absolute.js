@@ -10,9 +10,17 @@ function createCrossFilter(dataPath) {
 		xf = crossfilter(data);
 		dimension = new Array();
 		group = new Array();
-		keys = new Array();
+		columns = new Array();
 		for (var k in data[0]) {
-			keys.push(k);
+			columns.push(k);
+		}
+		$('select[name=dimension]').html('');
+		$('select[name=group]').html('');
+		for (var i = 0; i < columns.length; i++) {
+			$('select[name=dimension]')
+			.append('<option>' + columns[i] + '</option>');
+			$('select[name=group]')
+			.append('<option>' + columns[i] + '</option>');
 		}
 
 		for (var i = 0; i < charts.length; i++) {
@@ -163,7 +171,6 @@ function chartDelete(id) {
 
 function chartDeleteThis() {
 	var id = $('#chart-settings [name=id]').val();
-
 	$.UIkit.modal("#chart-settings").hide();
 	chartDelete(id);
 }
