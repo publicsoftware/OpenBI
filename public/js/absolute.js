@@ -156,9 +156,16 @@ function chartSettingsSave() {
 	restart();
 }
 
-function chartDelete(k) {
-	charts[k].deleted = true;
-	$('#chart' + k).fadeOut();
+function chartDelete(id) {
+	charts[id].deleted = true;
+	$('#chart' + id).fadeOut();
+}
+
+function chartDeleteThis() {
+	var id = $('#chart-settings [name=id]').val();
+
+	$.UIkit.modal("#chart-settings").hide();
+	chartDelete(id);
 }
 
 function createChart(data) {
