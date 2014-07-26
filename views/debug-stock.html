@@ -1,31 +1,27 @@
 <%- include header.html %>
 
 <script>
-/*
-http://finance.yahoo.com/q?s=yhoo (to get Company & Exchange)
-http://finance.yahoo.com/q/pr?s=yhoo (to get Sector, Industry, # Employees)
-http://finance.yahoo.com/q/hp?s=yhoo (to get historical prices date range)
-*/
-//type: tech pharm airline semi medi finance telecom software it web
+
 var url = "http://query.yahooapis.com/v1/public/yql";
 var symbols = [
 	{
-		type: 'System',
+		type: 'Solution',
 		list: ['aapl','goog','msft', 'ibm', 'orcl', 'hpq', 'ncr', 'dbd', 'emc',
-			'xrx']
+			'xrx', 'ca', 'acn']
 	},
 	{
 		type: 'Software',
-		list: ['adbe','adsk','symc','vmw','rht','sap', 'intu','fisv', 'ctxs']
+		list: ['adbe','adsk','symc','vmw','rht','sap', 'intu', 'ctxs', 'ment',
+			'fis']
 	},
 	{
 		type: 'Web',
 		list: ['fb', 'amzn', 'ebay', 'pcln', 'aol', 'yhoo', 'lnkd', 'twtr',
-			'grpn', 'yndx', 'bidu', 'nflx', 'renn', 'zen']
+			'grpn', 'yndx', 'bidu', 'nflx', 'renn', 'z', 'zen']
 	},
 	{
 		type: 'Electronics',
-		list: ['intc', 'amd', 'nvda', 'txn', 'ter', 'mu', 'amat', 'alu',
+		list: ['intc', 'amd', 'nvda', 'txn', 'ter', 'mu', 'amat',
 			'xlnx', 'altr', 'qcom', 'mchp', 'atml', 'cy', 'mscc', 'lscc',
 			'brcm', 'mrvl', 'stm']
 	},
@@ -42,20 +38,18 @@ var symbols = [
 		list: ['csco', 'jnpr']
 	},
 	{
-		type: 'IT Services',
-		list: ['ca', 'acn']
-	},
-	{
 		type: 'Telecom',
-		list: ['irdm', 'nok', 't', 'vod', 'vz' ]
+		list: ['irdm', 'nok', 't', 'vod', 'vz', 'alu']
 	},
 	{
 		type: 'Others',
-		list: ['xom', 'ba', 'gm', 'f', 'hog','cpb',
-		'ko', 'pep', 'jnj', 'pg', 'pfe', 'gsk', 'mrk', 'lly', 'abt', 'bmy',
-		'ge', 'cvx', 'wmt', 'c', 'wfc', 'jpm', 'bac', 'pm', 'jcp', 'dis',
+		list: ['xom', 'cvx', 'ba', 'gm', 'f', 'dis', 'sbux', 'brk-a',
+		'ge', 'wmt', 'ko', 'pep', 'hog','cpb',
+		'jnj', 'pg', 'pfe', 'gsk', 'mrk', 'lly', 'abt', 'bmy',
+		'c', 'wfc', 'jpm', 'bac', 'pm', 'jcp',
 		'v', 'gs', 'axp', 'ms', 'fox', 'cbs', 'viab', 'twx',
-		'dal', 'ual', 'aal', 'luv', 'sbux', 'brk-a']
+		'dal', 'ual', 'aal', 'luv',
+		'fisv']
 	}
 	/* ,
 	{
@@ -69,10 +63,16 @@ var symbols = [
 var list = "";
 for (var i = 0; i < symbols.length; i++) {
 	for (var j = 0; j < symbols[i].list.length; j++) {
-		list += symbols[i].list[j] + ',';
+		list += symbols[i].list[j];
+		if (i === symbols.length - 1 &&
+			j === symbols[i].list.length - 1) {
+		}
+		else {
+			list += ",";
+		}
 	}
 }
-
+console.log(list);
 
 var data = encodeURIComponent("select * from yahoo.finance.quotes where " +
 	" symbol in ('" + list + "') " +
@@ -84,6 +84,7 @@ url = url + '?q=' + data + "&format=json&diagnostics=false"
 		;
 
 $.get(url, function(response) {
+	console.log(response);
 	// console.log(response.query.results.quote);
 	var data = response.query.results.quote;
 	var columns = ["Symbol", "Type", "StockExchange", "Name",
