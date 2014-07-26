@@ -50,11 +50,20 @@ function createCrossFilter(dataPath) {
 					.elasticX(true)
 					.transitionDuration(transitionDuration)
 					.colors(color)
-					.ordering(function(d){ return -d.value; })
+					/*
 					.data(function(group) {
-						return group.top(25);
+						return group.top(10);
 						})
+					*/
 					;
+
+				if (charts[i].sort === 'asc') {
+					charts[i].chart.ordering(function(d){ return d.value; })
+				}
+				else
+				if (charts[i].sort === 'desc') {
+					charts[i].chart.ordering(function(d){ return -d.value; })
+				}
 			}
 			else
 			if (charts[i].type === 'line') {
@@ -104,24 +113,6 @@ function createCrossFilter(dataPath) {
 
 }
 
-function getData() {
-	var url = "http://query.yahooapis.com/v1/public/yql";
-	var symbol = 'aapl,msft,goog,king';
-	var data = encodeURIComponent("select * from yahoo.finance.quotes where " +
-		" symbol in ('" + symbol + "') " +
-		// " and startDate='2014-06-01' and endDate='2014-06-30'" +
-		"");
-	$.getJSON(url + '?q=' + data + "&format=json&diagnostics=true&" +
-			"env=http://datatables.org/alltables.env"
-		)
-	.done(function (data) {
-		console.log(data);
-		// $("#result").text("Bid Price: " + data.query.results.quote.LastTradePriceOnly);
-	})
-	.fail(function (jqxhr, textStatus, error) {
-	});
-}
-
 // TODO: Add right and bottom padding automatically
 
 function chartSettings(k) {
@@ -131,6 +122,7 @@ function chartSettings(k) {
 	$('#chart-settings [name=type]'     ).val(charts[k].type);
 	$('#chart-settings [name=dimension]').val(charts[k].dimension);
 	$('#chart-settings [name=group]'    ).val(charts[k].group);
+	$('#chart-settings [name=sort]'     ).val(charts[k].sort);
 	var modal = $.UIkit.modal("#chart-settings");
 	modal.show();
 }
@@ -141,6 +133,7 @@ function chartSettingsSave() {
 	charts[id].type			= $('#chart-settings [name=type]'     ).val();
 	charts[id].dimension	= $('#chart-settings [name=dimension]').val();
 	charts[id].group		= $('#chart-settings [name=group]'    ).val();
+	charts[id].sort			= $('#chart-settings [name=sort]'     ).val();
 	$('#chart' + id + " .title").text(charts[id].name);
 	var modal = $.UIkit.modal("#chart-settings");
 	modal.hide();
@@ -202,6 +195,7 @@ function saveChart(index) {
 			type:      charts[index].type,
 			dimension: charts[index].dimension,
 			group:     charts[index].group,
+			sort:      charts[index].sort,
 			x:x, y:y, width:w, height:h };
 		$.post('/object-save', data);
 	}

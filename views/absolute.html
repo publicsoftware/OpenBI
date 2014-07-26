@@ -10,7 +10,7 @@ body {
 <div class='uk-container'>
 	<ul class='title'>
 		<li>
-			<a href="#drawer" class="uk-icon-button uk-icon-navicon" 
+			<a href="#drawer" class="uk-icon-button uk-icon-navicon"
 			   id='navicon' data-uk-offcanvas></a>
 		</li>
 		<li>
@@ -20,13 +20,13 @@ body {
 			<a href="" class="uk-icon-button uk-icon-refresh"
 				onclick='javascript:restart();'></a>
 		</li>
-		
+
 		<% if (user === document.user) { %>
 		<li>
 			<a href="" class="uk-icon-button uk-icon-plus"
 				onclick='javascript:createChart({})'></a>
 		</li>
-		
+
 		<li>
 			<a href="" class="uk-icon-button uk-icon-save"
 				onclick='javascript:documentSaveLayout()'></a>
@@ -36,7 +36,7 @@ body {
 				data-uk-modal></a>
 		</li>
 		<% } %>
-		
+
 		<!-- <li style='width:2rem;'></li> -->
 		<li style=''>
 			<h2 style='margin:0; text-shadow: 0 1px white;'>
@@ -59,13 +59,13 @@ var keys;
 
 function main() {
 	$('.chart').remove();
-	while (charts.length > 0) {		
+	while (charts.length > 0) {
 		charts.pop();
 	}
-	
+
 	// TODO: load charts from ajax not the backend code
 	<% for (var i = 0; i < charts.length; i++) { %>
-		createChart({ 
+		createChart({
 			id:		<%= charts[i].id %>,
 			name:		'<%= charts[i].name %>',
 			type:		'<%= charts[i].type %>',
@@ -110,15 +110,15 @@ $(document).ready(function() {
 		<form class="uk-form" action="javascript:chartSettingsSave()">
 			<input type="hidden" name="id" value="0" />
 			<div class="uk-grid uk-grid-preserve">
-				
+
 				<div class="uk-width-1-3">
 					Name
 				</div>
 				<div class="uk-width-2-3">
-					<input class="uk-width-1-1" type="text" name="name" 
+					<input class="uk-width-1-1" type="text" name="name"
 						   autofocus />
 				</div>
-				
+
 				<div class="uk-width-1-3">
 					Chart Type
 				</div>
@@ -131,28 +131,39 @@ $(document).ready(function() {
 						<option value="line">Line</option>
 					</select>
 				</div>
-				
+
 				<div class="uk-width-1-3">
 					Dimension
 				</div>
 				<div class="uk-width-2-3">
 					<input class="uk-width-1-1" type="text" name="dimension" />
 				</div>
-				
+
 				<div class="uk-width-1-3">
 					Group
 				</div>
 				<div class="uk-width-2-3">
 					<input class="uk-width-1-1" type="text" name="group" />
 				</div>
-				
+
+				<div class="uk-width-1-3">
+					Sort
+				</div>
+				<div class="uk-width-2-3">
+					<select class="uk-width-1-1" name="sort">
+						<option value="none">None</option>
+						<option value="asc">Ascending A-Z</option>
+						<option value="desc">Descending Z-A</option>
+					</select>
+				</div>
+
 				<div class="uk-width-1-3"></div>
 				<div class="uk-width-2-3">
-					<input type="submit" value="Save" 
+					<input type="submit" value="Save"
 					   class="uk-button uk-button-primary" />
 				</div>
 			</div>
-			
+
 		</form>
 	</div>
 </div>
@@ -161,7 +172,7 @@ $(document).ready(function() {
 	<div class="uk-modal-dialog">
 		<a class="uk-modal-close uk-close"></a>
 		<h1>Settings</h1>
-		
+
 		<form class='uk-form' action='javascript:documentSettingsSave()'>
 			<div class='uk-grid uk-grid-preserve'>
 				<div class='uk-width-3-10'>
@@ -171,22 +182,23 @@ $(document).ready(function() {
 					<input type='text' name='name' class='uk-width-1-1'
 					   value='<%= document.name %>' />
 				</div>
+
 				<div class='uk-width-3-10'>
 					<label>Public</label>
 				</div>
 				<div class='uk-width-7-10'>
-					<input type='checkbox' name='public' 
-						<%= document.public ? 'checked' : '' %> />	
+					<input type='checkbox' name='public'
+						<%= document.public ? 'checked' : '' %> />
 				</div>
-				
+
 				<div class='uk-width-1-1'>&nbsp;</div>
-				
+
 				<div class='uk-width-1-1'>
 					<input type='submit' value='Save'
 					   class='uk-button uk-button-primary' />
 					<!--
 					<input type='button' value='Cancel'
-					   class='uk-button' 
+					   class='uk-button'
 					   onclick='javascript:documentSettingsClose()' />
 					<input type='hidden' />
 					-->
