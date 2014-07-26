@@ -97,16 +97,16 @@ function createCrossFilter(dataPath) {
 			}
 
 			if (charts[i].top === 'top') {
-				var value = parseInt(charts[i].top_value);
+				group[i].value = parseInt(charts[i].top_value);
 				charts[i].chart.data(function(group) {
-					return group.top(value);
+					return group.top(group.value);
 					});
 			}
 			else
 			if (charts[i].top === 'bottom') {
-				var value = -parseInt(charts[i].top_value);
+				group[i].value = -parseInt(charts[i].top_value);
 				charts[i].chart.data(function(group) {
-					return group.top(Infinity).splice(value);
+					return group.top(Infinity).splice(group.value);
 					});
 			}
 
