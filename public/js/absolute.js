@@ -256,8 +256,7 @@ function documentSaveLayout() {
 }
 
 function documentSettingsClose() {
-	var modal = $.UIkit.modal("#settings");
-	modal.hide();
+	$.UIkit.modal("#settings").hide();
 }
 
 function documentSettingsSave() {
@@ -269,6 +268,7 @@ function documentSettingsSave() {
 	};
 	$.post('/document-save', data, function(result) {
 		documentSettingsSave();
+		$.UIkit.modal("#settings").hide();
 	});
 }
 

@@ -12,6 +12,7 @@
 			<a href="javascript:location.reload()"
 				class="uk-icon-button uk-icon-refresh"></a>
 		</li>
+		<% if (user !== 0) { %>
 		<li>
 			<a href='javascript:createChart({})'
 				class="uk-icon-button uk-icon-plus"></a>
@@ -24,6 +25,7 @@
 			<a href="#settings" data-uk-modal
 				class="uk-icon-button uk-icon-gears"></a>
 		</li>
+		<% } %>
 		<li>
 			<!-- <h2 style='margin:0; text-shadow: 0 1px white;'> -->
 			<%= document.name %>
