@@ -1,45 +1,32 @@
 <%- include header.html %>
-<style>
-body {
-	/* background: #eee; */
-}
-</style>
-
 <div class='uk-container'>
 	<ul class='title'>
 		<li>
-			<a href="#drawer" class="uk-icon-button uk-icon-navicon"
-			   id='navicon' data-uk-offcanvas></a>
+			<a href="#drawer" id='navicon' data-uk-offcanvas
+				class="uk-icon-button uk-icon-bars"></a>
 		</li>
 		<li>
 			<a href="/" class="uk-icon-button uk-icon-home"></a>
 		</li>
 		<li>
-			<a href="" class="uk-icon-button uk-icon-refresh"
-				onclick='javascript:restart();'></a>
-		</li>
-
-		<% if (user === document.user) { %>
-		<li>
-			<a href="" class="uk-icon-button uk-icon-plus"
-				onclick='javascript:createChart({})'></a>
-		</li>
-
-		<li>
-			<a href="" class="uk-icon-button uk-icon-save"
-				onclick='javascript:documentSaveLayout()'></a>
+			<a href="javascript:location.reload()"
+				class="uk-icon-button uk-icon-refresh"></a>
 		</li>
 		<li>
-			<a href="#settings" class="uk-icon-button uk-icon-gears"
-				data-uk-modal></a>
+			<a href='javascript:createChart({})'
+				class="uk-icon-button uk-icon-plus"></a>
 		</li>
-		<% } %>
-
-		<!-- <li style='width:2rem;'></li> -->
-		<li style=''>
-			<h2 style='margin:0; text-shadow: 0 1px white;'>
-				<%= document.name %>
-			</h2>
+		<li>
+			<a href='javascript:documentSaveLayout()'
+				class="uk-icon-button uk-icon-save"></a>
+		</li>
+		<li>
+			<a href="#settings" data-uk-modal
+				class="uk-icon-button uk-icon-gears"></a>
+		</li>
+		<li>
+			<!-- <h2 style='margin:0; text-shadow: 0 1px white;'> -->
+			<%= document.name %>
 		</li>
 	</ul>
 </div>
@@ -49,10 +36,7 @@ body {
 	<span class='handle'>
 		<span class='title'></span>
 		<span class='button'>
-		<i class="uk-icon-gears" onclick='javascript:chartSettings(_id)'></i>
-		<!--
-		<i class="uk-icon-trash-o" onclick='javascript:chartDelete(_id)'></i>
-		-->
+			<i class="uk-icon-gears" onclick='javascript:chartSettings(_id)'></i>
 		</span>
 	</span>
 </div>
@@ -161,7 +145,7 @@ body {
 				</div>
 				<div class='uk-width-7-10'>
 					<input type='text' name='name' class='uk-width-1-1'
-					   value='<%= document.name %>' />
+					   value='Stock 2014' />
 				</div>
 
 				<div class='uk-width-3-10'>
@@ -169,7 +153,7 @@ body {
 				</div>
 				<div class='uk-width-7-10'>
 					<input type='checkbox' name='public'
-						<%= document.public ? 'checked' : '' %> />
+						checked />
 				</div>
 
 				<div class='uk-width-1-1'>&nbsp;</div>
@@ -189,7 +173,6 @@ body {
 	</div>
 </div>
 
-<%- include drawer.html %>
 <script src="/js/absolute.js"></script>
 
 <script>
@@ -243,4 +226,5 @@ $(document).ready(function() {
 
 </script>
 
+<%- include drawer.html %>
 <%- include footer.html %>

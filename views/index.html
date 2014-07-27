@@ -1,24 +1,20 @@
 <%- include header.html %>
-
 <div class='uk-container'>
 	<ul class='title'>
 		<li>
-			<a href="#drawer" class="uk-icon-button uk-icon-navicon"
-			   id='navicon' data-uk-offcanvas></a>
+			<a href="#drawer" id='navicon' data-uk-offcanvas
+				class="uk-icon-button uk-icon-bars"></a>
 		</li>
 		<li>
 			<a href="/" class="uk-icon-button uk-icon-home"></a>
 		</li>
 		<li>
-			<a href="" class="uk-icon-button uk-icon-refresh"
-				onclick='location.reload()'></a>
+			<a href='#new-document' data-uk-modal
+				class="uk-icon-button uk-icon-file-o"></a>
 		</li>
 		<li>
-			OpenBI
+			<%= title %>
 		</li>
-
-		<li><a href="/">Home</a></li>
-		<li><a href='#new-document' data-uk-modal>New</a></li>
 	</ul>
 </div>
 

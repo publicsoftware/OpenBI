@@ -50,6 +50,15 @@ ul.title {
 	vertical-align: middle;
 	list-style: none;
 	font-size: 1rem;
+
+	a {
+		transition: all 0.1s ease-in;
+		opacity: 0.2;
+		&:hover {
+			opacity: 1.0;
+		}
+	}
+
 }
 
 
@@ -81,7 +90,7 @@ ul.title {
 .chart .handle {
 	width: 100%;
 	display: block;
-	height: 32px;
+	height: 28px;
 	padding: 2px 4px;
 	transition: background 0.25s ease-in;
 }
@@ -100,7 +109,7 @@ ul.title {
 	float: right;
 	opacity: 0;
 	transition: opacity 0.25s ease-in;
-	margin: 4px;
+	margin: 4px 10px;
 }
 
 .chart:hover .button {
