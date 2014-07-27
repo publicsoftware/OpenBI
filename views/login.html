@@ -1,30 +1,30 @@
 <%- include header.html %>
 
 <script>
-	function Controller($scope, $http) {
-		
-		$scope.login = function() {
-			$http.post('/login', $scope.form)
-			.success(function(r) {
-				if (r.result === 'ok') {
-					window.location = './';
+	function login() {
+		var username = $('[name=username]').val();
+		var password = $('[name=password]').val();
+		$.post('/login', {username: username, password: password},
+			function(result) {
+				if (result.result === 'ok') {
+					window.location = '/';
 				}
 			});
-		};
 	}
 </script>
 
 <div class="uk-container" ng-controller="Controller">
-	<form class="uk-form" ng-submit="login()" id='login-form'>
+	<form class="uk-form" id='login-form' action='javascript:login()'>
 		<h1>Log In</h1>
 		<div class="uk-grid uk-grid-preserve">
 			<label class="uk-width-4-10">User Name</label>
 			<input class="uk-width-5-10" type="text" ng-model="form.username"
-						 autofocus placeholder="User Name" />
+						name="username"
+						autofocus placeholder="User Name" />
 			<span  class="uk-width-1-10"></span>
 			<label class="uk-width-4-10">Password</label>
 			<input class="uk-width-5-10" type="password" placeholder="Password"
-				   ng-model="form.password" />
+						name="password" ng-model="form.password" />
 			<span  class="uk-width-1-10"></span>
 			<span  class="uk-width-4-10"></span>
 			<input type="submit" value="Log In" class="uk-button" />

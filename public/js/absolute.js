@@ -23,6 +23,8 @@ function createCrossFilter(dataPath) {
 			.append('<option>' + columns[i] + '</option>');
 		}
 
+		var transitionDuration = 1000;
+
 		for (var i = 0; i < charts.length; i++) {
 			var color = d3.scale.category20();
 			dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
@@ -33,7 +35,6 @@ function createCrossFilter(dataPath) {
 			var height = $('#chart' + i).outerHeight();
 			height -= _chart_padding;
 			var square = Math.min(width, height);
-			var transitionDuration = 1000;
 
 			if (charts[i].type === 'pie') {
 				charts[i].chart = dc.pieChart("#chart" + i)
@@ -43,9 +44,7 @@ function createCrossFilter(dataPath) {
 					.group(group[i])
 					.radius(square / 2 - _chart_padding)
 					.innerRadius(square / 10)
-					.transitionDuration(transitionDuration)
-					// .legend(dc.legend())
-					.colors(color)
+					.legend(dc.legend())
 					;
 			}
 			else
@@ -56,8 +55,6 @@ function createCrossFilter(dataPath) {
 					.dimension(dimension[i])
 					.group(group[i])
 					.elasticX(true)
-					.transitionDuration(transitionDuration)
-					.colors(color)
 					;
 			}
 			else
@@ -68,11 +65,9 @@ function createCrossFilter(dataPath) {
 					.dimension(dimension[i])
 					.group(group[i])
 					.elasticY(true)
-					.transitionDuration(transitionDuration)
 					.brushOn(true)
 					.x(d3.scale.ordinal())
 					.xUnits(dc.units.ordinal)
-					.colors(color)
 					;
 			}
 			else
@@ -85,16 +80,18 @@ function createCrossFilter(dataPath) {
 					.centerBar(true)
 					.brushOn(true)
 					.elasticY(true)
-					.transitionDuration(transitionDuration)
 					.x(d3.scale.ordinal())
 					.xUnits(dc.units.ordinal)
 					.renderHorizontalGridLines(true)
 					.barPadding(1)
 					.outerPadding(.5)
 					.gap(1)
-					.colors(color)
 					;
 			}
+
+			charts[i].chart
+				.transitionDuration(transitionDuration)
+				.colors(color);
 
 			if (charts[i].sort === 'asc') {
 				charts[i].chart.ordering(function(d){ return d.value; })
