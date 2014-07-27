@@ -18,9 +18,9 @@ function createCrossFilter(dataPath) {
 		$('select[name=group]').html('');
 		for (var i = 0; i < columns.length; i++) {
 			$('select[name=dimension]')
-			.append('<option>' + columns[i] + '</option>');
+				.append('<option>' + columns[i] + '</option>');
 			$('select[name=group]')
-			.append('<option>' + columns[i] + '</option>');
+				.append('<option>' + columns[i] + '</option>');
 		}
 
 		var transitionDuration = 1000;
@@ -89,30 +89,32 @@ function createCrossFilter(dataPath) {
 					;
 			}
 
-			charts[i].chart
-				.transitionDuration(transitionDuration)
-				.colors(color);
+			if (charts[i].chart != null) {
+				charts[i].chart
+					.transitionDuration(transitionDuration)
+					.colors(color);
 
-			if (charts[i].sort === 'asc') {
-				charts[i].chart.ordering(function(d){ return d.value; })
-			}
-			else
-			if (charts[i].sort === 'desc') {
-				charts[i].chart.ordering(function(d){ return -d.value; })
-			}
+				if (charts[i].sort === 'asc') {
+					charts[i].chart.ordering(function(d){ return d.value; })
+				}
+				else
+				if (charts[i].sort === 'desc') {
+					charts[i].chart.ordering(function(d){ return -d.value; })
+				}
 
-			if (charts[i].top === 'top') {
-				group[i].value = parseInt(charts[i].top_value);
-				charts[i].chart.data(function(group) {
-					return group.top(group.value);
+				if (charts[i].top === 'top') {
+					group[i].value = parseInt(charts[i].top_value);
+					charts[i].chart.data(function(group) {
+						return group.top(group.value);
 					});
-			}
-			else
-			if (charts[i].top === 'bottom') {
-				group[i].value = -parseInt(charts[i].top_value);
-				charts[i].chart.data(function(group) {
-					return group.top(Infinity).splice(group.value);
+				}
+				else
+				if (charts[i].top === 'bottom') {
+					group[i].value = -parseInt(charts[i].top_value);
+					charts[i].chart.data(function(group) {
+						return group.top(Infinity).splice(group.value);
 					});
+				}
 			}
 		}
 
@@ -261,11 +263,16 @@ function documentSaveLayout() {
 	}
 }
 
+function documentChooseFile() {
+	$('[name=file]').click();
+}
+
 function documentSettingsClose() {
 	$.UIkit.modal("#settings").hide();
 }
 
 function documentSettingsSave() {
+	/*
 	var checked = $('#settings [name=public]').is(':checked');
 	var data = {
 		document: doc,
@@ -273,9 +280,9 @@ function documentSettingsSave() {
 		public: checked ? 1 : 0
 	};
 	$.post('/document-save', data, function(result) {
-		documentSettingsSave();
 		$.UIkit.modal("#settings").hide();
 	});
+	*/
 }
 
 function snapAll() {

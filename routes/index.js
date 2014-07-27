@@ -106,42 +106,46 @@ router.get('/document/:id', function(req, res) {
 
 router.post('/document-save', function(req, res) {
 	if (req.session.info == null) {
-		res.send({result:'error'});
+		res.redirect('/document/' + req.body.document);
 	}
 	else {
 		var user      = req.session.info.id;
 		var document  = parseInt(req.body.document);
-		var public    = parseInt(req.body.public);
+		var public    = req.body.public === 'on' ? 1 : 0;
 		pool.getConnection(function(error, connection) {
 			if (error) {
-
+				res.redirect('/document/' + req.body.document);
 			}
 			else {
 				connection.query("select user from documents where id=?",
 				[document],
 				function(error, records) {
 					if (error || records.length === 0) {
-						res.send({result:'error', info:'invalid document'});
+						res.redirect('/document/' + req.body.document);
 					}
 					else {
 						if (records[0].user === user) {
+							var path = req.files.file ?
+										req.files.file.path : '';
+							var name = req.files.file ?
+										req.files.file.originalname : '';
 							connection.query(
-							"update documents set name=?, public=? where id=?",
-							[req.body.name, public, document],
-							function(errors, records) {
-								if (errors) {
-									res.send({result:'error',
-										info:'database error'});
+							"update documents set name=?, public=?, " +
+							"data_type='file', data_name=?, data=? " +
+							"where id=?",
+							[req.body.name, public, name, path, document],
+							function(error, records) {
+								if (error) {
 								}
 								else {
-									res.send({result:'ok'});
 								}
 								connection.release();
+								res.redirect('/document/' + req.body.document);
 							});
 						}
 						else {
-							res.send({result:'error',
-								info:'permission denied'});
+							// TODO: REMOVE THE FILE 'path'
+							res.redirect('/document/' + req.body.document);
 						}
 					}
 				});
@@ -432,31 +436,30 @@ NOTE:
 
 /*
 // Using Connection Pool
+var mysql =  require('mysql');
+var pool =  mysql.createPool({
+	host : 'host',
+	user : 'username',
+	password: 'password'
+});
 
-	var mysql =  require('mysql');
-	var pool =  mysql.createPool({
-		host : 'host',
-		user : 'username',
-		password: 'password'
-	});
+pool.getConnection(function(error, connection) {
+	if (error) {
 
-	pool.getConnection(function(error, connection) {
-		if (error) {
+	}
+	else {
+		connection.query('select * from users',  function(error, records) {
+			if (error) {
+				// throw err;
+			}
+			else {
+				// console.log(records);
+			}
+		});
+	}
 
-		}
-		else {
-			connection.query('select * from users',  function(error, records) {
-				if (error) {
-					// throw err;
-				}
-				else {
-					// console.log(records);
-				}
-			});
-		}
-
-		connection.release();
-	});
+	connection.release();
+});
 
 */
 

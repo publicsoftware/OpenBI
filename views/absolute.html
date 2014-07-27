@@ -139,7 +139,12 @@
 		<a class="uk-modal-close uk-close"></a>
 		<h1>Settings</h1>
 
-		<form class='uk-form' action='javascript:documentSettingsSave()'>
+		<form class='uk-form' method='post' action='/document-save'
+			enctype="multipart/form-data" >
+			<input type='hidden' name='document' value='<%= document.id %>' />
+			<input type='file' name='file'
+				style='display:none; width:4px; height:4px;' />
+
 			<div class='uk-grid uk-grid-preserve'>
 				<div class='uk-width-3-10'>
 					<label>Name</label>
@@ -150,18 +155,28 @@
 				</div>
 
 				<div class='uk-width-3-10'>
+					<label>Upload Data</label>
+				</div>
+				<div class='uk-width-7-10'>
+					<input type='button' class='uk-button' value='Choose File'
+						onclick='javascript:documentChooseFile()' />
+				</div>
+
+				<div class='uk-width-3-10'>
 					<label>Public</label>
 				</div>
 				<div class='uk-width-7-10'>
 					<input type='checkbox' name='public'
-						checked />
+						checked /> Allow everyone view this document.
 				</div>
 
-				<div class='uk-width-1-1'>&nbsp;</div>
+				<div class='uk-width-3-10'> &nbsp;
+				</div>
 
-				<div class='uk-width-1-1'>
+				<div class='uk-width-7-10'>
 					<input type='submit' value='Save'
 					   class='uk-button uk-button-primary' />
+
 					<!--
 					<input type='button' value='Cancel'
 					   class='uk-button'
