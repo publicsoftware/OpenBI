@@ -16,13 +16,48 @@ pool.on('error', function(err) {
 });
 
 var title = 'OpenBI';
+/*
+pool.getConnection(function(error, connection) {
+	if (error) {
+	}
+	else {
+		connection.query('select * from users',  function(error, records) {
+			if (error) {
+			}
+			else {
+			}
+			connection.release();
+		});
+	}
+});
+*/
 
 router.get('/', function(req, res) {
 	if (req.session.info == null) {
 		res.redirect('/welcome');
 	}
 	else {
-		res.render('index.html', { title: title });
+		pool.getConnection(function(error, connection) {
+			if (error) {
+				res.redirect('/welcome');
+			}
+			else {
+				connection.query('select * from documents where user=?',
+					[req.session.info.id],
+				function(error, records) {
+					if (error) {
+						res.redirect('/welcome');
+					}
+					else {
+						res.render('index.html',
+							{ title: title,
+								documents: records
+							});
+					}
+					connection.release();
+				});
+			}
+		});
 	}
 });
 

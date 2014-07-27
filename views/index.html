@@ -1,19 +1,5 @@
 <%- include header.html %>
 
-<script>
-
-function DashboardController($scope, $http) {
-
-	// initialize
-	$scope.dashboards = [];
-	$http.get('/document-list').success(function(result) {
-		$scope.dashboards = result;
-	});
-
-}
-
-</script>
-
 <div class='uk-container'>
 	<ul class='title'>
 		<li>
@@ -36,13 +22,15 @@ function DashboardController($scope, $http) {
 	</ul>
 </div>
 
-<div class="uk-container" ng-controller="DashboardController">
+<div class="uk-container">
 	<div class="uk-grid">
-		<div class="uk-width-1-3" ng-repeat="d in dashboards">
-			<a href="/document/{{d.id}}">
-				<h1>{{ d.name }}</h1>
+		<% for (var i = 0; i < documents.length; i++) { %>
+		<div class="uk-width-1-3">
+			<a href="/document/<%= documents[i].id %>">
+				<h1><%= documents[i].name %></h1>
 			</a>
 		</div>
+		<% } %>
 	</div>
 </div>
 
