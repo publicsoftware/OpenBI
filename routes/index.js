@@ -50,7 +50,8 @@ router.get('/', function(req, res) {
 					}
 					else {
 						res.render('index.html',
-							{ title: title,
+							{
+								title: title,
 								documents: records
 							});
 					}

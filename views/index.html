@@ -30,16 +30,6 @@
 	</div>
 </div>
 
-<script>
-function chooseFile() {
-	$('[name=file]').click();
-}
-
-function theme(t) {
-	$('[name=theme]').val(t);
-}
-</script>
-
 <div id="new-document" class="uk-modal">
 	<div class="uk-modal-dialog">
 		<a class="uk-modal-close uk-close"></a>
@@ -79,6 +69,16 @@ function theme(t) {
 
 	</div>
 </div>
+
+<script>
+function chooseFile() {
+	$('[name=file]').click();
+}
+
+function theme(t) {
+	$('[name=theme]').val(t);
+}
+</script>
 
 <%- include drawer.html %>
 <%- include footer.html %>
