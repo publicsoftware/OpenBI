@@ -272,10 +272,6 @@ function documentSettingsSave() {
 	});
 }
 
-$('body').on('mouseup', function() {
-	snapAll();
-});
-
 function snapAll() {
 	$('body').css('width', '100%');
 	$('.chart').each(function() {

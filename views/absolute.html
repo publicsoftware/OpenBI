@@ -1,6 +1,4 @@
 <%- include header.html %>
-
-<script src="/js/absolute.js"></script>
 <style>
 body {
 	background: #eee;
@@ -45,54 +43,6 @@ body {
 		</li>
 	</ul>
 </div>
-
-<script>
-
-var doc_s = '<%= document.id %>';
-var doc = doc_s === '' ? 0 : parseInt(doc_s);
-var charts = new Array();
-var data;
-var xf;
-var dimension;
-var group;
-var columns;
-
-function main() {
-	$('.chart').remove();
-	while (charts.length > 0) {
-		charts.pop();
-	}
-
-	// TODO: load charts from ajax not the backend code
-	<% for (var i = 0; i < charts.length; i++) { %>
-		createChart({
-			id:		<%= charts[i].id %>,
-			name:		'<%= charts[i].name %>',
-			type:		'<%= charts[i].type %>',
-			dimension:	'<%= charts[i].dimension %>',
-			group:		'<%= charts[i].reduce %>',
-			sort:		'<%= charts[i].sort %>',
-			top:		'<%= charts[i].top %>',
-			top_value:	'<%= charts[i].top_value %>',
-			x:		<%= charts[i].x %>,
-			y:		<%= charts[i].y %>,
-			width:	<%= charts[i].width %>,
-			height:	<%= charts[i].height %>
-		});
-	<% } %>
-
-	restart();
-}
-
-function restart() {
-	createCrossFilter("/data/<%= document.id %>");
-}
-
-$(document).ready(function() {
-	main();
-});
-
-</script>
 
 <script type="text/html" id="chart-template">
 <div class='chart' id='chart_id'>
@@ -240,4 +190,57 @@ $(document).ready(function() {
 </div>
 
 <%- include drawer.html %>
+<script src="/js/absolute.js"></script>
+
+<script>
+
+var doc_s = '<%= document.id %>';
+var doc = doc_s === '' ? 0 : parseInt(doc_s);
+var charts = new Array();
+var data;
+var xf;
+var dimension;
+var group;
+var columns;
+
+function main() {
+	$('.chart').remove();
+	while (charts.length > 0) {
+		charts.pop();
+	}
+
+	// TODO: load charts from ajax not the backend code
+	<% for (var i = 0; i < charts.length; i++) { %>
+		createChart({
+			id:		<%= charts[i].id %>,
+			name:		'<%= charts[i].name %>',
+			type:		'<%= charts[i].type %>',
+			dimension:	'<%= charts[i].dimension %>',
+			group:		'<%= charts[i].reduce %>',
+			sort:		'<%= charts[i].sort %>',
+			top:		'<%= charts[i].top %>',
+			top_value:	'<%= charts[i].top_value %>',
+			x:		<%= charts[i].x %>,
+			y:		<%= charts[i].y %>,
+			width:	<%= charts[i].width %>,
+			height:	<%= charts[i].height %>
+		});
+	<% } %>
+
+	restart();
+}
+
+function restart() {
+	createCrossFilter("/data/<%= document.id %>");
+}
+
+$(document).ready(function() {
+	$('body').on('mouseup', function() {
+		snapAll();
+	});
+	main();
+});
+
+</script>
+
 <%- include footer.html %>
