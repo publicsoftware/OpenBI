@@ -245,11 +245,17 @@ function saveChart(index) {
 		 	top:       charts[index].top,
 			top_value: charts[index].top_value,
 			x:x, y:y, width:w, height:h };
-		$.post('/object-save', data);
+		$.post('/object-save', data, function(result) {
+			saveCount++;
+			if (saveCount === charts.length) {
+				location.reload();
+			}
+		});
 	}
 }
-
+var saveCount = 0;
 function documentSaveLayout() {
+	saveCount = 0;
 	for (var i = 0; i < charts.length; i++) {
 		saveChart(i);
 	}
