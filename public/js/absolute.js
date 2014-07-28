@@ -337,6 +337,7 @@ function snap(x) {
 			if (w-x1+x < 20 && h-y1+y < 20) {
 
 				$(this).css('cursor', 'nwse-resize');
+				$('#ruler').fadeIn();
 				$(this).addClass('resizable');
 
 				var x = $(this).offset().left;
@@ -352,11 +353,13 @@ function snap(x) {
 					.outerWidth(width + 'px')
 					.outerHeight(height + 'px');
 				});
+
 				$(this).parents().on("mouseup", function() {
 					$('.resizable')
 					.css('z-index', z)
 					.css('cursor', 'default')
 					.removeClass('resizable');
+					$('#ruler').fadeOut();
 				});
 			}
 			e.preventDefault();
@@ -365,6 +368,7 @@ function snap(x) {
 		$(this).on("mouseup", function() {
 			$(this).css('cursor', 'default')
 			.removeClass('resizable');
+			$('#ruler').fadeOut();
 			// snapAll();
 		});
 
@@ -385,7 +389,8 @@ function snap(x) {
 
 		return $el.css('cursor', opt.cursor).on("mousedown", function(e) {
 			$(this).css('cursor', 'move');
-			if(opt.handle === "") {
+			$('#ruler').fadeIn();
+			if (opt.handle === "") {
 				var $drag = $(this).addClass('draggable');
 			} else {
 				var $drag = $(this).addClass('active-handle').parent().
@@ -407,6 +412,7 @@ function snap(x) {
 			e.preventDefault();
 		}).on("mouseup", function() {
 			$(this).css('cursor', 'default');
+			$('#ruler').fadeOut();
 			if(opt.handle === "") {
 				$(this).removeClass('draggable');
 			} else {
