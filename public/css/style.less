@@ -41,16 +41,20 @@ h1 {
 	}
 }
 
+body {
+	background: #eee;
+}
+
 ul.title {
 	padding: 0;
 	margin: .5rem;
-	li {
-		display: inline-block;
-	}
 	vertical-align: middle;
 	list-style: none;
 	font-size: 1rem;
-
+	li {
+		display: inline-block;
+			text-shadow: 0 1px white;
+	}
 	a {
 		transition: all 0.1s ease-in;
 		opacity: 0.2;
@@ -58,9 +62,7 @@ ul.title {
 			opacity: 1.0;
 		}
 	}
-
 }
-
 
 // chart style
 .chart {
@@ -75,6 +77,38 @@ ul.title {
 	transition: border 0.25s ease-in;
 	border: 1px solid #ddd;
 	border-bottom: 1px solid #ccc;
+
+	.handle {
+		width: 100%;
+		display: block;
+		height: 28px;
+		padding: 2px 4px;
+		transition: background 0.25s ease-in;
+	}
+
+	.title {
+		float: left;
+		margin: 4px;
+	}
+
+	.button {
+		float: right;
+		opacity: 0;
+		transition: opacity 0.25s ease-in;
+		margin: 4px 10px;
+
+		i {
+			transition: all 0.25s ease-in;
+			&:hover {
+				color: dodgerblue;
+				cursor: pointer;
+			}
+		}
+	}
+
+	&:hover .button {
+		opacity: 1.0;
+	}
 }
 
 .chart:hover,
@@ -85,42 +119,7 @@ ul.title {
 		url(/images/resize.png)
 		100% 100% no-repeat;
 	background-color: rgb(255, 255, 255, 0.3);
-}
-
-.chart .handle {
-	width: 100%;
-	display: block;
-	height: 28px;
-	padding: 2px 4px;
-	transition: background 0.25s ease-in;
-}
-
-.chart:hover .handle,
-.resize .handle {
-	background: #f7f7f7;
-}
-
-.chart .title {
-	float: left;
-	margin: 4px;
-}
-
-.chart .button {
-	float: right;
-	opacity: 0;
-	transition: opacity 0.25s ease-in;
-	margin: 4px 10px;
-}
-
-.chart:hover .button {
-	opacity: 1.0;
-}
-
-.chart .button i {
-	transition: all 0.25s ease-in;
-}
-
-.chart .button i:hover {
-	color: dodgerblue;
-	cursor: pointer;
+	.handle {
+		background: #f7f7f7;
+	}
 }
