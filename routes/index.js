@@ -49,11 +49,10 @@ router.get('/', function(req, res) {
 						res.redirect('/welcome');
 					}
 					else {
-						res.render('index.html',
-							{
-								title: title,
-								documents: records
-							});
+						res.render('index.html', {
+							title: title,
+							documents: records
+						});
 					}
 					connection.release();
 				});
@@ -130,9 +129,9 @@ router.post('/document-save', function(req, res) {
 							var name = req.files.file ?
 										req.files.file.originalname : '';
 							connection.query(
-							"update documents set name=?, public=?, " +
-							"data_type='file', data_name=?, data=? " +
-							"where id=?",
+								"update documents set name=?, public=?, " +
+								"data_type='file', data_name=?, data=? " +
+								"where id=?",
 							[req.body.name, public, name, path, document],
 							function(error, records) {
 								if (error) {
