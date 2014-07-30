@@ -23,8 +23,8 @@ div.dc-chart {
 
 .dc-chart rect.deselected {
     stroke: none;
-    fill: #ccc;
-    opacity: 0.5;
+    fill: #bbb;
+    opacity: 0.4;
 }
 
 .dc-chart .pie-slice {
