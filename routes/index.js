@@ -68,38 +68,6 @@ router.get('/debug', function(req, res) {
 
 
 
-/*
-// non-spa
-router.get('/', function(req, res) {
-	if (req.session.info == null) {
-		res.redirect('/welcome');
-	}
-	else {
-		pool.getConnection(function(error, connection) {
-			if (error) {
-				res.redirect('/welcome');
-			}
-			else {
-				connection.query('select * from documents where user=?',
-					[req.session.info.id],
-				function(error, records) {
-					if (error) {
-						res.redirect('/welcome');
-					}
-					else {
-						res.render('index.html', {
-							title: title,
-							documents: records
-						});
-					}
-					connection.release();
-				});
-			}
-		});
-	}
-});
-*/
-
 router.get('/document', function(req, res) {
 	res.redirect('/');
 });
@@ -374,20 +342,6 @@ router.post('/document-create', function(req, res) {
 				});
 			}
 		});
-	}
-});
-
-
-router.get('/welcome', function(req, res) {
-	res.render('welcome.html', { title: title });
-});
-
-router.get('/login', function(req, res) {
-	if (req.session.info == null) {
-		res.render('login.html', { title: title });
-	}
-	else {
-		res.redirect("/");
 	}
 });
 
