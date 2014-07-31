@@ -3,6 +3,8 @@ OpenBI
 
 Web-based Business Intelligence system for the rest of us on this planet.
 
+![] (http://openbi.publicsoftwareproject.org/images/ogp.png)
+
 Installation
 ------------
 >$ git clone https://github.com/publicsoftware/OpenBI.git<br/>
