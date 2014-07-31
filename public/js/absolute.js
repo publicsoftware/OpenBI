@@ -1,3 +1,4 @@
+"use strict;"
 var _grid_size = 8;
 var _chart_padding = 16;
 
