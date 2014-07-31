@@ -91,38 +91,42 @@ function createCrossFilter(dataPath) {
 			}
 			else
 			if (charts[i].type === 'wordcloud') {
-				d3.layout.cloud().size([width, height])
-					.words([
-						"Hello", "world", "normally", "you", "want", "more", "words",
-						"than", "this"].map(function(d) {
-						return {text: d, size: 10 + Math.random() * 90};
-					}))
-					.padding(5)
-					// .rotate(function() { return ~~(Math.random() * 2) * 90; })
-					.font("Impact")
-					.fontSize(function(d) { return d.size; })
-					.on("end", function (words) {
-						d3.select('#chart' + i).append("svg")
-							.attr("width", width)
-							.attr("height", height)
-							.append("g")
-							.attr("transform", "translate(" + width / 2 + "," +
-								height / 2 + ")")
-							.selectAll("text")
-							.data(words)
-							.enter().append("text")
-							.style("font-size", function(d) { return d.size +
-								"px"; })
-							.style("font-family", "Impact")
-							.style("fill", function(d, i) { return color(i); })
-							.attr("text-anchor", "middle")
-							.attr("transform", function(d) {
-								return "translate(" + [d.x, d.y] + ")rotate(" +
-									d.rotate + ")";
-							})
-							.text(function(d) { return d.text; });
-						})
-					.start();
+
+				// TODO: Use real data
+				var w = [
+					{text:'Hello', size: 60},
+					{text:'World', size: 50},
+					{text:'Hello', size: 60},
+					{text:'World', size: 50}
+				];
+
+				d3.layout.cloud()
+				.size([width, height])
+				.words(w)
+				.padding(5)
+				.rotate(0)
+				.fontSize(function(d) { return d.size; })
+				.on("end", function (words) {
+					d3.select('#chart' + i)
+					.append("svg")
+					.attr("width", width)
+					.attr("height", height)
+					.append("g")
+					.attr("transform", "translate(" + width / 2 + "," +
+						height / 2 + ")")
+					.selectAll("text")
+					.data(words)
+					.enter().append("text")
+					.style("font-size", function(d) { return d.size+"px"; })
+					.style("fill", function(d, i) { return color(i); })
+					.attr("text-anchor", "middle")
+					.attr("transform", function(d) {
+						return "translate(" + [d.x, d.y] + ")rotate(" +
+							d.rotate + ")";
+					})
+					.text(function(d) { return d.text; });
+					})
+				.start();
 			}
 
 			if (charts[i].chart != null) {
