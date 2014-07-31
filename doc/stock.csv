@@ -1,0 +1,111 @@
+Symbol,Type,StockExchange,Name,MarketCapitalization,EBITDA
+AAPL,Solution,NASDAQ,Apple Inc.,584800,59128
+GOOG,Solution,NASDAQ,Google Inc.,398100,19424
+MSFT,Solution,NASDAQ,Microsoft Corpora,366600,33098
+IBM,Solution,NYSE,International Bus,194000,25286
+ORCL,Solution,NYSE,Oracle Corporatio,179700,16717
+HPQ,Solution,NYSE,Hewlett-Packard C,66302,13106
+NCR,Solution,NYSE,NCR Corporation C,5334,930
+DBD,Solution,NYSE,"Diebold, Incorpor",2466,223.8
+EMC,Solution,NYSE,EMC Corporation C,59247,5442
+XRX,Solution,NYSE,Xerox Corporation,15164,2535
+CA,Solution,NASDAQ,CA Inc.,12993,1429
+ACN,Solution,NYSE,Accenture plc. Cl,50739,4529
+ADBE,Software,NASDAQ,Adobe Systems Inc,36119,747.8
+ADSK,Software,NASDAQ,"Autodesk, Inc.",12585,392.2
+SYMC,Software,NASDAQ,Symantec Corporat,16483,1944
+VMW,Software,NYSE,"Vmware, Inc. Comm",41807,1457
+RHT,Software,NYSE,"Red Hat, Inc. Com",10718,306.2
+SAP,Software,NYSE,SAP  SE ADS,96373,7899
+INTU,Software,NASDAQ,Intuit Inc.,23460,1499
+CTXS,Software,NASDAQ,"Citrix Systems, I",11513,695.1
+MENT,Software,NASDAQ,Mentor Graphics C,2380,235.8
+FIS,Software,NYSE,Fidelity National,16286,1578
+FB,Web,NASDAQ,"Facebook, Inc.",192500,5519
+AMZN,Web,NASDAQ,"Amazon.com, Inc.",149700,4081
+EBAY,Web,NASDAQ,eBay Inc.,65474,4972
+PCLN,Web,NASDAQ,The Priceline Gro,64375,2681
+AOL,Web,NYSE,AOL Inc. AOL Inc.,3103,434.7
+YHOO,Web,NASDAQ,Yahoo! Inc.,36651,772.6
+LNKD,Web,NYSE,LinkedIn Corporat,21605,166.3
+TWTR,Web,NYSE,"Twitter, Inc. Com",22283,-616.3
+GRPN,Web,NASDAQ,"Groupon, Inc.",4236,117.6
+YNDX,Web,NASDAQ,Yandex N.V.,9805,533.1
+BIDU,Web,NASDAQ,"Baidu, Inc.",79413,2472
+NFLX,Web,NASDAQ,"Netflix, Inc.",25350,416.3
+RENN,Web,NYSE,Renren Inc. Ameri,1191,-99.5
+Z,Web,NASDAQ,"Zillow, Inc.",6277,-6.6
+ZEN,Web,NYSE,"Zendesk, Inc. Com",1197,-22.1
+INTC,Electronics,NASDAQ,Intel Corporation,170600,21856
+AMD,Electronics,NYSE,Advanced Micro De,2873,476
+NVDA,Electronics,NASDAQ,NVIDIA Corporatio,9926,799.3
+TXN,Electronics,NASDAQ,Texas Instruments,49983,4453
+TER,Electronics,NYSE,"Teradyne, Inc. Co",3556,380
+MU,Electronics,NASDAQ,Micron Technology,35787,4899
+AMAT,Electronics,NASDAQ,Applied Materials,25845,1612
+XLNX,Electronics,NASDAQ,"Xilinx, Inc.",11097,847.1
+ALTR,Electronics,NASDAQ,Altera Corporatio,10487,547.2
+QCOM,Electronics,NASDAQ,QUALCOMM Incorpor,127500,8902
+MCHP,Electronics,NASDAQ,Microchip Technol,9193,670
+ATML,Electronics,NASDAQ,Atmel Corporation,3528,151.1
+CY,Electronics,NASDAQ,Cypress Semicondu,1616,51.4
+MSCC,Electronics,NASDAQ,Microsemi Corpora,2296,230.4
+LSCC,Electronics,NASDAQ,Lattice Semicondu,830.9,62.4
+BRCM,Electronics,NASDAQ,Broadcom Corporat,22074,1334
+MRVL,Electronics,NASDAQ,Marvell Technolog,6805,500.4
+STM,Electronics,NYSE,STMicroelectronic,7654,990
+SNDK,Storage,NASDAQ,SanDisk Corporati,21030,2346
+WDC,Storage,NASDAQ,Western Digital C,23356,3184
+STX,Storage,NASDAQ,Seagate Technolog,19456,2685
+EA,Game,NASDAQ,Electronic Arts I,11281,366
+ZNGA,Game,NASDAQ,Zynga Inc.,2653,32.6
+KING,Game,NYSE,King Digital Ente,5861,817.2
+CSCO,Networking,NASDAQ,"Cisco Systems, In",133000,12871
+JNPR,Networking,NYSE,"Juniper Networks,",10934,836.8
+IRDM,Telecom,NASDAQ,Iridium Communica,622.4,189.9
+NOK,Telecom,NYSE,Nokia Corporation,30603,2549
+T,Telecom,NYSE,AT&T Inc.,184500,46640
+VOD,Telecom,NASDAQ,Vodafone Group Pl,90319,15967
+VZ,Telecom,NYSE,Verizon Communica,212600,50671
+ALU,Telecom,NYSE,Alcatel-Lucent Co,10420,1047
+XOM,Others,NYSE,Exxon Mobil Corpo,443100,60657
+CVX,Others,NYSE,Chevron Corporati,254300,39906
+BA,Others,NYSE,Boeing Company (T,88780,8280
+GM,Others,NYSE,General Motors Co,56393,8772
+F,Others,NYSE,Ford Motor Compan,69674,12066
+DIS,Others,NYSE,Walt Disney Compa,149300,13178
+SBUX,Others,NASDAQ,Starbucks Corpora,59275,3168
+BRK-A,Others,NYSE,Berkshire Hathawa,306000,37192
+GE,Others,NYSE,General Electric,258700,28318
+WMT,Others,NYSE,"Wal-Mart Stores,",244900,35560
+KO,Others,NYSE,Coca-Cola Company,179800,13044
+PEP,Others,NYSE,"Pepsico, Inc. Com",137900,12657
+HOG,Others,NYSE,"Harley-Davidson,",13926,1499
+CPB,Others,NYSE,Campbell Soup Com,13655,1407
+JNJ,Others,NYSE,Johnson & Johnson,288900,24667
+PG,Others,NYSE,Procter & Gamble,215300,19683
+PFE,Others,NYSE,"Pfizer, Inc. Comm",192600,22375
+GSK,Others,NYSE,GlaxoSmithKline P,116700,12806
+MRK,Others,NYSE,"Merck & Company,",169900,15907
+LLY,Others,NYSE,Eli Lilly and Com,68654,5689
+ABT,Others,NYSE,Abbott Laboratori,64643,4464
+BMY,Others,NYSE,Bristol-Myers Squ,81848,4291
+C,Others,NYSE,"Citigroup, Inc. C",151700,0
+WFC,Others,NYSE,Wells Fargo & Com,270900,0
+JPM,Others,NYSE,JP Morgan Chase &,223100,0
+BAC,Others,NYSE,Bank of America C,163900,0
+PM,Others,NYSE,Philip Morris Int,133300,14288
+JCP,Others,NYSE,J.C. Penney Compa,2801,-519
+V,Others,NYSE,Visa Inc.,134900,7951
+GS,Others,NYSE,Goldman Sachs Gro,80298,0
+AXP,Others,NYSE,American Express,97446,0
+MS,Others,NYSE,Morgan Stanley Co,65300,0
+FOX,Others,NASDAQ,Twenty-First Cent,72512,6323
+CBS,Others,NYSE,CBS Corporation C,32808,3750
+VIAB,Others,NASDAQ,Viacom Inc.,37025,4361
+TWX,Others,NYSE,Time Warner Inc.,74969,8057
+DAL,Others,NYSE,"Delta Air Lines,",32008,6153
+UAL,Others,NYSE,United Continenta,17473,3499
+AAL,Others,NASDAQ,American Airlines,30035,4723
+LUV,Others,NYSE,Southwest Airline,20229,2392
+FISV,Others,NASDAQ,"Fiserv, Inc.",15619,1423
