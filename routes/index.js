@@ -63,11 +63,6 @@ router.get('/debug', function(req, res) {
 	res.send(OK);
 });
 
-
-
-
-
-
 router.get('/document', function(req, res) {
 	res.redirect('/');
 });
@@ -162,12 +157,12 @@ router.post('/document-save', function(req, res) {
 
 router.post('/object-delete', function(req, res) {
 	if (req.session.info == null) {
-		res.send({result:'error'});
+		res.send(ERROR);
 	}
 	else {
 		pool.getConnection(function(error, connection) {
 			if (error) {
-				res.send({result:'error'});
+				res.send(ERROR);
 			}
 			else {
 				var id = parseInt(req.body.id);
@@ -176,7 +171,7 @@ router.post('/object-delete', function(req, res) {
 				[document],
 				function(error, records) {
 					if (error) {
-						res.send({result:'error'});
+						res.send(ERROR);
 					}
 					else
 					{
@@ -185,16 +180,16 @@ router.post('/object-delete', function(req, res) {
 							[id],
 							function(errors, records) {
 								if (errors) {
-									res.send({result:'error'});
+									res.send(ERROR);
 								}
 								else {
-									res.send({result:'ok'});
+									res.send(OK);
 								}
 								connection.release();
 							});
 						}
 						else {
-							res.send({result:'error'});
+							res.send(ERROR);
 						}
 					}
 				});
@@ -208,19 +203,19 @@ router.post('/object-save', function(req, res) {
 	var document = parseInt(req.body.document);
 
 	if (req.session.info == null) {
-		res.send({result:'error'});
+		res.send(ERROR);
 	}
 	else {
 		pool.getConnection(function(error, connection) {
 			if (error) {
-				res.send({result:'error'});
+				res.send(ERROR);
 			}
 			else {
 				connection.query("select user from documents where id=?",
 				[document],
 				function(error, records) {
 					if (error) {
-						res.send({result:'error'});
+						res.send(ERROR);
 					}
 					else
 					{
@@ -245,10 +240,10 @@ router.post('/object-save', function(req, res) {
 									req.body.width, req.body.height],
 								function(error, rows) {
 									if (error) {
-										res.send({result:'error'});
+										res.send(ERROR);
 									}
 									else {
-										res.send({result:'ok'});
+										res.send(OK);
 									}
 								});
 							}
@@ -267,17 +262,17 @@ router.post('/object-save', function(req, res) {
 									id],
 								function(error, rows) {
 									if (error) {
-										res.send({result:'error'});
+										res.send(ERROR);
 									}
 									else {
-										res.send({result:'ok'});
+										res.send(OK);
 									}
 									connection.release();
 								});
 							}
 						}
 						else {
-							res.send({result:'error'});
+							res.send(ERROR);
 						}
 					}
 				});
@@ -348,7 +343,7 @@ router.post('/document-create', function(req, res) {
 router.post('/login', function(req, res) {
 	pool.getConnection(function(error, connection) {
 		if (error) {
-			res.send({result:'error'});
+			res.send(ERROR);
 		}
 		else {
 			var digest = crypto.createHash('sha256').update(req.body.password)
@@ -361,10 +356,10 @@ router.post('/login', function(req, res) {
 					rows[0].password === digest)
 				{
 					req.session.info = rows[0];
-					res.send({result:'ok'});
+					res.send(OK);
 				}
 				else {
-					res.send({result:'error'});
+					res.send(ERROR);
 				}
 				connection.release();
 			});
@@ -374,7 +369,6 @@ router.post('/login', function(req, res) {
 });
 
 router.get('/debug-stock', function(req, res) {
-	// res.send([]);
 	res.render('debug-stock.html', { title: title });
 });
 
