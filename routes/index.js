@@ -4,6 +4,10 @@ var mysql	= require('mysql');
 var crypto	= require('crypto');
 var http    = require('http');
 
+var title = 'OpenBI';
+var OK    = { result: 'ok' };
+var ERROR = { result: 'error' };
+
 var pool = mysql.createPool({
 	host		: 'localhost',
 	user		: 'openbi',
@@ -15,23 +19,57 @@ pool.on('error', function(err) {
 	console.log(err.code);
 });
 
-var title = 'OpenBI';
-/*
-pool.getConnection(function(error, connection) {
-	if (error) {
+router.get('/', function(req, res) {
+	res.render('index.html', {
+		title: title
+	});
+});
+
+router.get('/session', function(req, res) {
+	// TODO: remove password
+	res.send(req.session.info);
+});
+
+router.get('/document-list', function(req, res) {
+	if (req.session.info == null) {
+		res.send(ERROR);
 	}
 	else {
-		connection.query('select * from users',  function(error, records) {
+		pool.getConnection(function(error, db) {
 			if (error) {
+				res.send(ERROR);
 			}
 			else {
+				db.query("select * from documents where user=?",
+				[req.session.info.id],
+				function(error, records) {
+					var result = OK;
+					result.data = records;
+					res.send(result);
+					db.release();
+				});
 			}
-			connection.release();
 		});
 	}
 });
-*/
 
+
+router.get('/logout', function(req, res) {
+	req.session.destroy();
+	res.send(OK);
+});
+
+router.get('/debug', function(req, res) {
+	res.send(OK);
+});
+
+
+
+
+
+
+/*
+// non-spa
 router.get('/', function(req, res) {
 	if (req.session.info == null) {
 		res.redirect('/welcome');
@@ -60,6 +98,7 @@ router.get('/', function(req, res) {
 		});
 	}
 });
+*/
 
 router.get('/document', function(req, res) {
 	res.redirect('/');
@@ -338,26 +377,6 @@ router.post('/document-create', function(req, res) {
 	}
 });
 
-router.get('/document-list', function(req, res) {
-	if (req.session.info == null) {
-		res.send([]);
-	}
-	else {
-		pool.getConnection(function(error, connection) {
-			if (error) {
-				res.send([]);
-			}
-			else {
-				connection.query("select * from documents where user=?",
-				[req.session.info.id],
-				function(error, records) {
-					res.send(records);
-					connection.release();
-				});
-			}
-		});
-	}
-});
 
 router.get('/welcome', function(req, res) {
 	res.render('welcome.html', { title: title });
@@ -398,15 +417,6 @@ router.post('/login', function(req, res) {
 		}
 	});
 
-});
-
-router.get('/logout', function(req, res) {
-	req.session.destroy();
-	res.render('logout.html', { title: title });
-});
-
-router.get('/debug', function(req, res) {
-	res.send([]);
 });
 
 router.get('/debug-stock', function(req, res) {
