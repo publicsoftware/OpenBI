@@ -24,8 +24,6 @@ function createCrossFilter(dataPath) {
 				.append('<option>' + columns[i] + '</option>');
 		}
 
-		var transitionDuration = 1000;
-
 		for (var i = 0; i < charts.length; i++) {
 			var color = d3.scale.category20();
 			dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
@@ -91,7 +89,6 @@ function createCrossFilter(dataPath) {
 			}
 			else
 			if (charts[i].type === 'wordcloud') {
-
 				charts[i].chart = dc.wordCloud('#chart' + i)
 					.width(width)
 					.height(height - _chart_padding)
@@ -101,7 +98,7 @@ function createCrossFilter(dataPath) {
 
 			if (charts[i].chart != null) {
 				charts[i].chart
-					.transitionDuration(transitionDuration)
+					.transitionDuration(1000)
 					.colors(color);
 
 				if (charts[i].sort === 'asc') {
