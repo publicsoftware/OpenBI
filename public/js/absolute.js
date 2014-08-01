@@ -92,7 +92,7 @@ function createCrossFilter(dataPath) {
 			else
 			if (charts[i].type === 'wordcloud') {
 
-				charts[i].chart = dc.simple('#chart' + i)
+				charts[i].chart = dc.wordCloud('#chart' + i)
 					.width(width)
 					.height(height - _chart_padding)
 					.dimension(dimension[i])
