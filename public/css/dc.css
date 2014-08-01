@@ -23,8 +23,17 @@ div.dc-chart {
 
 .dc-chart rect.deselected {
     stroke: none;
-    fill: #bbb;
-    opacity: 0.4;
+    fill: #ccc;
+    opacity: 0.5;
+}
+
+.dc-chart .empty-chart .pie-slice path {
+    fill: #FFEEEE;
+    cursor: default;
+}
+
+.dc-chart .empty-chart .pie-slice {
+    cursor: default;
 }
 
 .dc-chart .pie-slice {
@@ -47,14 +56,14 @@ div.dc-chart {
 
 .dc-chart .selected path {
     stroke-width: 3;
-    stroke: #ddd;
+    stroke: #ccc;
     fill-opacity: 1;
 }
 
 .dc-chart .deselected path {
     stroke: none;
     fill-opacity: .5;
-    fill: #ddd;
+    fill: #ccc;
 }
 
 .dc-chart .axis path, .axis line {

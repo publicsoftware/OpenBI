@@ -1,10 +1,8 @@
 dc.wordCloud = function(parent, chartGroup) {
-	var _wordcloudCssClass = 'wordcloud';
+	var wordcloudClass = 'wordcloud';
 	var _chart = dc.colorMixin(dc.baseMixin({}));
-	var _id    = parent;
-	var color  = d3.scale.category20();
-	var width  = 0;
-	var height = 0;
+	var width  = _chart.width;
+	var height = _chart.height;
 
 	_chart._doRender = function() {
 		drawChart();
@@ -15,7 +13,7 @@ dc.wordCloud = function(parent, chartGroup) {
 		return _chart._doRender();
 	};
 
-	function drawChart() {
+	var drawChart = function() {
 		width    = _chart.width();
 		height   = _chart.height();
 		var data = _chart.data();
@@ -33,17 +31,8 @@ dc.wordCloud = function(parent, chartGroup) {
 			data[d].y = data[d].size * 10;
 		}
 
-		d3.select(_id).selectAll("svg").remove();
-		/*
-			.transition()
-			.duration(1000)
-			.style("opacity", 1e-6)
-			.remove();
-		*/
-		createElements(data);
-	}
+		d3.select(parent).selectAll("svg").remove();
 
-	function createElements(data) {
 		d3.layout.cloud()
 			.size([width, height])
 			.words(data)
@@ -53,28 +42,21 @@ dc.wordCloud = function(parent, chartGroup) {
 			.on("end", draw)
 			.start()
 			;
-	}
+	};
 
-	function draw(words) {
-		/*
-		d3.select(_id).selectAll("svg").selectAll("g")
-			.transition()
-				.duration(1000)
-				.style("opacity", 1e-6)
-				.remove();
-		*/
-		d3.select(_id)
+	var draw = function(words) {
+		d3.select(parent)
 			.append("svg")
 			.attr("width",  width)
 			.attr("height", height)
 			.append("g")
-			.attr("transform", "translate(" + width / 2 + "," +height / 2 + ")")
+			.attr("transform", "translate(" + width/2 + "," + height/2 + ")")
 			.selectAll("text")
 			.data(words)
 			.enter()
 			.append("text")
 			.style("font-size", function(d) { return d.size + "px"; })
-			.style("fill", function(d, i) { return color(i); })
+			.style("fill", function(d, i) { return _chart.getColor(d, i); })
 			.style("opacity", 0)
 			.attr("text-anchor", "middle")
 			.attr("transform", function(d) {
@@ -82,14 +64,14 @@ dc.wordCloud = function(parent, chartGroup) {
 					d.rotate + ")";
 			})
 			.attr("class", function (d, i) {
-				return _wordcloudCssClass + " _" + i;
+				return wordcloudClass + " _" + i;
 			})
 			.transition()
-			.duration(1000)
+			.duration(_chart.transitionDuration())
 			.style("opacity", 1)
 			.text(function(d) { return d.key; })
 			;
-	}
+	};
 
 	return _chart.anchor(parent, chartGroup);
 };
