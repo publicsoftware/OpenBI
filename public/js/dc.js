@@ -6662,7 +6662,7 @@ dc.numberDisplay = function (parent, chartGroup) {
     /**
     #### .html({one:"%number record",some:"%number records",none:"empty"}})
     %number will be replaced with the value
-    Get or set the string attached to the number and pluralize it according to the value. 
+    Get or set the string attached to the number and pluralize it according to the value.
     **/
 
     _chart.html = function(s) {
