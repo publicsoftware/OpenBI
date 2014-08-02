@@ -26,8 +26,12 @@ router.get('/', function(req, res) {
 });
 
 router.get('/session', function(req, res) {
-	// TODO: remove password
-	res.send(req.session.info);
+	var result = req.session.info || {};
+	if (result.password != null) {
+		result.password = '';
+		result.result = 'ok';
+	}
+	res.send(result);
 });
 
 router.get('/document-list', function(req, res) {

@@ -52,12 +52,13 @@ var session = null;
 function main() {
 	$.getJSON('/session')
 	.success(function(result) {
-		session = result;
-		if (result == null) {
-			showWelcome();
+		if (result.result === 'ok') {
+			session = result;
+			showIndex();
 		}
 		else {
-			showIndex();
+			session = null;
+			showWelcome();
 		}
 		updateToolbar();
 	})
@@ -134,6 +135,9 @@ function login() {
 	.success(function(result) {
 		if (result.result === 'ok') {
 			main();
+		}
+		else {
+			showWelcome();
 		}
 	});
 }
