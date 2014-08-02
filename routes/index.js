@@ -108,6 +108,28 @@ router.get('/document/:id', function(req, res) {
 	});
 });
 
+router.post('/document-delete/:id', function(req, res) {
+	pool.getConnection(function(error, db) {
+		if (error) {
+			res.send(ERROR);
+		}
+		else {
+			var id   = req.params.id;
+			var user = req.session.info ? req.session.info.id : 0;
+			var sql  = "delete from documents where id=? and user=?";
+			db.query(sql, [id, user], function(error, results) {
+				if (error) {
+					res.send(ERROR);
+				}
+				else {
+					res.send(OK);
+				}
+				db.release();
+			});
+		}
+	});
+});
+
 router.post('/document-save', function(req, res) {
 	if (req.session.info == null) {
 		res.redirect('/document/' + req.body.document);
@@ -117,54 +139,38 @@ router.post('/document-save', function(req, res) {
 		var document = parseInt(req.body.document);
 		var public   = req.body.public === 'on' ? 1 : 0;
 		var init     = req.body.init;
-		// init         = init.replace(/\r/g, '');
 
-		pool.getConnection(function(error, connection) {
+		pool.getConnection(function(error, db) {
 			if (error) {
 				res.redirect('/document/' + req.body.document);
 			}
 			else {
-				connection.query("select user from documents where id=?",
-				[document],
-				function(error, records) {
-					if (error || records.length === 0) {
-						res.redirect('/document/' + req.body.document);
+				db.query(
+					"update documents set name=?, public=?, " +
+					"init=? " +
+					"where id=? and user=?",
+				[req.body.name, public, init, document, user],
+				function(error, r) {
+					var path = req.files.file ?
+							req.files.file.path : '';
+					var name = req.files.file ?
+							req.files.file.originalname : '';
+					if (path === '') {
+						res.redirect('/document/' +
+							req.body.document);
+						db.release();
 					}
 					else {
-						if (records[0].user === user) {
-							connection.query(
-								"update documents set name=?, public=?, " +
-								"init=? " +
-								"where id=?",
-							[req.body.name, public, init, document],
-							function(error, r) {
-								var path = req.files.file ?
-										   req.files.file.path : '';
-								var name = req.files.file ?
-										   req.files.file.originalname : '';
-								if (path === '') {
-									connection.release();
-									res.redirect('/document/' +
-										req.body.document);
-								}
-								else {
-									connection.query(
-										"update documents set data_type='file'"+
-										", data_name=?, data=? " +
-										"where id=?",
-									[name, path, document],
-									function(error, r) {
-										connection.release();
-										res.redirect('/document/' +
-											req.body.document);
-									});
-								}
-							});
-						}
-						else {
-							// TODO: REMOVE THE FILE 'path'
-							res.redirect('/document/' + req.body.document);
-						}
+						db.query(
+							"update documents set data_type='file'"+
+							", data_name=?, data=? " +
+							"where id=? and user=?",
+						[name, path, document, user],
+						function(error, r) {
+							res.redirect('/document/' +
+								req.body.document);
+							db.release();
+						});
 					}
 				});
 			}

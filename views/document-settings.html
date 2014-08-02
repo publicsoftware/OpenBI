@@ -53,8 +53,12 @@
 					<input type='button' value='Cancel'
 					   class='uk-button'
 					   onclick='javascript:documentSettingsClose()' />
-					<input type='hidden' />
 					-->
+
+					<input type='button' value='Delete'
+						class='uk-button uk-button-danger'
+						onclick='javascript:documentDelete()' />
+					<input type='hidden' />
 				</div>
 			</div>
 		</form>
@@ -69,6 +73,13 @@ function documentSaveLayout() {
 	for (var i = 0; i < charts.length; i++) {
 		saveChart(i);
 	}
+}
+
+function documentDelete() {
+	$.post('/document-delete/' + doc)
+	.success(function(result) {
+		window.location = '/';
+	});
 }
 
 function documentChooseFile() {

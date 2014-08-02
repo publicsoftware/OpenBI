@@ -204,7 +204,7 @@ function saveChart(index) {
 			dimension: charts[index].dimension,
 			group:     charts[index].group,
 			sort:      charts[index].sort,
-			 top:       charts[index].top,
+			top:       charts[index].top,
 			top_value: charts[index].top_value,
 			x:x, y:y, width:w, height:h };
 		$.post('/object-save', data, function(result) {

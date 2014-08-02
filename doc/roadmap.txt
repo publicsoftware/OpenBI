@@ -19,11 +19,11 @@ Color Swatch
 Register New User
 Installation page
 Table
+Auto Save
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Doing
 
-Auto Save
 Delete Document
 Home page
 Welcome page
