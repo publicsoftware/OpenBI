@@ -1,28 +1,26 @@
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 To Do
-Design Wireframe
 Root Page
-Settings Dialog
 Root - manage and grant URL / REST / Query Page
 Root - activate user
 Big Data
-Data Uploader from CSV file
 Embedded Dashboard / Chart to other web
 Git pull after committing code
 Isometric Chart
 File Drag & Drop
-Use SQLite as a primary database for standalone app
+Support SQLite for standalone app
 Common Dashboard for Apache Log, Paypal Transaction
-Word cloud
+MathML
+Photo
+HTML Editor
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Doing
-Use SPA architecture
+
 Color Swatch
 Register New User
 View Page
-dc / crossfilter / d3
 Installation page
 Table
 Home page
@@ -31,6 +29,10 @@ OGP
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Done
+Settings Dialog
+Use SPA architecture
+Word cloud
+dc.js / crossfilter / d3
 Log Out
 Print what you see is what you get
 Log In

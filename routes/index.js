@@ -117,7 +117,7 @@ router.post('/document-save', function(req, res) {
 		var document = parseInt(req.body.document);
 		var public   = req.body.public === 'on' ? 1 : 0;
 		var init     = req.body.init;
-		init         = init.replace(/\r/g, '');
+		// init         = init.replace(/\r/g, '');
 
 		pool.getConnection(function(error, connection) {
 			if (error) {
