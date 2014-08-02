@@ -28,8 +28,11 @@ create table documents (
 	style		nvarchar(16383),				-- custom css styling
 	data_type	 varchar(255) default 'none',	-- none, file, url, query, yql
 	data_name	nvarchar(1023),					-- original file name or name
-	data		longtext						-- file path on server
+	data		longtext,						-- file path on server
+	init		longtext						-- data init code
 );
+
+-- alter table documents add column init longtext;
 
 /*
 if (data_type == 'file') {

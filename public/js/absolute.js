@@ -4,10 +4,20 @@ var _chart_padding = 16;
 
 function createCrossFilter(dataPath) {
 	// TODO: load data only first time then
-	// create data preparation, get the available dimension
-	// display dimension & group to user
+	// create data preparation
 	d3.csv(dataPath, function(data_) {
 		data = data_;
+
+		// execute data preparation
+		/*
+		try {
+			var s = "for (var i = 0; i < data.length; i++) data[i].Cost = i * 5;";
+			var r = eval(s);
+		}
+		catch (e) {
+		}
+		*/
+
 		xf = crossfilter(data);
 		dimension = new Array();
 		group = new Array();
@@ -24,12 +34,14 @@ function createCrossFilter(dataPath) {
 				.append('<option>' + columns[i] + '</option>');
 		}
 
+		console.log(charts);
+
 		for (var i = 0; i < charts.length; i++) {
-			var color = d3.scale.category20();
 			dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
 			group[i] = dimension[i].group()
 					.reduceSum(dc.pluck(charts[i].group))
 					;
+			var color = d3.scale.category20();
 			var width  = $('#chart' + i).outerWidth();
 			var height = $('#chart' + i).outerHeight();
 			height -= _chart_padding;
@@ -135,8 +147,6 @@ function createCrossFilter(dataPath) {
 	});
 }
 
-// TODO: Add right and bottom padding automatically
-
 function chartSettings(k) {
 	$('#chart-settings').prop('data-chart-id', k);
 	$('#chart-settings [name=id]'       ).val(k);
@@ -205,8 +215,8 @@ function createChart(data) {
 		data.group = '';
 		data.x = _grid_size;
 		data.y = _grid_size * 8;
-		data.width = 240;
-		data.height = 120;
+		data.width = 320;
+		data.height = 320;
 		data.sort = '';
 		data.top = '';
 		data.top_value = '0';

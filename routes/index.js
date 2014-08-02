@@ -90,6 +90,9 @@ router.get('/document/:id', function(req, res) {
 							res.redirect("/");
 						}
 						else {
+							if (records[0].init == null) {
+								records[0].init = '';
+							}
 							res.render('absolute.html', {
 								title: title + ' ' + records[0].name,
 								user: user,
@@ -113,6 +116,8 @@ router.post('/document-save', function(req, res) {
 		var user      = req.session.info.id;
 		var document  = parseInt(req.body.document);
 		var public    = req.body.public === 'on' ? 1 : 0;
+		var init = req.body.init;
+
 		pool.getConnection(function(error, connection) {
 			if (error) {
 				res.redirect('/document/' + req.body.document);
@@ -126,22 +131,33 @@ router.post('/document-save', function(req, res) {
 					}
 					else {
 						if (records[0].user === user) {
-							var path = req.files.file ?
-										req.files.file.path : '';
-							var name = req.files.file ?
-										req.files.file.originalname : '';
 							connection.query(
 								"update documents set name=?, public=?, " +
-								"data_type='file', data_name=?, data=? " +
+								"init=? " +
 								"where id=?",
-							[req.body.name, public, name, path, document],
-							function(error, records) {
-								if (error) {
+							[req.body.name, public, init, document],
+							function(error, r) {
+								var path = req.files.file ?
+										   req.files.file.path : '';
+								var name = req.files.file ?
+										   req.files.file.originalname : '';
+								if (path === '') {
+									connection.release();
+									res.redirect('/document/' +
+										req.body.document);
 								}
 								else {
+									connection.query(
+										"update documents set data_type='file'"+
+										", data_name=?, data=? " +
+										"where id=?",
+									[name, path, document],
+									function(error, r) {
+										connection.release();
+										res.redirect('/document/' +
+											req.body.document);
+									});
 								}
-								connection.release();
-								res.redirect('/document/' + req.body.document);
 							});
 						}
 						else {
