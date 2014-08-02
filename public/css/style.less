@@ -4,14 +4,17 @@ html {
 	font-size: 100%;
 }
 
+body {
+	background: #eee;
+	min-width: 320px;
+}
+
 h1 {
 	font-weight: 200;
 }
 
-.uk-container-center {
-	display: block;
-	text-align: center;
-}
+a { text-decoration: none; }
+a:hover { text-decoration: none; }
 
 .uk-container {
 	margin: 0 auto;
@@ -42,10 +45,6 @@ h1 {
 	}
 }
 
-body {
-	background: #eee;
-}
-
 ul.title {
 	padding: 0;
 	margin: .5rem;
@@ -64,6 +63,42 @@ ul.title {
 		}
 	}
 }
+
+ul {
+	list-style-type: none;
+}
+
+textarea.code {
+	width: 100%;
+	font-family: Courier;
+}
+
+.document {
+	display: inline-block;
+	background: white;
+	margin: 4px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	text-align: center;
+	padding-top: 10px;
+	width: 240px;
+	min-height: 180px;
+	// height: 240px;
+
+	&:hover {
+		border: 1px solid #aaa;
+		cursor: pointer;
+	}
+
+	.info {
+		width: 100%;
+		height: 40px;
+		background: #eee;
+	}
+}
+
+
+
 
 // chart style
 .chart {
@@ -135,12 +170,6 @@ ul.title {
 	font-size: 0.8rem !important;
 	overflow: hidden;
 	display: none;
-}
-
-.horz {
-	top: 32px;
-	width: 100%;
-	height: 20px;
 
 	.item {
 		position: absolute;
@@ -149,29 +178,23 @@ ul.title {
 	}
 }
 
+.horz {
+	top: 32px;
+	width: 100%;
+	height: 20px;
+	.item {
+		border-left: 1px solid blue;
+	}
+}
+
 .vert {
 	top: 0;
 	width: 32px;
 	height: 100%;
-
 	.item {
-		position: absolute;
-		border: none;
 		border-top: 1px solid blue;
 	}
 }
-
-
-ul {
-	list-style-type: none;
-}
-
-textarea.code {
-	width: 100%;
-	font-family: Courier;
-}
-
-
 
 
 

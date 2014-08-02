@@ -36,6 +36,14 @@
 	</div>
 </div>
 
+<script type='text/html' id='folder-template'>
+<div class='document' onclick='showDocument(_id)'>
+_name
+<span class='info'>
+</span>
+</div>
+</script>
+
 <script>
 "use strict;"
 $(document).ready(main);
@@ -77,18 +85,25 @@ function showIndex() {
 		$.getJSON('/document-list')
 		.success(function(result) {
 			if (result.result === 'ok') {
-				var html = "<ul class='no-header'>";
+				var html = "";
 				for (var i = 0; i < result.data.length; i++) {
-					html += "<li><a href='/document/" +
-						result.data[i].id + "'>" +
-						result.data[i].name + "</a></li>";
+					if (result.data[i].name == '')
+						result.data[i].name = '&nbsp;';
+					html += $('#folder-template').html()
+						.replace('_id', result.data[i].id)
+						.replace('_name', result.data[i].name)
+						;
 				}
-				html += "</ul>";
+				html += "";
 				$('#main').html(html);
 				updateToolbar();
 			}
 		});
 	}
+}
+
+function showDocument(id) {
+	window.location = "/document/" + id;
 }
 
 function showWelcome() {

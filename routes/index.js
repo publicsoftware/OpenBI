@@ -318,7 +318,12 @@ router.get('/data/:id', function(req, res) {
 					res.send([]);
 				}
 				else {
-					res.sendfile(records[0].data);
+					if (records[0].data == null) {
+						res.send('');
+					}
+					else {
+						res.sendfile(records[0].data);
+					}
 				}
 				connection.release();
 			});
@@ -336,22 +341,42 @@ router.post('/document-create', function(req, res) {
 				res.redirect("/");
 			}
 			else {
+				var name = req.body.name;
+				if (name == null) {
+					name = '';
+				}
 				var path = req.files.file ? req.files.file.path : '';
 				var name = req.files.file ? req.files.file.originalname : '';
-				connection.query("insert into documents(user, name, theme, " +
-					" data_type, data_name, data) " +
-					" values(?, ?, ?, 'file', ?, ?)",
-					[req.session.info.id, req.body.name, req.body.theme,
-					name, path],
-				function(error, result) {
-					if (result == null) {
-						res.redirect("/");
-					}
-					else {
-						res.redirect("/document/" + result.insertId);
-					}
-					connection.release();
-				});
+				if (path === '') {
+					connection.query("insert into documents(user, name, theme)"+
+						" values(?, ?, ?)",
+						[req.session.info.id, name, req.body.theme],
+					function(error, result) {
+						if (result == null) {
+							res.redirect("/");
+						}
+						else {
+							res.redirect("/document/" + result.insertId);
+						}
+						connection.release();
+					});
+				}
+				else {
+					connection.query("insert into documents(user, name, theme,"+
+						" data_type, data_name, data) " +
+						" values(?, ?, ?, 'file', ?, ?)",
+						[req.session.info.id, name, req.body.theme,
+						name, path],
+					function(error, result) {
+						if (result == null) {
+							res.redirect("/");
+						}
+						else {
+							res.redirect("/document/" + result.insertId);
+						}
+						connection.release();
+					});
+				}
 			}
 		});
 	}
