@@ -109,25 +109,30 @@ router.get('/document/:id', function(req, res) {
 });
 
 router.post('/document-delete/:id', function(req, res) {
-	pool.getConnection(function(error, db) {
-		if (error) {
-			res.send(ERROR);
-		}
-		else {
-			var id   = req.params.id;
-			var user = req.session.info ? req.session.info.id : 0;
-			var sql  = "delete from documents where id=? and user=?";
-			db.query(sql, [id, user], function(error, results) {
-				if (error) {
-					res.send(ERROR);
-				}
-				else {
-					res.send(OK);
-				}
-				db.release();
-			});
-		}
-	});
+	if (req.session.info == null) {
+		res.send(ERROR);
+	}
+	else {
+		pool.getConnection(function(error, db) {
+			if (error) {
+				res.send(ERROR);
+			}
+			else {
+				var id   = req.params.id;
+				var user = req.session.info.id;
+				var sql  = "delete from documents where id=? and user=?";
+				db.query(sql, [id, user], function(error, records) {
+					if (error) {
+						res.send(ERROR);
+					}
+					else {
+						res.send(OK);
+					}
+					db.release();
+				});
+			}
+		});
+	}
 });
 
 router.post('/document-save', function(req, res) {
@@ -150,14 +155,11 @@ router.post('/document-save', function(req, res) {
 					"init=? " +
 					"where id=? and user=?",
 				[req.body.name, public, init, document, user],
-				function(error, r) {
-					var path = req.files.file ?
-							req.files.file.path : '';
-					var name = req.files.file ?
-							req.files.file.originalname : '';
+				function(error, records) {
+					var path = req.files.file ? req.files.file.path : '';
+					var file = req.files.file ? req.files.file.originalname:'';
 					if (path === '') {
-						res.redirect('/document/' +
-							req.body.document);
+						res.redirect('/document/' + req.body.document);
 						db.release();
 					}
 					else {
@@ -165,10 +167,9 @@ router.post('/document-save', function(req, res) {
 							"update documents set data_type='file'"+
 							", data_name=?, data=? " +
 							"where id=? and user=?",
-						[name, path, document, user],
-						function(error, r) {
-							res.redirect('/document/' +
-								req.body.document);
+						[file, path, document, user],
+						function(error, records) {
+							res.redirect('/document/' + req.body.document);
 							db.release();
 						});
 					}
