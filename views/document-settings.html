@@ -1,97 +1,82 @@
 <div id="settings" class="uk-modal">
-    <div class="uk-modal-dialog">
-        <a class="uk-modal-close uk-close"></a>
-        <h1>Settings</h1>
+	<div class="uk-modal-dialog">
+		<a class="uk-modal-close uk-close"></a>
+		<h1>Settings</h1>
 
-        <form class='uk-form' method='post' action='/document-save'
-            enctype="multipart/form-data" >
-            <input type='hidden' name='document' value='<%= document.id %>' />
-            <input type='file' name='file'
-                style='display:none; width:4px; height:4px;' />
+		<form class='uk-form' method='post' action='/document-save'
+			enctype="multipart/form-data" >
+			<input type='hidden' name='document' value='<%= document.id %>' />
+			<input type='file' name='file'
+				style='display:none; width:4px; height:4px;' />
 
-            <div class='uk-grid uk-grid-preserve'>
-                <div class='uk-width-3-10'>
-                    <label>Name</label>
-                </div>
-                <div class='uk-width-7-10'>
-                    <input type='text' name='name' class='uk-width-1-1'
-                       value='<%= document.name %>' />
-                </div>
+			<div class='uk-grid uk-grid-preserve'>
+				<div class='uk-width-3-10'>
+					<label>Name</label>
+				</div>
+				<div class='uk-width-7-10'>
+					<input type='text' name='name' class='uk-width-1-1'
+					   value='<%= document.name %>' />
+				</div>
 
-                <div class='uk-width-3-10'>
-                    <label>Upload Data</label>
-                </div>
-                <div class='uk-width-7-10'>
-                    <input type='button' class='uk-button' value='Choose File'
-                        onclick='javascript:documentChooseFile()' />
-                </div>
+				<div class='uk-width-3-10'>
+					<label>Upload Data</label>
+				</div>
+				<div class='uk-width-7-10'>
+					<input type='button' class='uk-button' value='Choose File'
+						onclick='javascript:documentChooseFile()' />
+				</div>
 
-                <div class='uk-width-3-10'>
-                    <label>Public</label>
-                </div>
-                <div class='uk-width-7-10'>
-                    <input type='checkbox' name='public'
-                         <%= document.public ? 'checked' : '' %> />
-                    <label for='public'>Allow everyone view this document.
-                    </label>
-                </div>
+				<div class='uk-width-3-10'>
+					<label>Public</label>
+				</div>
+				<div class='uk-width-7-10'>
+					<input type='checkbox' name='public'
+						 <%= document.public ? 'checked' : '' %> />
+					<label for='public'>Allow everyone view this document.
+					</label>
+				</div>
 
-                <div class='uk-width-1-1'>
-                    <textarea class='code' rows='4' name='init'
-                        placeholder="Data Preparation"
-                        ><%- document.init %></textarea>
-                </div>
+				<div class='uk-width-1-1'>
+					<textarea class='code' rows='4' name='init'
+						placeholder="Data Preparation"
+						><%- document.init %></textarea>
+				</div>
 
-                <div class='uk-width-3-10'> &nbsp;
-                </div>
+				<div class='uk-width-3-10'> &nbsp;
+				</div>
 
-                <div class='uk-width-7-10'>
-                    <input type='submit' value='Save'
-                       class='uk-button uk-button-primary' />
+				<div class='uk-width-7-10'>
+					<input type='submit' value='Save'
+					   class='uk-button uk-button-primary' />
 
-                    <!--
-                    <input type='button' value='Cancel'
-                       class='uk-button'
-                       onclick='javascript:documentSettingsClose()' />
-                    <input type='hidden' />
-                    -->
-                </div>
-            </div>
-        </form>
-    </div>
+					<!--
+					<input type='button' value='Cancel'
+					   class='uk-button'
+					   onclick='javascript:documentSettingsClose()' />
+					<input type='hidden' />
+					-->
+				</div>
+			</div>
+		</form>
+	</div>
 </div>
 
 <script>
 
 var saveCount = 0;
 function documentSaveLayout() {
-    saveCount = 0;
-    for (var i = 0; i < charts.length; i++) {
-        saveChart(i);
-    }
+	saveCount = 0;
+	for (var i = 0; i < charts.length; i++) {
+		saveChart(i);
+	}
 }
 
 function documentChooseFile() {
-    $('[name=file]').click();
+	$('[name=file]').click();
 }
 
 function documentSettingsClose() {
-    $.UIkit.modal("#settings").hide();
-}
-
-function documentSettingsSave() {
-    /*
-    -- Use form post instead of ajax
-    var checked = $('#settings [name=public]').is(':checked');
-    var data = {
-        document: doc,
-        name: $('#settings [name=name]').val(),
-        public: checked ? 1 : 0
-    };
-    $.post('/document-save', data, function(result) {
-        $.UIkit.modal("#settings").hide();
-    });
-    */
+	$.UIkit.modal("#settings").hide();
 }
 
 </script>
