@@ -16,13 +16,15 @@ MathML
 Photo
 HTML Editor
 Color Swatch
+Register New User
+Installation page
+Table
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Doing
 
-Register New User
-Installation page
-Table
+Auto Save
+Delete Document
 Home page
 Welcome page
 OGP

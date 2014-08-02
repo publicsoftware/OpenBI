@@ -14,8 +14,8 @@
 			<%= title %>
 		</li>
 		<li>
-			<a href='#new-document' id='new' style='display:none;'
-				class="uk-icon-button uk-icon-file-o" data-uk-modal></a>
+			<a href='javascript:showNew()' id='new' style='display:none;'
+				class="uk-icon-button uk-icon-file-o"></a>
 		</li>
 		<li>
 			<a href="javascript:logout()" id='logout' style='display:none;'
@@ -149,6 +149,6 @@ function logout() {
 </script>
 
 
-<%- include new-document.html %>
+<%- include document-new.html %>
 <%- include drawer.html %>
 <%- include footer.html %>

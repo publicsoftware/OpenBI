@@ -336,7 +336,7 @@ router.post('/document-create', function(req, res) {
 		res.redirect("/login");
 	}
 	else {
-		pool.getConnection(function(error, connection) {
+		pool.getConnection(function(error, db) {
 			if (error) {
 				res.redirect("/");
 			}
@@ -346,9 +346,9 @@ router.post('/document-create', function(req, res) {
 					name = '';
 				}
 				var path = req.files.file ? req.files.file.path : '';
-				var name = req.files.file ? req.files.file.originalname : '';
+				var file = req.files.file ? req.files.file.originalname : '';
 				if (path === '') {
-					connection.query("insert into documents(user, name, theme)"+
+					db.query("insert into documents(user, name, theme)"+
 						" values(?, ?, ?)",
 						[req.session.info.id, name, req.body.theme],
 					function(error, result) {
@@ -358,15 +358,15 @@ router.post('/document-create', function(req, res) {
 						else {
 							res.redirect("/document/" + result.insertId);
 						}
-						connection.release();
+						db.release();
 					});
 				}
 				else {
-					connection.query("insert into documents(user, name, theme,"+
+					db.query("insert into documents(user, name, theme,"+
 						" data_type, data_name, data) " +
 						" values(?, ?, ?, 'file', ?, ?)",
 						[req.session.info.id, name, req.body.theme,
-						name, path],
+						file, path],
 					function(error, result) {
 						if (result == null) {
 							res.redirect("/");
@@ -374,7 +374,7 @@ router.post('/document-create', function(req, res) {
 						else {
 							res.redirect("/document/" + result.insertId);
 						}
-						connection.release();
+						db.release();
 					});
 				}
 			}

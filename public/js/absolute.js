@@ -3,8 +3,7 @@ var _grid_size = 8;
 var _chart_padding = 16;
 
 function createCrossFilter(dataPath) {
-	// TODO: load data only first time then
-	// create data preparation
+	// TODO: load data only first time
 	d3.csv(dataPath, function(data_) {
 		data = data_;
 
