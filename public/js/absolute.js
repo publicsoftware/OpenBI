@@ -2,25 +2,26 @@
 var _grid_size = 8;
 var _chart_padding = 16;
 
-function createCrossFilter(dataPath) {
-	// TODO: load data only first time
-	d3.csv(dataPath, function(data_) {
-		data = data_;
+function createCrossFilter(dataUrl) {
+	// TODO load data only one time
+	// TODO support realtime data
+	d3.csv(dataUrl, function(dataResult) {
+		data = dataResult;
 
-		// execute data preparation
 		try {
 			var r = eval(init);
 		}
 		catch (e) {
 		}
 
-		xf = crossfilter(data);
+		xf        = crossfilter(data);
 		dimension = new Array();
-		group = new Array();
-		columns = new Array();
+		group     = new Array();
+		columns   = new Array();
 		for (var k in data[0]) {
 			columns.push(k);
 		}
+
 		$('select[name=dimension]').html('');
 		$('select[name=group]').html('');
 		for (var i = 0; i < columns.length; i++) {
@@ -141,40 +142,6 @@ function createCrossFilter(dataPath) {
 			.attr("transform", "translate(-10,0)rotate(315)");
 		*/
 	});
-}
-
-function createChart(data) {
-   	if (data.id == null) {
-		data.id = 0;
-		data.name = 'New';
-		data.type = 'none';
-		data.dimension = '';
-		data.group = '';
-		data.x = _grid_size;
-		data.y = _grid_size * 6;
-		data.width = 304;
-		data.height = 304;
-		data.sort = '';
-		data.top = '';
-		data.top_value = '0';
-	}
-
-	var html = $('#chart-template').html();
-	var count = charts.length;
-	html = html.replace(/_id/g, count);
-	$('body').append(html);
-
-	var chart = $('#chart' + count);
-	chart.draggable({handle: '.handle'});
-	chart.resizable();
-
-	if (data.x) chart.css('left', data.x + 'px');
-	if (data.y) chart.css('top',  data.y + 'px');
-	if (data.width)  chart.outerWidth(data.width + 'px');
-	if (data.height) chart.outerHeight(data.height + 'px');
-	chart.find(".title").text(data.name);
-
-	charts.push(data);
 }
 
 function snapAll() {

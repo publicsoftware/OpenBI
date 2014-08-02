@@ -91,6 +91,41 @@
 
 <script>
 
+function createChart(data) {
+	if (data.id == null) {
+		data.id = 0;
+		data.name = 'New';
+		data.type = 'none';
+		data.dimension = '';
+		data.group = '';
+		data.x = _grid_size;
+		data.y = _grid_size * 6;
+		data.width = 304;
+		data.height = 304;
+		data.sort = '';
+		data.top = '';
+		data.top_value = '0';
+	}
+
+	var count = charts.length;
+	var html = $('#chart-template').html().replace(/_id/g, count);
+	$('body').append(html);
+
+	var chart = $('#chart' + count);
+	chart.draggable({handle: '.handle'});
+	chart.resizable();
+
+	if (data.x)			chart.css('left', data.x + 'px');
+	if (data.y)			chart.css('top',  data.y + 'px');
+	if (data.width)		chart.outerWidth( data.width + 'px');
+	if (data.height)	chart.outerHeight(data.height + 'px');
+	chart.find(".title").text(data.name);
+
+	charts.push(data);
+	saveChart(count);
+}
+
+
 function chartSettings(k) {
 	$('#chart-settings').prop('data-chart-id', k);
 	$('#chart-settings [name=id]'       ).val(k);
