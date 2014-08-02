@@ -134,56 +134,6 @@ function logout() {
 </script>
 
 
-<div id="new-document" class="uk-modal">
-	<div class="uk-modal-dialog">
-		<a class="uk-modal-close uk-close"></a>
-		<h2>New</h2>
-
-		<form method="post" action="/document-create"
-			enctype="multipart/form-data" class="uk-form" >
-
-			<input type="text" name="name" placeholder="Title" autofocus
-					class="uk-width-1-1" />
-
-			<h3>Theme</h3>
-			<div data-uk-button-radio>
-				<a href="javascript:theme('Light')" class="uk-button">
-					Light
-				</a>
-
-				<a href="javascript:theme('Dark')" class="uk-button">
-					Dark
-				</a>
-
-			</div>
-
-			<h3>Data Upload</h3>
-			<a href="javascript:chooseFile()" class="uk-button">
-				Choose File
-			</a>
-
-			<input type="hidden" name="theme" value='Light' />
-			<input type="file" name="file"  style="display:none;" />
-
-			<hr/>
-			<input type="submit" value="Create"
-				   class="uk-button uk-button-primary" />
-		</form>
-
-	</div>
-</div>
-
-<script>
-function chooseFile() {
-	$('[name=file]').click();
-}
-
-function theme(t) {
-	$('[name=theme]').val(t);
-}
-</script>
-
-
-
+<%- include new-document.html %>
 <%- include drawer.html %>
 <%- include footer.html %>
