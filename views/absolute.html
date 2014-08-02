@@ -179,12 +179,14 @@
 				</div>
 				<div class='uk-width-7-10'>
 					<input type='checkbox' name='public'
-						checked /> Allow everyone view this document.
+					 	<%= document.public ? 'checked' : '' %> />
+					<label for='public'>Allow everyone view this document.
+					</label>
 				</div>
 
 				<div class='uk-width-1-1'>
 					<textarea class='code' rows='4' name='init'
-						></textarea>
+						><%- document.init %></textarea>
 				</div>
 
 				<div class='uk-width-3-10'> &nbsp;
@@ -219,6 +221,7 @@ var xf;
 var dimension;
 var group;
 var columns;
+var init = '<%- document.init %>';
 
 function main() {
 	$('.chart').remove();

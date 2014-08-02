@@ -9,14 +9,11 @@ function createCrossFilter(dataPath) {
 		data = data_;
 
 		// execute data preparation
-		/*
 		try {
-			var s = "for (var i = 0; i < data.length; i++) data[i].Cost = i * 5;";
-			var r = eval(s);
+			var r = eval(init);
 		}
 		catch (e) {
 		}
-		*/
 
 		xf = crossfilter(data);
 		dimension = new Array();

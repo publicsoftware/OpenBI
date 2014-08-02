@@ -116,7 +116,7 @@ router.post('/document-save', function(req, res) {
 		var user      = req.session.info.id;
 		var document  = parseInt(req.body.document);
 		var public    = req.body.public === 'on' ? 1 : 0;
-		var init = req.body.init;
+		var init      = req.body.init;
 
 		pool.getConnection(function(error, connection) {
 			if (error) {
