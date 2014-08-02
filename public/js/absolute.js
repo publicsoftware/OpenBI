@@ -152,9 +152,9 @@ function createChart(data) {
 		data.dimension = '';
 		data.group = '';
 		data.x = _grid_size;
-		data.y = _grid_size * 8;
-		data.width = 320;
-		data.height = 320;
+		data.y = _grid_size * 6;
+		data.width = 304;
+		data.height = 304;
 		data.sort = '';
 		data.top = '';
 		data.top_value = '0';
@@ -176,37 +176,6 @@ function createChart(data) {
 	chart.find(".title").text(data.name);
 
 	charts.push(data);
-}
-
-var saveCount = 0;
-function documentSaveLayout() {
-	saveCount = 0;
-	for (var i = 0; i < charts.length; i++) {
-		saveChart(i);
-	}
-}
-
-function documentChooseFile() {
-	$('[name=file]').click();
-}
-
-function documentSettingsClose() {
-	$.UIkit.modal("#settings").hide();
-}
-
-function documentSettingsSave() {
-	/*
-	-- Use form post instead of ajax
-	var checked = $('#settings [name=public]').is(':checked');
-	var data = {
-		document: doc,
-		name: $('#settings [name=name]').val(),
-		public: checked ? 1 : 0
-	};
-	$.post('/document-save', data, function(result) {
-		$.UIkit.modal("#settings").hide();
-	});
-	*/
 }
 
 function snapAll() {
@@ -261,7 +230,7 @@ function snap(x) {
 			if (w-x1+x < 20 && h-y1+y < 20) {
 
 				$(this).css('cursor', 'nwse-resize');
-				$('#ruler').fadeIn();
+				$('.ruler').fadeIn();
 				$(this).addClass('resizable');
 
 				var x = $(this).offset().left;
@@ -283,7 +252,7 @@ function snap(x) {
 					.css('z-index', z)
 					.css('cursor', 'default')
 					.removeClass('resizable');
-					$('#ruler').fadeOut();
+					$('.ruler').fadeOut();
 				});
 			}
 			e.preventDefault();
@@ -292,7 +261,7 @@ function snap(x) {
 		$(this).on("mouseup", function() {
 			$(this).css('cursor', 'default')
 			.removeClass('resizable');
-			$('#ruler').fadeOut();
+			$('.ruler').fadeOut();
 			// snapAll();
 		});
 
@@ -313,7 +282,7 @@ function snap(x) {
 
 		return $el.css('cursor', opt.cursor).on("mousedown", function(e) {
 			$(this).css('cursor', 'move');
-			$('#ruler').fadeIn();
+			$('.ruler').fadeIn();
 			if (opt.handle === "") {
 				var $drag = $(this).addClass('draggable');
 			} else {
@@ -336,7 +305,7 @@ function snap(x) {
 			e.preventDefault();
 		}).on("mouseup", function() {
 			$(this).css('cursor', 'default');
-			$('#ruler').fadeOut();
+			$('.ruler').fadeOut();
 			if(opt.handle === "") {
 				$(this).removeClass('draggable');
 			} else {
