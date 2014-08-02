@@ -221,7 +221,19 @@ var xf;
 var dimension;
 var group;
 var columns;
-var init = '<%- document.init %>';
+<%
+	var init = document.init;
+	init = init.replace(/\r/g, '\n');
+	var lines = init.split('\n');
+	init = "";
+	for (var i = 0; i < lines.length; i++) {
+		init += '"' + lines[i] + '\\n" + ';
+	}
+	init += '""';
+
+%>
+
+var init = <%- init %>;
 
 function main() {
 	$('.chart').remove();
