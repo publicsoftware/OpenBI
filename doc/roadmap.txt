@@ -1,6 +1,7 @@
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 To Do
+
 Root Page
 Root - manage and grant URL / REST / Query Page
 Root - activate user
@@ -20,15 +21,15 @@ Color Swatch
 Doing
 
 Register New User
-View Page
 Installation page
 Table
 Home page
-Intro page
+Welcome page
 OGP
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Done
+
 Settings Dialog
 Use SPA architecture
 Word cloud

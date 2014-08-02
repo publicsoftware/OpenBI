@@ -1,0 +1,186 @@
+
+<div id="chart-settings" class="uk-modal" data-chart-id="0">
+    <div class="uk-modal-dialog">
+        <a class="uk-modal-close uk-close"></a>
+        <h1>Settings</h1>
+        <form class="uk-form" action="javascript:chartSettingsSave()">
+            <input type="hidden" name="id" value="0" />
+            <div class="uk-grid uk-grid-preserve">
+
+                <div class="uk-width-1-3">
+                    Name
+                </div>
+                <div class="uk-width-2-3">
+                    <input class="uk-width-1-1" type="text" name="name"
+                           autofocus />
+                </div>
+
+                <div class="uk-width-1-3">
+                    Chart Type
+                </div>
+                <div class="uk-width-2-3">
+                    <select class="uk-width-1-1" name="type">
+                        <option value="none">None</option>
+                        <option value="pie">Pie</option>
+                        <option value="row">Row</option>
+                        <option value="bar">Bar</option>
+                        <option value="line">Line</option>
+                        <option value="wordcloud">Word Cloud</option>
+                    </select>
+                </div>
+
+                <div class="uk-width-1-3">
+                    Dimension
+                </div>
+                <div class="uk-width-2-3">
+                    <!--
+                    <input class="uk-width-1-1" type="text" name="dimension" />
+                    -->
+                    <select class='uk-width-1-1' name='dimension'></select>
+                </div>
+
+                <div class="uk-width-1-3">
+                    Group
+                </div>
+                <div class="uk-width-2-3">
+                    <!--
+                    <input class="uk-width-1-1" type="text" name="group" />
+                    -->
+                    <select class='uk-width-1-1' name='group'></select>
+                </div>
+
+                <div class="uk-width-1-3">
+                    Sort
+                </div>
+                <div class="uk-width-2-3">
+                    <select class="uk-width-1-1" name="sort"
+                        onchange='sortChange()'>
+                        <option value="none">None</option>
+                        <option value="asc">Ascending A-Z</option>
+                        <option value="desc">Descending Z-A</option>
+                    </select>
+                </div>
+
+                <div class="uk-width-1-3">
+                    Filter
+                </div>
+                <div class="uk-width-2-3">
+                    <select class="uk-width-4-10" name="top"
+                        onchange='topChange()'>
+                        <option value="none">None</option>
+                        <option value="top">Top</option>
+                        <option value="bottom">Bottom</option>
+                    </select>
+                    <input class="uk-width-5-10" type="text" name="top-value"
+                        style='display:none; '/>
+                    <input type='hidden' />
+                </div>
+
+                <div class="uk-width-1-3"></div>
+                <div class="uk-width-2-3">
+                    <input type="submit" value="Save"
+                        class="uk-button uk-button-primary" />
+                    <input type="button" value="Delete"
+                        onclick="javascript:chartDeleteThis()"
+                        class="uk-button uk-button-danger" />
+                    <input type="hidden" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+function chartSettings(k) {
+    $('#chart-settings').prop('data-chart-id', k);
+    $('#chart-settings [name=id]'       ).val(k);
+    $('#chart-settings [name=name]'     ).val(charts[k].name);
+    $('#chart-settings [name=type]'     ).val(charts[k].type);
+    $('#chart-settings [name=dimension]').val(charts[k].dimension);
+    $('#chart-settings [name=group]'    ).val(charts[k].group);
+    $('#chart-settings [name=sort]'     ).val(charts[k].sort);
+    $('#chart-settings [name=top]'      ).val(charts[k].top);
+    $('#chart-settings [name=top-value]').val(charts[k].top_value);
+    topChange();
+    var modal = $.UIkit.modal("#chart-settings").show();
+}
+
+function chartSettingsSave() {
+    var id					= $('#chart-settings [name=id]'       ).val();
+    charts[id].name			= $('#chart-settings [name=name]'     ).val();
+    charts[id].type			= $('#chart-settings [name=type]'     ).val();
+    charts[id].dimension	= $('#chart-settings [name=dimension]').val();
+    charts[id].group		= $('#chart-settings [name=group]'    ).val();
+    charts[id].sort			= $('#chart-settings [name=sort]'     ).val();
+    charts[id].top			= $('#chart-settings [name=top]'      ).val();
+    charts[id].top_value	= $('#chart-settings [name=top-value]').val();
+    $('#chart' + id + " .title").text(charts[id].name);
+    var modal = $.UIkit.modal("#chart-settings");
+    modal.hide();
+    restart();
+}
+
+function sortChange() {
+    var val = $('select[name=sort]').val();
+    if (val === 'asc' || val === 'desc') {
+        $('select[name=top]').val('none');
+        topChange();
+    }
+}
+
+function topChange() {
+    var val = $('select[name=top]').val();
+    if (val === 'top' || val === 'bottom') {
+        $('input[name=top-value]').fadeIn();
+        $('select[name=sort]').val('none');
+    }
+    else {
+        $('input[name=top-value]').fadeOut();
+    }
+}
+
+function chartDelete(id) {
+    charts[id].deleted = true;
+    $('#chart' + id).fadeOut();
+}
+
+function chartDeleteThis() {
+    var id = $('#chart-settings [name=id]').val();
+    $.UIkit.modal("#chart-settings").hide();
+    chartDelete(id);
+}
+
+function saveChart(index) {
+    if (charts[index].deleted) {
+        var data = { id: charts[index].id, document: doc };
+        $.post('/object-delete', data);
+    }
+    else {
+        var chart = $('#chart' + index);
+        var x = chart.position().left;
+        var y = chart.position().top;
+        var w = chart.outerWidth();
+        var h = chart.outerHeight();
+
+        var data = {
+            document:  doc,
+            id:        charts[index].id,
+            name:      charts[index].name,
+            type:      charts[index].type,
+            dimension: charts[index].dimension,
+            group:     charts[index].group,
+            sort:      charts[index].sort,
+             top:       charts[index].top,
+            top_value: charts[index].top_value,
+            x:x, y:y, width:w, height:h };
+        $.post('/object-save', data, function(result) {
+            saveCount++;
+            if (saveCount === charts.length) {
+                location.reload();
+            }
+        });
+    }
+}
+
+</script>
