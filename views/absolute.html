@@ -186,6 +186,7 @@
 
 				<div class='uk-width-1-1'>
 					<textarea class='code' rows='4' name='init'
+						placeholder="Data Preparation"
 						><%- document.init %></textarea>
 				</div>
 
@@ -223,8 +224,9 @@ var group;
 var columns;
 <%
 	var init = document.init;
-	// init = init.replace(/\r/g, '');
-	// escape for " ' < >
+	// escape for " not need for ' < >
+	init = init.replace(/\r/g, '');
+	init = init.replace(/"/g, "\\\"");
 	var lines = init.split('\n');
 	init = "";
 	for (var i = 0; i < lines.length; i++) {

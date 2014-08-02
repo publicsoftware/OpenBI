@@ -286,6 +286,7 @@ function documentSettingsClose() {
 
 function documentSettingsSave() {
 	/*
+	-- Use form post instead of ajax
 	var checked = $('#settings [name=public]').is(':checked');
 	var data = {
 		document: doc,

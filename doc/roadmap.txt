@@ -14,11 +14,11 @@ Common Dashboard for Apache Log, Paypal Transaction
 MathML
 Photo
 HTML Editor
+Color Swatch
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Doing
 
-Color Swatch
 Register New User
 View Page
 Installation page
