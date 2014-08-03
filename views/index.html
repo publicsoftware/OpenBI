@@ -37,8 +37,17 @@
 </div>
 
 <script type='text/html' id='folder-template'>
-<div class='document' onclick='showDocument(_id)'>
-_name
+<div class='document uk-width-small-1-2 uk-width-medium-1-4 uk-width-large-1-4'
+	onclick='showDocument(_id)'>
+	<div class='block'>
+		<div class='info'>
+			<span>
+				_name
+			<span>
+		</div>
+		<div class='handle'>
+		</div>
+	</div>
 </div>
 </script>
 
@@ -84,7 +93,7 @@ function showIndex() {
 		$.getJSON('/document-list')
 		.success(function(result) {
 			if (result.result === 'ok') {
-				var html = "<div class='uk-grid'>";
+				var html = "<div class='uk-grid uk-grid-preserve'>";
 				for (var i = 0; i < result.data.length; i++) {
 					if (result.data[i].name == '')
 						result.data[i].name = '&nbsp;';

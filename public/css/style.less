@@ -17,6 +17,7 @@ a { text-decoration: none; }
 a:hover { text-decoration: none; }
 
 #main {
+	margin: 0 auto;
 	.uk-grid {
 		margin: 0 auto;
 		text-align: center;
@@ -77,34 +78,43 @@ textarea.code {
 }
 
 .document {
-	display: inline-block;
-	background: white;
-	margin: 4px;
-	border: 1px solid #bbb;
-	border-top: 1px solid #ccc;
-	border-radius: 4px;
-	text-align: center;
-	font-weight: 200;
-	color: #444;
-	width: 240px;
-	min-height: 180px;
-	// height: 240px;
-	transition: all 0.2s ease-in;
-	// opacity: 0.9;
-	padding: 10px;
 
-	&:hover {
-		border: 1px solid #aaa;
-		border-top: 1px solid #bbb;
-		cursor: pointer;
-		color: #222;
-		// opacity: 1.0;
-	}
-
-	.info {
+	.block {
+		display: inline-block;
+		background: white;
+		margin: 4px;
+		border: 1px solid #bbb;
+		border-top: 1px solid #ccc;
+		border-radius: 4px;
+		text-align: center;
+		font-weight: 200;
+		color: #444;
 		width: 100%;
-		height: 40px;
-		background: #eee;
+		height: 120px;
+		transition: all 0.2s ease-in;
+		padding: 0;
+		opacity: 0.9;
+
+		&:hover {
+			border: 1px solid #aaa;
+			border-top: 1px solid #bbb;
+			cursor: pointer;
+			color: #222;
+			opacity: 1.0;
+		}
+
+		.info {
+			width: 100%;
+			height: 80px;
+		}
+
+		.handle {
+			width: 100%;
+			height: 40px;
+			bottom: 0;
+			background: #fafafa;
+			border-radius: 0 0 4px 4px;
+		}
 	}
 }
 
@@ -134,6 +144,7 @@ textarea.code {
 	}
 
 	.title {
+		font-weight: 200;
 		float: left;
 		margin: 4px;
 	}
