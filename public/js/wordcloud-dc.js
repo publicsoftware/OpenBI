@@ -17,15 +17,25 @@ dc.wordCloud = function(parent, chartGroup) {
 		width    = _chart.width();
 		height   = _chart.height();
 		var data = _chart.data();
+		data     = data.sort(function(a, b) {
+			if (a.value < b.value) {
+				return -1;
+			}
+			else if (a.value > b.value) {
+				return +1
+			}
+			return 0;
+		});
 		var max  = 0;
 		for (var d = 0; d < data.length; d++) {
 			if (max < data[d].value) {
 				max = data[d].value;
 			}
 		}
+
 		for (var d = 0; d < data.length; d++) {
 			data[d].size = data[d].value * 1.0 / max;
-			data[d].size *= width / data.length;
+			data[d].size *= width / 5;
 			data[d].size = Math.floor(data[d].size);
 			data[d].x = data[d].size * 10;
 			data[d].y = data[d].size * 10;
@@ -68,7 +78,7 @@ dc.wordCloud = function(parent, chartGroup) {
 			})
 			.transition()
 			.duration(_chart.transitionDuration())
-			.style("opacity", 1)
+			.style("opacity", function(d, i) { return 1; })
 			.text(function(d) { return d.key; })
 			;
 	};

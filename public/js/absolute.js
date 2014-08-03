@@ -101,8 +101,10 @@ function createCrossFilter(dataUrl) {
 				charts[i].chart = dc.wordCloud('#chart' + i)
 					.width(width)
 					.height(height - _chart_padding)
+					.ordering(function(d){ return d.value; })
 					.dimension(dimension[i])
-					.group(group[i]);
+					.group(group[i])
+					;
 			}
 
 			if (charts[i].chart != null) {
