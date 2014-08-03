@@ -23,15 +23,16 @@ Auto Save
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Doing
-
-Delete Document
+SSL
 Home page
 Welcome page
+About
 OGP
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Done
 
+Delete Document
 Settings Dialog
 Use SPA architecture
 Word cloud

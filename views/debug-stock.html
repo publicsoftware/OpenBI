@@ -40,7 +40,7 @@ var symbols = [
 	{
 		type: 'Telecom',
 		list: ['irdm', 'nok', 't', 'vod', 'vz', 'alu']
-	},
+	}/*,
 	{
 		type: 'Others',
 		list: ['xom', 'cvx', 'ba', 'gm', 'f', 'dis', 'sbux', 'brk-a',
@@ -50,7 +50,7 @@ var symbols = [
 		'v', 'gs', 'axp', 'ms', 'fox', 'cbs', 'viab', 'twx',
 		'dal', 'ual', 'aal', 'luv',
 		'fisv']
-	}
+	} */
 	/* ,
 	{
 		type: '',
@@ -117,6 +117,7 @@ $.get(url, function(response) {
 					info = info.replace(/M/g, '');
 					info = (parseFloat(info) * 1).toFixed(2);
 				}
+				info = parseFloat(info / 1000).toFixed(2);
 			}
 			else
 			if (columns[j] === 'Symbol') {
