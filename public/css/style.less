@@ -16,8 +16,11 @@ h1,h2,h3,h4,h5,h6 {
 a { text-decoration: none; }
 a:hover { text-decoration: none; }
 
-.uk-container {
-	margin: 0 auto;
+#main {
+	.uk-grid {
+		margin: 0 auto;
+		text-align: center;
+	}
 }
 
 .uk-form {
@@ -77,18 +80,25 @@ textarea.code {
 	display: inline-block;
 	background: white;
 	margin: 4px;
-	border: 1px solid #ccc;
+	border: 1px solid #bbb;
+	border-top: 1px solid #ccc;
 	border-radius: 4px;
 	text-align: center;
-	padding-top: 10px;
+	font-weight: 200;
+	color: #444;
 	width: 240px;
 	min-height: 180px;
 	// height: 240px;
 	transition: all 0.2s ease-in;
+	// opacity: 0.9;
+	padding: 10px;
 
 	&:hover {
 		border: 1px solid #aaa;
+		border-top: 1px solid #bbb;
 		cursor: pointer;
+		color: #222;
+		// opacity: 1.0;
 	}
 
 	.info {

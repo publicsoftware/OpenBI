@@ -39,8 +39,6 @@
 <script type='text/html' id='folder-template'>
 <div class='document' onclick='showDocument(_id)'>
 _name
-<span class='info'>
-</span>
 </div>
 </script>
 
@@ -86,16 +84,16 @@ function showIndex() {
 		$.getJSON('/document-list')
 		.success(function(result) {
 			if (result.result === 'ok') {
-				var html = "";
+				var html = "<div class='uk-grid'>";
 				for (var i = 0; i < result.data.length; i++) {
 					if (result.data[i].name == '')
 						result.data[i].name = '&nbsp;';
 					html += $('#folder-template').html()
-						.replace('_id', result.data[i].id)
+						.replace('_id',   result.data[i].id)
 						.replace('_name', result.data[i].name)
 						;
 				}
-				html += "";
+				html += "</div>";
 				$('#main').html(html);
 				updateToolbar();
 			}
