@@ -17,6 +17,7 @@ dc.wordCloud = function(parent, chartGroup) {
 		width    = _chart.width();
 		height   = _chart.height();
 		var data = _chart.data();
+		/*
 		data     = data.sort(function(a, b) {
 			if (a.value < b.value) {
 				return -1;
@@ -26,6 +27,7 @@ dc.wordCloud = function(parent, chartGroup) {
 			}
 			return 0;
 		});
+		*/
 		var max  = 0;
 		for (var d = 0; d < data.length; d++) {
 			if (max < data[d].value) {
@@ -46,7 +48,7 @@ dc.wordCloud = function(parent, chartGroup) {
 		d3.layout.cloud()
 			.size([width, height])
 			.words(data)
-			.padding(2)
+			.padding(20)
 			.rotate(0)
 			.fontSize(function(d) { return d.size; })
 			.on("end", draw)
