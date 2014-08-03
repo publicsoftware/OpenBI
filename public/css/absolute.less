@@ -1,0 +1,120 @@
+@background: #eee;
+@text: #222;
+
+@chartBackground: white;
+@chartOpacity: 1.0;
+@chartBorder: #ccc;
+@chartTitle: #f7f7f7;
+
+html {
+	font-size: 100%;
+}
+
+body {
+	background: @background;
+	min-width: 320px;
+	color: #222;
+}
+
+ul.title {
+	color: @text;
+}
+
+// chart style
+.chart {
+	position: absolute;
+	min-width: 240px;
+	min-height: 120px;
+	color: @text;
+	background: @chartBackground;
+	border-radius: 4px;
+	overflow: hidden;
+	transition: background 0.5s ease-in;
+	transition: border 0.25s ease-in;
+	border: 1px solid @chartBorder;
+	border-bottom: 1px solid darken(@chartBorder, 10%);
+	opacity: @chartOpacity;
+
+	.handle {
+		width: 100%;
+		display: block;
+		height: 28px;
+		padding: 2px 4px;
+		transition: background 0.25s ease-in;
+	}
+
+	.title {
+		color: @text;
+		font-weight: 200;
+		float: left;
+		margin: 4px;
+	}
+
+	.button {
+		float: right;
+		opacity: 0;
+		transition: opacity 0.25s ease-in;
+		margin: 4px 10px;
+
+		i {
+			transition: all 0.25s ease-in;
+			&:hover {
+				color: dodgerblue;
+				cursor: pointer;
+			}
+		}
+	}
+
+	&:hover .button {
+		opacity: 1.0;
+	}
+
+	& > svg {
+		margin-left: 4px;
+	}
+}
+
+.chart:hover,
+.resizable {
+	border: 1px solid darken(@chartBorder, 10%);
+	border-bottom: 1px solid darken(@chartBorder, 20%);
+	background:
+		url(/images/resize.png)
+		100% 100% no-repeat;
+	background-color: lighten(@chartBackground, 10%);
+	.handle {
+		background: @chartTitle;
+	}
+}
+
+.ruler {
+	position: absolute;
+	z-index: 2000;
+	font-size: 0.8rem !important;
+	overflow: hidden;
+	display: none;
+
+	.item {
+		position: absolute;
+		border: none;
+		border-left: 1px solid blue;
+	}
+}
+
+.horz {
+	top: 32px;
+	width: 100%;
+	height: 20px;
+	.item {
+		border-left: 1px solid blue;
+	}
+}
+
+.vert {
+	top: 0;
+	width: 32px;
+	height: 100%;
+	.item {
+		border-top: 1px solid blue;
+	}
+}

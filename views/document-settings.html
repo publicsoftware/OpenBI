@@ -37,9 +37,20 @@
 				</div>
 
 				<div class='uk-width-1-1'>
+					Data Preparation<br/>
 					<textarea class='code' rows='4' name='init'
 						placeholder="Data Preparation"
 						><%- document.init %></textarea>
+				</div>
+
+				<div class='uk-width-1-1'>
+					Theme
+					<a href='javascript:theme("light")'>Light</a>
+					<a href='javascript:theme("dark")'>Dark</a>
+					<br/>
+					<textarea class='code' rows='4' name='style'
+						placeholder="Style"
+						><%- document.style %></textarea>
 				</div>
 
 				<div class='uk-width-1-1 modal-button'>
@@ -85,6 +96,17 @@ function documentChooseFile() {
 
 function documentSettingsClose() {
 	$.UIkit.modal("#settings").hide();
+}
+
+function theme(name) {
+	if (name === 'light') {
+		$('[name=style]').val('');
+	}
+	else
+	if (name === 'dark') {
+		var s = "{\n  background: '#444',\n  text: '#eee',\n  chartTitle: '#777',\n   chartBorder: '#777',\n  chartBackground: '#666'\n}";
+		$('[name=style]').val(s);
+	}
 }
 
 </script>

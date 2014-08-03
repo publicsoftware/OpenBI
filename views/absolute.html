@@ -1,4 +1,27 @@
-<%- include header.html %>
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, user-scalable=no" />
+	<meta property="og:title" content="OpenBI" />
+	<meta property="og:type" content="website" />
+	<meta property="og:description"
+		content="OpenBI - The Public Software Project" />
+	<meta property="og:image"
+		content="http://openbi.publicsoftwareproject.org/images/ogp.png" />
+	<meta property="og:image:type" content="image/png" />
+	<title><%= title %></title>
+	<link rel="icon" type="image/png" href="/favicon.png" />
+	<link rel="stylesheet" href="/css/uikit.almost-flat.min.css" />
+	<link rel="stylesheet" href="/css/dc.css" />
+	<link rel="stylesheet" href="/css/style.css" />
+	<link rel="stylesheet" type="text/less" href="/css/absolute.less" />
+	<script src="/js/jquery.js"></script>
+	<script src="/js/less.js"></script>
+</head>
+<body>
+
 <div>
 	<ul class='title'>
 		<li>
@@ -104,7 +127,7 @@ function main() {
 		charts.pop();
 	}
 
-	// TODO: load charts from ajax not the backend code
+	<% /* TODO load charts from ajax not the backend code */ %>
 	<% for (var i = 0; i < charts.length; i++) { %>
 		createChart({
 			id:		<%= charts[i].id %>,
@@ -130,6 +153,11 @@ function restart() {
 }
 
 $(document).ready(function() {
+	try {
+		less.modifyVars(<%- document.style %>);
+	}
+	catch (e) {}
+
 	$('body').on('mouseup', function() {
 		snapAll();
 		$('#ruler').fadeOut();

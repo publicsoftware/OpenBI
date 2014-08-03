@@ -156,9 +156,9 @@ router.post('/document-save', function(req, res) {
 			else {
 				db.query(
 					"update documents set name=?, public=?, " +
-					"init=? " +
+					"init=?, style=? " +
 					"where id=? and user=?",
-				[req.body.name, public, init, document, user],
+				[req.body.name, public, init, req.body.style, document, user],
 				function(error, records) {
 					var path = req.files.file ? req.files.file.path : '';
 					var file = req.files.file ? req.files.file.originalname:'';

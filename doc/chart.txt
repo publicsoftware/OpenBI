@@ -1,5 +1,27 @@
 
 
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+Using LESS to change theme
+
+<link rel="stylesheet" type="text/less" href="/css/absolute.less" />
+<script src="/js/jquery.js"></script>
+<script src="/js/less.js"></script>
+
+less.modifyVars({
+	background: '#333'
+});
+
+Dark
+{
+  background: '#444',
+  text: '#eee',
+  chartTitle: '#777',
+  chartBorder: '#777',
+  chartBackground: '#666'
+}
+
+
+
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 

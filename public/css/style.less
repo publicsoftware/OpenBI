@@ -57,7 +57,7 @@ ul.title {
 	font-size: 1rem;
 	li {
 		display: inline-block;
-			text-shadow: 0 1px white;
+		// text-shadow: 0 1px white;
 	}
 	a {
 		transition: all 0.1s ease-in;
@@ -127,106 +127,6 @@ textarea.code {
 			bottom: 0;
 			border-radius: 0 0 4px 4px;
 		}
-	}
-}
-
-
-
-
-// chart style
-.chart {
-	position: absolute;
-	min-width: 240px;
-	min-height: 120px;
-	background: white;
-	border-radius: 4px;
-	border: 1px solid #f7f7f7;
-	overflow: hidden;
-	transition: background 0.25s ease-in;
-	transition: border 0.25s ease-in;
-	border: 1px solid #ddd;
-	border-bottom: 1px solid #ccc;
-
-	.handle {
-		width: 100%;
-		display: block;
-		height: 28px;
-		padding: 2px 4px;
-		transition: background 0.25s ease-in;
-	}
-
-	.title {
-		font-weight: 200;
-		float: left;
-		margin: 4px;
-	}
-
-	.button {
-		float: right;
-		opacity: 0;
-		transition: opacity 0.25s ease-in;
-		margin: 4px 10px;
-
-		i {
-			transition: all 0.25s ease-in;
-			&:hover {
-				color: dodgerblue;
-				cursor: pointer;
-			}
-		}
-	}
-
-	&:hover .button {
-		opacity: 1.0;
-	}
-
-	& > svg {
-		margin-left: 4px;
-	}
-}
-
-.chart:hover,
-.resizable {
-	border: 1px solid #ccc;
-	border-bottom: 1px solid #bbb;
-	background:
-		url(/images/resize.png)
-		100% 100% no-repeat;
-	background-color: rgb(255, 255, 255, 0.3);
-	.handle {
-		background: #f7f7f7;
-	}
-}
-
-.ruler {
-	position: absolute;
-	z-index: 2000;
-	font-size: 0.8rem !important;
-	overflow: hidden;
-	display: none;
-
-	.item {
-		position: absolute;
-		border: none;
-		border-left: 1px solid blue;
-	}
-}
-
-.horz {
-	top: 32px;
-	width: 100%;
-	height: 20px;
-	.item {
-		border-left: 1px solid blue;
-	}
-}
-
-.vert {
-	top: 0;
-	width: 32px;
-	height: 100%;
-	.item {
-		border-top: 1px solid blue;
 	}
 }
 
