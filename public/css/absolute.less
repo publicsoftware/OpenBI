@@ -5,6 +5,7 @@
 @chartOpacity: 1.0;
 @chartBorder: #ccc;
 @chartTitle: #f7f7f7;
+@ruler: #99f;
 
 html {
 	font-size: 100%;
@@ -29,7 +30,6 @@ ul.title {
 	background: @chartBackground;
 	border-radius: 4px;
 	overflow: hidden;
-	transition: background 0.5s ease-in;
 	transition: border 0.25s ease-in;
 	border: 1px solid @chartBorder;
 	border-bottom: 1px solid darken(@chartBorder, 10%);
@@ -59,7 +59,7 @@ ul.title {
 		i {
 			transition: all 0.25s ease-in;
 			&:hover {
-				color: dodgerblue;
+				color: #aaa;
 				cursor: pointer;
 			}
 		}
@@ -77,11 +77,10 @@ ul.title {
 .chart:hover,
 .resizable {
 	border: 1px solid darken(@chartBorder, 10%);
-	border-bottom: 1px solid darken(@chartBorder, 20%);
-	background:
-		url(/images/resize.png)
-		100% 100% no-repeat;
-	background-color: lighten(@chartBackground, 10%);
+	// border-bottom: 1px solid darken(@chartBorder, 30%);
+	background: url(/images/resize.png) 100% 100% no-repeat;
+	// background: lighten(@chartBackground, 10%);
+	background-color: @chartBackground;
 	.handle {
 		background: @chartTitle;
 	}
@@ -106,7 +105,7 @@ ul.title {
 	width: 100%;
 	height: 20px;
 	.item {
-		border-left: 1px solid blue;
+		border-left: 1px solid @ruler;
 	}
 }
 
@@ -115,6 +114,6 @@ ul.title {
 	width: 32px;
 	height: 100%;
 	.item {
-		border-top: 1px solid blue;
+		border-top: 1px solid @ruler;
 	}
 }
