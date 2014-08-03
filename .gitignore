@@ -27,3 +27,4 @@ node_modules
 
 nbproject
 uploads
+*.out
