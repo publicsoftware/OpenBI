@@ -189,13 +189,11 @@ function snap(x) {
 			var y = $(this).offset().top;
 			var w = $(this).outerWidth();
 			var h = $(this).outerHeight();
-			console.log('[w,h] = [' + w + ',' + h + ']');
+			// console.log('[w,h] = [' + w + ',' + h + ']');
 			var x1 = e.pageX;
 			var y1 = e.pageY;
-			console.log('[x,y] = [' + (x1-x) + ',' + (y1-y) + ']');
-			console.log(e);
+			// console.log('[x,y] = [' + (x1-x) + ',' + (y1-y) + ']');
 			if (w-x1+x < 40 && h-y1+y < 40) {
-
 				$(this).css('cursor', 'nwse-resize');
 				$('.ruler').fadeIn();
 				$(this).addClass('resizable');
