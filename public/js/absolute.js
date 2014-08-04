@@ -207,7 +207,12 @@ function theme(name) {
 	}
 	else
 	if (name === 'dark') {
-		var s = "{\n  background: '#333',\n  text: '#eee',\n  chartTitle: '#777',\n  chartBorder: '#777',\n  chartBackground: '#555',  chartShadow: 'inset 0px 0px 300px rgba(0,0,0,.5)',\n  axis: 'white'\n}";
+		var s = "{\n  background: '#333',\n  text: '#eee',\n  chartTitle: '#777',\n  chartBorder: '#777',\n  chartBackground: '#555',\n  chartShadow: 'inset 0px 0px 300px rgba(0,0,0,.5)',\n  axis: 'white'\n}";
+		$('[name=style]').val(s);
+	}
+	else
+	if (name === 'white') {
+		var s = "{\n  background: 'white',\n  text: '#555',\n  chartTitle: '#eee',\n  chartBorder: 'white',\n  chartBackground: 'white',\n  axis: '#555'\n}";
 		$('[name=style]').val(s);
 	}
 }
