@@ -197,7 +197,6 @@ function snap(x) {
 			// console.log('[x,y] = [' + (x1-x) + ',' + (y1-y) + ']');
 			if (w-x1+x < 40 && h-y1+y < 40) {
 				$(this).css('cursor', 'nwse-resize');
-				$('.ruler').fadeIn();
 				$(this).addClass('resizable');
 
 				var x = $(this).offset().left;
@@ -207,6 +206,9 @@ function snap(x) {
 				$(this).css('z-index', z + 1000);
 
 				$(this).parents().on("mousemove", function(e) {
+					if ($('.resizable').length > 0) {
+						$('.ruler').fadeIn();
+					}
 					var width  = snap(e.pageX - x);
 					var height = snap(e.pageY - y);
 					$('.resizable')
