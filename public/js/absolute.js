@@ -163,6 +163,174 @@ function createCrossFilter(dataUrl) {
 	});
 }
 
+
+
+var saveCount = 0;
+function documentSaveLayout() {
+	saveCount = 0;
+	for (var i = 0; i < charts.length; i++) {
+		saveChart(i);
+	}
+}
+
+function documentDelete() {
+	$.post('/document-delete/' + doc)
+	.success(function(result) {
+		window.location = '/';
+	});
+}
+
+function documentChooseFile() {
+	$('[name=file]').click();
+}
+
+function documentSettingsClose() {
+	$.UIkit.modal("#settings").hide();
+}
+
+function sampleCode() {
+	var s = "data.forEach(function(d) {\n  d.Count = 1;\n});";
+	$('[name=init]').val(s);
+}
+
+function theme(name) {
+	if (name === 'light') {
+		$('[name=style]').val('');
+	}
+	else
+	if (name === 'dark') {
+		var s = "{\n  background: '#333',\n  text: '#eee',\n  chartTitle: '#777',\n  chartBorder: '#777',\n  chartBackground: '#555',  chartShadow: 'inset 0px 0px 300px rgba(0,0,0,.5)',\n  axis: 'white'\n}";
+		$('[name=style]').val(s);
+	}
+}
+
+
+function createChart(data) {
+	if (data.id == null) {
+		data.id = 0;
+		data.name = 'New';
+		data.type = 'none';
+		data.dimension = '';
+		data.group = '';
+		data.x = _grid_size;
+		data.y = _grid_size * 6;
+		data.width = 304;
+		data.height = 304;
+		data.sort = '';
+		data.top = '';
+		data.top_value = '0';
+	}
+
+	var count = charts.length;
+	var html = $('#chart-template').html().replace(/_id/g, count);
+	$('body').append(html);
+
+	var chart = $('#chart' + count);
+	chart.draggable({handle: '.handle'});
+	chart.resizable();
+
+	if (data.x)			chart.css('left', data.x + 'px');
+	if (data.y)			chart.css('top',  data.y + 'px');
+	if (data.width)		chart.outerWidth( data.width + 'px');
+	if (data.height)	chart.outerHeight(data.height + 'px');
+	chart.find(".title").text(data.name);
+
+	charts.push(data);
+}
+
+function chartSettings(k) {
+	$('#chart-settings').prop('data-chart-id', k);
+	$('#chart-settings [name=id]'       ).val(k);
+	$('#chart-settings [name=name]'     ).val(charts[k].name);
+	$('#chart-settings [name=type]'     ).val(charts[k].type);
+	$('#chart-settings [name=dimension]').val(charts[k].dimension);
+	$('#chart-settings [name=group]'    ).val(charts[k].group);
+	$('#chart-settings [name=sort]'     ).val(charts[k].sort);
+	$('#chart-settings [name=top]'      ).val(charts[k].top);
+	$('#chart-settings [name=top-value]').val(charts[k].top_value);
+	topChange();
+	var modal = $.UIkit.modal("#chart-settings").show();
+}
+
+function chartSettingsSave() {
+	var id					= $('#chart-settings [name=id]'       ).val();
+	charts[id].name			= $('#chart-settings [name=name]'     ).val();
+	charts[id].type			= $('#chart-settings [name=type]'     ).val();
+	charts[id].dimension	= $('#chart-settings [name=dimension]').val();
+	charts[id].group		= $('#chart-settings [name=group]'    ).val();
+	charts[id].sort			= $('#chart-settings [name=sort]'     ).val();
+	charts[id].top			= $('#chart-settings [name=top]'      ).val();
+	charts[id].top_value	= $('#chart-settings [name=top-value]').val();
+	$('#chart' + id + " .title").text(charts[id].name);
+	var modal = $.UIkit.modal("#chart-settings");
+	modal.hide();
+	restart();
+}
+
+function sortChange() {
+	var val = $('select[name=sort]').val();
+	if (val === 'asc' || val === 'desc') {
+		$('select[name=top]').val('none');
+		topChange();
+	}
+}
+
+function topChange() {
+	var val = $('select[name=top]').val();
+	if (val === 'top' || val === 'bottom') {
+		$('input[name=top-value]').fadeIn();
+		$('select[name=sort]').val('none');
+	}
+	else {
+		$('input[name=top-value]').fadeOut();
+	}
+}
+
+function chartDelete(id) {
+	charts[id].deleted = true;
+	$('#chart' + id).fadeOut();
+}
+
+function chartDeleteThis() {
+	var id = $('#chart-settings [name=id]').val();
+	$.UIkit.modal("#chart-settings").hide();
+	chartDelete(id);
+}
+
+function saveChart(index) {
+	if (charts[index].deleted) {
+		var data = { id: charts[index].id, document: doc };
+		$.post('/object-delete', data);
+	}
+	else {
+		var chart = $('#chart' + index);
+		var x = chart.position().left;
+		var y = chart.position().top;
+		var w = chart.outerWidth();
+		var h = chart.outerHeight();
+
+		var data = {
+			document:  doc,
+			id:        charts[index].id,
+			name:      charts[index].name,
+			type:      charts[index].type,
+			dimension: charts[index].dimension,
+			group:     charts[index].group,
+			sort:      charts[index].sort,
+			top:       charts[index].top,
+			top_value: charts[index].top_value,
+			x:x, y:y, width:w, height:h };
+		$.post('/object-save', data, function(result) {
+			saveCount++;
+			if (saveCount === charts.length) {
+				location.reload();
+			}
+		});
+	}
+}
+
+
+
 function snapAll() {
 	$('body').css('width', '100%');
 	$('.chart').each(function() {
