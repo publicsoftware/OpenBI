@@ -123,7 +123,7 @@ function createCrossFilter(dataUrl) {
 					;
 			}
 			*/
-			
+
 			if (charts[i].chart != null) {
 				charts[i].chart
 					.transitionDuration(1000)
@@ -183,7 +183,7 @@ function snapAll() {
 
 function snap(x) {
 	x = parseInt(x);
-	grid = parseInt(_grid_size);
+	grid = _grid_size;
 
 	if (x % grid === 0) {
 	}
@@ -194,8 +194,6 @@ function snap(x) {
 		x = parseInt(x / grid) * grid;
 	}
 
-	if (x % _grid_size !== 0)
-		console.log('error ' + x);
 	return x;
 }
 
