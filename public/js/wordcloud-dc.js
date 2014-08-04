@@ -25,7 +25,7 @@ dc.wordCloud = function(parent, chartGroup) {
 		}
 
 		for (var d = 0; d < data.length; d++) {
-			data[d].size = data[d].value * 1.0 / max * width / 7;
+			data[d].size = data[d].value * 1.0 / max * width / 10.0;
 			data[d].size = Math.floor(data[d].size);
 			data[d].x = data[d].size * 10;
 			data[d].y = data[d].size * 10;
@@ -36,7 +36,7 @@ dc.wordCloud = function(parent, chartGroup) {
 		d3.layout.cloud()
 			.size([width, height])
 			.words(data)
-			.padding(20)
+			.padding(5)
 			.rotate(0)
 			.fontSize(function(d) { return d.size; })
 			.on("end", draw)
