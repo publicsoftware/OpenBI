@@ -1,5 +1,14 @@
 
 
+{
+  background: '#333',
+  text: '#eee',
+  chartTitle: '#777',
+  chartBorder: '@background',
+  chartBackground: '@background',
+  axis: 'white'
+}
+
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Using LESS to change theme
 

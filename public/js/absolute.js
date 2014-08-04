@@ -31,7 +31,7 @@ function createCrossFilter(dataUrl) {
 				.append('<option>' + columns[i] + '</option>');
 		}
 
-		console.log(charts);
+		// console.log(charts);
 
 		for (var i = 0; i < charts.length; i++) {
 			dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
@@ -92,9 +92,9 @@ function createCrossFilter(dataUrl) {
 					.x(d3.scale.ordinal())
 					.xUnits(dc.units.ordinal)
 					.renderHorizontalGridLines(true)
-					.barPadding(1)
-					.outerPadding(.5)
-					.gap(1)
+					.outerPadding(1)
+					.barPadding(.5)
+					// .gap(1)
 					;
 			}
 			else
@@ -160,6 +160,7 @@ function createCrossFilter(dataUrl) {
 			.style("text-anchor", "end")
 			.attr("transform", "translate(-10,0)rotate(315)");
 		*/
+
 	});
 }
 
@@ -212,7 +213,7 @@ function theme(name) {
 	}
 	else
 	if (name === 'white') {
-		var s = "{\n  background: 'white',\n  text: '#555',\n  chartTitle: '#eee',\n  chartBorder: 'white',\n  chartBackground: 'white',\n  axis: '#555'\n}";
+		var s = "{\n  background: 'white',\n  text: '#666',\n  chartTitle: '#eee',\n  chartBorder: '@background',\n  chartBackground: '@background',\n  axis: '#666'\n}";
 		$('[name=style]').val(s);
 	}
 }
