@@ -188,6 +188,14 @@ function documentSettingsClose() {
 	$.UIkit.modal("#settings").hide();
 }
 
+function documentViewData() {
+	$.get('/data/' + doc)
+	.success(function(result) {
+		$('#csv').val(result);
+		$.UIkit.modal("#data").show();
+	});
+}
+
 function sampleCode() {
 	var s = "data.forEach(function(d) {\n  d.Count = 1;\n});";
 	$('[name=init]').val(s);
