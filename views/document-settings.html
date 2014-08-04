@@ -37,7 +37,9 @@
 				</div>
 
 				<div class='uk-width-1-1'>
-					Data Preparation<br/>
+					Data Preparation
+					<a href='javascript:sampleCode()'>Sample</a>
+					<br/>
 					<textarea class='code' rows='4' name='init'
 						placeholder="Data Preparation"
 						><%- document.init %></textarea>
@@ -96,6 +98,11 @@ function documentChooseFile() {
 
 function documentSettingsClose() {
 	$.UIkit.modal("#settings").hide();
+}
+
+function sampleCode() {
+	var s = "data.forEach(function(d) {\n  d.Count = 1;\n});";
+	$('[name=init]').val(s);
 }
 
 function theme(name) {
