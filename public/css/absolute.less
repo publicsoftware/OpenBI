@@ -45,7 +45,8 @@ ul.title {
 		width: 100%;
 		display: block;
 		height: 28px;
-		padding: 2px 4px;
+		padding: 0;
+		margin-bottom: 4px;
 		transition: background 0.25s ease-in;
 	}
 
@@ -60,12 +61,12 @@ ul.title {
 		float: right;
 		opacity: 0;
 		transition: opacity 0.25s ease-in;
-		margin: 4px 10px;
+		margin: 4px 4px;
 
 		i {
 			transition: all 0.25s ease-in;
 			&:hover {
-				color: #aaa;
+				color: lighten(@text, 20%);
 				cursor: pointer;
 			}
 		}

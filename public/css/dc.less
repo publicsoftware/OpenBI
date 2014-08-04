@@ -1,4 +1,5 @@
 @axis: #222;
+@selected: #ccc;
 
 .dc-chart {
 	float: left;
@@ -44,7 +45,7 @@
 	cursor: pointer;
 }
 
-.dc-chart .pie-slice.external{
+.dc-chart .pie-slice.external {
 	fill: black;
 }
 
@@ -58,7 +59,7 @@
 
 .dc-chart .selected path {
 	stroke-width: 3;
-	stroke: #ccc;
+	stroke: @selected;
 	fill-opacity: 1;
 }
 

@@ -330,7 +330,6 @@ function saveChart(index) {
 }
 
 
-
 function snapAll() {
 	$('body').css('width', '100%');
 	$('.chart').each(function() {
