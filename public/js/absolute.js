@@ -44,14 +44,15 @@ function createCrossFilter(dataUrl) {
 			height -= _chart_padding;
 			var square = Math.min(width, height);
 
-			if (charts[i].type === 'pie') {
+			if (charts[i].type === 'pie' ||
+				charts[i].type === 'donut') {
 				charts[i].chart = dc.pieChart("#chart" + i)
 					.width(width)
 					.height(height - _chart_padding)
 					.dimension(dimension[i])
 					.group(group[i])
 					.radius(square / 2 - _chart_padding)
-					.innerRadius(square / 10)
+					.innerRadius(charts[i].type === 'pie' ? 0 : square / 10)
 					.legend(dc.legend())
 					;
 			}
@@ -106,7 +107,23 @@ function createCrossFilter(dataUrl) {
 					.group(group[i])
 					;
 			}
-
+			/*
+			else
+			if (charts[i].type === 'bubble') {
+				charts[i].chart = dc.bubbleChart('#chart' + i)
+					.width(width)
+					.height(height - _chart_padding)
+					.ordering(function(d){ return d.value; })
+					.dimension(dimension[i])
+					.group(group[i])
+					.brushOn(true)
+					.elasticY(true)
+					.x(d3.scale.ordinal())
+					.xUnits(dc.units.ordinal)
+					;
+			}
+			*/
+			
 			if (charts[i].chart != null) {
 				charts[i].chart
 					.transitionDuration(1000)
