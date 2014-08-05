@@ -68,6 +68,28 @@ function createCrossFilter(dataUrl) {
 			}
 			else
 			if (charts[i].type === 'line') {
+				var data = group[i].top(Infinity);
+				var min = +Infinity;
+				var max = -Infinity;
+				for (var d = 0; d < data.length; d++) {
+					var value = parseFloat(data[d].key);
+					if (min > value)
+						min = value;
+					if (max < value)
+						max = value;
+				}
+				charts[i].chart = dc.lineChart('#chart' + i)
+					.width(width)
+					.height(height - _chart_padding)
+					.dimension(dimension[i])
+					.group(group[i])
+					.elasticY(true)
+					.brushOn(true)
+					.x(d3.scale.linear().domain([min, max]))
+					;
+
+				/*
+				// for ordinal
 				charts[i].chart = dc.lineChart('#chart' + i)
 					.width(width)
 					.height(height - _chart_padding)
@@ -78,9 +100,37 @@ function createCrossFilter(dataUrl) {
 					.x(d3.scale.ordinal())
 					.xUnits(dc.units.ordinal)
 					;
+				*/
 			}
 			else
 			if (charts[i].type === 'bar') {
+				var data = group[i].top(Infinity);
+				var min = +Infinity;
+				var max = -Infinity;
+				for (var d = 0; d < data.length; d++) {
+					var value = parseFloat(data[d].key);
+					if (min > value)
+						min = value;
+					if (max < value)
+						max = value;
+				}
+
+				charts[i].chart = dc.barChart('#chart' + i)
+					.width(width)
+					.height(height - _chart_padding)
+					.dimension(dimension[i])
+					.group(group[i])
+					.centerBar(true)
+					.brushOn(true)
+					.elasticY(true)
+					.x(d3.scale.linear().domain([min, max]))
+					.renderHorizontalGridLines(true)
+					.outerPadding(1)
+					.barPadding(.5)
+					.gap(1)
+					;
+				/*
+				// for ordinal
 				charts[i].chart = dc.barChart('#chart' + i)
 					.width(width)
 					.height(height - _chart_padding)
@@ -96,6 +146,7 @@ function createCrossFilter(dataUrl) {
 					.barPadding(.5)
 					// .gap(1)
 					;
+				*/
 			}
 			else
 			if (charts[i].type === 'wordcloud') {
