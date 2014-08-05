@@ -99,6 +99,7 @@ router.get('/document/:id', function(req, res) {
 							}
 							res.render('absolute.html', {
 								title: title + ' ' + records[0].name,
+								host: req.protocol + '://' + req.get('host'),
 								user: user,
 								document: records[0],
 								charts: objects
