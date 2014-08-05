@@ -1,5 +1,6 @@
 @axis: #222;
 @selected: #ccc;
+@title: white;
 
 .dc-chart {
 	float: left;
@@ -11,7 +12,7 @@
 }
 
 .dc-chart rect.bar:hover {
-	fill-opacity: .5;
+	fill-opacity: .65;
 }
 
 .dc-chart rect.stack1 {
@@ -27,7 +28,7 @@
 .dc-chart rect.deselected {
 	stroke: none;
 	fill: #ccc;
-	opacity: 0.5;
+	opacity: 0.25;
 }
 
 .dc-chart .empty-chart .pie-slice path {
@@ -40,9 +41,10 @@
 }
 
 .dc-chart .pie-slice {
-	fill: white;
+	fill: @title;
 	font-size: 12px;
 	cursor: pointer;
+	// opacity: 0.8;
 }
 
 .dc-chart .pie-slice.external {
@@ -50,15 +52,15 @@
 }
 
 .dc-chart .pie-slice :hover {
-	fill-opacity: .8;
+	fill-opacity: .75;
 }
 
 .dc-chart .pie-slice.highlight {
-	fill-opacity: .8;
+	fill-opacity: .75;
 }
 
 .dc-chart .selected path {
-	stroke-width: 3;
+	stroke-width: 2;
 	stroke: @selected;
 	fill-opacity: 1;
 }
@@ -219,7 +221,7 @@
 }
 
 .dc-chart g.row text {
-	fill: white;
+	fill: @title;
 	font-size: 12px;
 	cursor: pointer;
 }
@@ -234,10 +236,9 @@
 }
 
 .dc-chart g.axis text {
-	/* Makes it so the user can't accidentally click and select text that is meant as a label only */
-	-webkit-user-select: none; /* Chrome/Safari */
-	-moz-user-select: none; /* Firefox */
-	-ms-user-select: none; /* IE10 */
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
 	-o-user-select: none;
 	user-select: none;
 	pointer-events: none;
@@ -270,9 +271,9 @@
 
 .dc-chart .box text {
 	font: 10px sans-serif;
-	-webkit-user-select: none; /* Chrome/Safari */
-	-moz-user-select: none; /* Firefox */
-	-ms-user-select: none; /* IE10 */
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
 	-o-user-select: none;
 	user-select: none;
 	pointer-events: none;
