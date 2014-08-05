@@ -97,9 +97,18 @@ router.get('/document/:id', function(req, res) {
 							if (records[0].init == null) {
 								records[0].init = '';
 							}
+
+							var host = req.protocol + "://";
+							if (req.get('x-forwarded-host') == null) {
+								host += req.get('host');
+							}
+							else {
+								host += req.get('x-forwarded-host');
+							}
+
 							res.render('absolute.html', {
 								title: title + ' ' + records[0].name,
-								host: req.protocol + '://' + req.get('host'),
+								host: host,
 								user: user,
 								document: records[0],
 								charts: objects
