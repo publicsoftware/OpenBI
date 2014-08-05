@@ -24,7 +24,6 @@ create table documents (
 	user		bigint,
 	name		nvarchar(1023),
 	public		int default 0,
-	theme		nvarchar(255),
 	style		nvarchar(16383),				-- custom css styling
 	data_type	 varchar(255) default 'none',	-- none, file, url, query, yql
 	data_name	nvarchar(1023),					-- original file name or name
