@@ -3378,7 +3378,14 @@ dc.pieChart = function (parent, chartGroup) {
     _chart.colorAccessor(_chart.cappedKeyAccessor);
 
     _chart.title(function (d) {
-        return _chart.cappedKeyAccessor(d) + ": " + _chart.cappedValueAccessor(d);
+        var value = _chart.cappedValueAccessor(d);
+        try {
+            value = parseFloat(value);
+            value = value.toFixed(2);
+        }
+        catch (e) { }
+
+        return _chart.cappedKeyAccessor(d) + ": " + value;
     });
 
     /**
