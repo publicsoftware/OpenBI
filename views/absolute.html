@@ -157,6 +157,7 @@ function restart() {
 	createCrossFilter("/data/<%= document.id %>");
 }
 
+$.ajaxSetup({cache: false});
 $(document).ready(function() {
 	try {
 		less.modifyVars(<%- document.style %>);
