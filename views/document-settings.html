@@ -6,7 +6,7 @@
 		<form class='uk-form' method='post' action='/document-save'
 			enctype="multipart/form-data" >
 			<input type='hidden' name='document' value='<%= document.id %>' />
-			<input type='file' name='file'
+			<input type='file' name='file' accept=".csv"
 				style='display:none; width:4px; height:4px;' />
 
 			<div class='uk-grid uk-grid-preserve'>
