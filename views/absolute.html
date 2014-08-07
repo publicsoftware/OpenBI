@@ -167,6 +167,9 @@ $(document).ready(function() {
 	$('body').on('mouseup', function() {
 		snapAll();
 		$('#ruler').fadeOut();
+		for (var i = 0; i < charts.length; i++) {
+			$('#chart' + i).css('z-index', _z_index + i);
+		}
 	});
 	main();
 });
