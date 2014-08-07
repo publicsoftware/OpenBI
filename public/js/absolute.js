@@ -1,6 +1,7 @@
 "use strict;"
 var _grid_size = 8;
 var _chart_padding = 16;
+var _z_index = 1000;
 
 function createCrossFilter(dataUrl) {
 	// TODO load data only one time
@@ -293,6 +294,7 @@ function createChart(data) {
 	var chart = $('#chart' + count);
 	chart.draggable({handle: '.handle'});
 	chart.resizable();
+	chart.css('z-index', count + _z_index);
 
 	if (data.x)			chart.css('left', data.x + 'px');
 	if (data.y)			chart.css('top',  data.y + 'px');
@@ -450,7 +452,7 @@ function snap(x) {
 				var y = $(this).offset().top;
 
 				var z = $(this).css('z-index');
-				$(this).css('z-index', z + 1000);
+				$(this).css('z-index', z + 10000);
 
 				$(this).parents().on("mousemove", function(e) {
 					if ($('.resizable').length > 0) {
@@ -508,7 +510,8 @@ function snap(x) {
 			var pos_y = drag.offset().top + drg_h - e.pageY;
 			var pos_x = drag.offset().left + drg_w - e.pageX;
 
-			drag.css('z-index', 900).parents().on("mousemove", function(e) {
+			drag.css('z-index', 10000 + z)
+			.parents().on("mousemove", function(e) {
 				if ($('.draggable').length > 0) {
 					$('.ruler').fadeIn();
 				}
