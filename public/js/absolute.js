@@ -451,8 +451,8 @@ function snap(x) {
 				var x = $(this).offset().left;
 				var y = $(this).offset().top;
 
-				var z = $(this).css('z-index');
-				$(this).css('z-index', z + 10000);
+				var z = parseInt($(this).css('z-index'));
+				$(this).css('z-index', 10000 + z);
 
 				$(this).parents().on("mousemove", function(e) {
 					if ($('.resizable').length > 0) {
@@ -504,7 +504,7 @@ function snap(x) {
 				var drag = $(this).addClass('active-handle').parent().
 									addClass('draggable');
 			}
-			var z = drag.css('z-index');
+			var z = parseInt(drag.css('z-index'));
 			var drg_h = drag.outerHeight();
 			var drg_w = drag.outerWidth();
 			var pos_y = drag.offset().top + drg_h - e.pageY;
