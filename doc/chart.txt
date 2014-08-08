@@ -1,5 +1,10 @@
 
 
+$('.chart').each(
+function() {
+  console.log($(this).css('z-index'));
+});
+
 {
   background: '#333',
   text: '#eee',

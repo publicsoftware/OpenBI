@@ -399,6 +399,13 @@ function saveChart(index) {
 
 function snapAll() {
 	$('body').css('width', '100%');
+	$('#ruler').fadeOut();
+
+	for (var i = 0; i < charts.length; i++) {
+		$('#chart' + i).css('z-index', _z_index + i);
+		// console.log($('#chart' + i).css('z-index'));
+	}
+
 	$('.chart').each(function() {
 		var x = $(this).position().left;
 		var y = $(this).position().top;
@@ -412,14 +419,17 @@ function snapAll() {
 		$(this).css('top',  y + 'px');
 		$(this).outerWidth(w + 'px');
 		$(this).outerHeight(h + 'px');
+		// $(this).css('z-index', _z_index + i);
 	});
+
 }
 
 function snap(x) {
 	x = parseInt(x);
-	grid = _grid_size;
+	var grid = _grid_size;
 
 	if (x % grid === 0) {
+		// nothing
 	}
 	if (x % grid > grid / 2) {
 		x = (parseInt(x / grid) + 1) * grid;
@@ -470,7 +480,7 @@ function snap(x) {
 					.css('z-index', z)
 					.css('cursor', 'default')
 					.removeClass('resizable');
-					$('.ruler').fadeOut();
+					snapAll();
 				});
 			}
 			e.preventDefault();
@@ -479,8 +489,7 @@ function snap(x) {
 		$(this).on("mouseup", function() {
 			$(this).css('cursor', 'default')
 			.removeClass('resizable');
-			$('.ruler').fadeOut();
-			// snapAll();
+			snapAll();
 		});
 
 		return $(this);
@@ -521,18 +530,19 @@ function snap(x) {
 					left:snap(e.pageX + pos_x - drg_w)
 				}).on("mouseup", function() {
 					$(this).removeClass('draggable').css('z-index', z);
+					snapAll();
 				});
 			});
 			e.preventDefault();
 		}).on("mouseup", function() {
 			$(this).css('cursor', 'default');
-			$('.ruler').fadeOut();
 			if(opt.handle === "") {
 				$(this).removeClass('draggable');
 			} else {
 				$(this).removeClass('active-handle').parent().
 						removeClass('draggable');
 			}
+			snapAll();
 		});
 	};
 })(jQuery);
