@@ -399,7 +399,7 @@ function saveChart(index) {
 
 function snapAll() {
 	$('body').css('width', '100%');
-	$('#ruler').fadeOut();
+	$('.ruler').fadeOut();
 
 	for (var i = 0; i < charts.length; i++) {
 		$('#chart' + i).css('z-index', _z_index + i);
