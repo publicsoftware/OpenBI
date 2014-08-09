@@ -1,6 +1,7 @@
 -- create database openbi default charset=utf8;
 -- create user 'openbi'@'localhost' identified by 'p@ssword';
 -- grant all on openbi.* to 'openbi'@'localhost';
+-- set password for 'openbi'@'localhost' = password('');
 
 use openbi;
 
