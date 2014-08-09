@@ -77,10 +77,11 @@ router.get('/document/:id', function(req, res) {
 			res.redirect("/");
 		}
 		else {
-			var user = req.session.info ? req.session.info.id : 0;
+			var user = req.session.info == null ? 0 : req.session.info.id;
+			var id = req.params.id;
 			connection.query(
 			"select * from documents where id=? and (user=? or public=1)",
-				[req.params.id, user],
+				[id, user],
 			function (error, records) {
 				if (error || records.length === 0) {
 					res.redirect("/");
@@ -88,7 +89,7 @@ router.get('/document/:id', function(req, res) {
 				else {
 					records[0].data = '/' + records[0].data;
 					connection.query("select * from objects where document=?",
-						[req.params.id],
+						[id],
 					function(error, objects) {
 						if (error) {
 							res.redirect("/");

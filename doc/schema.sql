@@ -17,6 +17,9 @@ create table users (
 insert into users(user, email, name, role, password)
 	values('root', 'email@email.com', 'System Administrator', 'root',
 		sha2('password', 256));
+insert into users(user, email, name, role, password)
+	values('user', 'email@email.com', 'User', 'user',
+		sha2('user', 256));
 
 drop table if exists documents;
 create table documents (
