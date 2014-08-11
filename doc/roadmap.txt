@@ -27,7 +27,8 @@ SSL
 Home page
 Welcome page
 About
-OGP
+Dynamic OGP
+Expand width/height
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Done
