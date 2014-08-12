@@ -111,6 +111,24 @@ var xf;
 var dimension;
 var group;
 var columns;
+
+$.ajaxSetup({cache: false});
+
+$(document).ready(function() {
+	try {
+		less.modifyVars(<%- document.style %>);
+	}
+	catch (e) {}
+
+	$('body').on('mouseup', function() {
+		snapAll();
+	});
+
+	$(window).resize(resize);
+
+	main();
+});
+
 <%
 	var init = document.init;
 	// escape for " not need for ' < >
@@ -170,18 +188,6 @@ function restart() {
 	createCrossFilter("/data/<%= document.id %>");
 }
 
-$.ajaxSetup({cache: false});
-$(document).ready(function() {
-	try {
-		less.modifyVars(<%- document.style %>);
-	}
-	catch (e) {}
-
-	$('body').on('mouseup', function() {
-		snapAll();
-	});
-	main();
-});
 
 </script>
 

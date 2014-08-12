@@ -3,45 +3,6 @@ var _grid_size = 8;
 var _chart_padding = 16;
 var _z_index = 1000;
 
-$(window).resize(resize);
-
-function resize() {
-	// stretch
-	for (var i = 0; i < charts.length; i++) {
-		if (charts[i].maximize_width) {
-			var width = $(window).width();
-			width = width  - charts[i].x - _grid_size;
-			// width = snap(width);
-			$('#chart' + i).outerWidth(width  + 'px');
-		}
-
-		if (charts[i].maximize_height) {
-			var height = $(window).height();
-			height = height - charts[i].y - _grid_size;
-			// height = snap(height);
-			$('#chart' + i).outerHeight(height + 'px');
-		}
-	}
-
-	var maxWidth = 0;
-	var maxHeight = 0;
-	for (var i = 0; i < charts.length; i++) {
-		var tmp = charts[i].x + $('#chart' + i).outerWidth();
-		if (maxWidth < tmp) {
-			maxWidth = tmp;
-		}
-		var tmp = charts[i].y + $('#chart' + i).outerHeight();
-		if (maxHeight < tmp) {
-			maxHeight = tmp;
-		}
-	}
-
-	$('#pad-right').css('left', maxWidth + 'px');
-
-	$('#pad-bottom').css('top', maxHeight + 'px');
-
-}
-
 function createCrossFilter(dataUrl) {
 	// TODO load data only one time
 	// TODO support realtime data
@@ -511,6 +472,43 @@ function snap(x) {
 	}
 
 	return x;
+}
+
+function resize() {
+	// stretch
+	for (var i = 0; i < charts.length; i++) {
+		if (charts[i].maximize_width) {
+			var width = $(window).width();
+			width = width  - charts[i].x - _grid_size;
+			// width = snap(width);
+			$('#chart' + i).outerWidth(width  + 'px');
+		}
+
+		if (charts[i].maximize_height) {
+			var height = $(window).height();
+			height = height - charts[i].y - _grid_size;
+			// height = snap(height);
+			$('#chart' + i).outerHeight(height + 'px');
+		}
+	}
+
+	var maxWidth = 0;
+	var maxHeight = 0;
+	for (var i = 0; i < charts.length; i++) {
+		var tmp = charts[i].x + $('#chart' + i).outerWidth();
+		if (maxWidth < tmp) {
+			maxWidth = tmp;
+		}
+		var tmp = charts[i].y + $('#chart' + i).outerHeight();
+		if (maxHeight < tmp) {
+			maxHeight = tmp;
+		}
+	}
+
+	$('#pad-right').css('left', maxWidth + 'px');
+
+	$('#pad-bottom').css('top', maxHeight + 'px');
+
 }
 
 (function($) {
