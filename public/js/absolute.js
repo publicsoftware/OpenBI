@@ -3,6 +3,26 @@ var _grid_size = 8;
 var _chart_padding = 16;
 var _z_index = 1000;
 
+$(window).resize(resize);
+
+function resize() {
+	for (var i = 0; i < charts.length; i++) {
+		if (charts[i].maximize_width) {
+			var width = $(window).width();
+			width = width  - charts[i].x - _grid_size;
+			width = snap(width);
+			$('#chart' + i).outerWidth (width + 'px');
+		}
+
+		if (charts[i].maximize_height) {
+			var height = $(window).height();
+			height = height - charts[i].y - _grid_size;
+			height = snap(height);
+			$('#chart' + i).outerHeight(height + 'px');
+		}
+	}
+}
+
 function createCrossFilter(dataUrl) {
 	// TODO load data only one time
 	// TODO support realtime data
@@ -306,6 +326,7 @@ function createChart(data) {
 
 	if (data.x)			chart.css('left', data.x + 'px');
 	if (data.y)			chart.css('top',  data.y + 'px');
+
 	if (data.maximize_width) {
 		var width = $(document).width();
 		chart.outerWidth(width - data.x - _grid_size);
