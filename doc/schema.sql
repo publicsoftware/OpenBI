@@ -76,9 +76,6 @@ create table objects (
 	maximize_height	int default 0
 );
 
--- alter table objects add column maximize_width int default 0;
--- alter table objects add column maximize_height int default 0;
-
 drop table if exists themes;
 create table themes (
 	id			serial,

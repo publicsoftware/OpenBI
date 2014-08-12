@@ -6,6 +6,7 @@ var _z_index = 1000;
 $(window).resize(resize);
 
 function resize() {
+	// stretch
 	for (var i = 0; i < charts.length; i++) {
 		if (charts[i].maximize_width) {
 			var width = $(window).width();
