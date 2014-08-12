@@ -260,12 +260,18 @@ function theme(name) {
 	}
 	else
 	if (name === 'dark') {
-		var s = "{\n  background: '#333',\n  text: '#eee',\n  chartTitle: '#777',\n  chartBorder: '#777',\n  chartBackground: '#555',\n  chartShadow: 'inset 0px 0px 300px rgba(0,0,0,.5)',\n  axis: 'white'\n}";
+		var s = "{\n  background: '#333',\n  text: '#eee',\n  " +
+		"chartTitle: '#777',\n  chartBorder: '#777',\n  " +
+		"chartBackground: '#555',\n  " +
+		"chartShadow: 'inset 0px 0px 300px rgba(0,0,0,.5)',\n  " +
+		"axis: 'white'\n}";
 		$('[name=style]').val(s);
 	}
 	else
 	if (name === 'white') {
-		var s = "{\n  background: 'white',\n  text: '#666',\n  chartTitle: '#eee',\n  chartBorder: '@background',\n  chartBackground: '@background',\n  axis: '#666'\n}";
+		var s = "{\n  background: 'white',\n  text: '#666',\n  " +
+		"chartTitle: '#eee',\n  chartBorder: '@background',\n  " +
+		"chartBackground: '@background',\n  axis: '#666'\n}";
 		$('[name=style]').val(s);
 	}
 }
@@ -285,6 +291,8 @@ function createChart(data) {
 		data.sort = '';
 		data.top = '';
 		data.top_value = '0';
+		data.maximize_width = 0;
+		data.maximize_height = 0;
 	}
 
 	var count = charts.length;
@@ -298,10 +306,27 @@ function createChart(data) {
 
 	if (data.x)			chart.css('left', data.x + 'px');
 	if (data.y)			chart.css('top',  data.y + 'px');
-	if (data.width)		chart.outerWidth( data.width + 'px');
-	if (data.height)	chart.outerHeight(data.height + 'px');
-	chart.find(".title").text(data.name);
+	if (data.maximize_width) {
+		var width = $(document).width();
+		chart.outerWidth(width - data.x - _grid_size);
+	}
+	else {
+		if (data.width) {
+			chart.outerWidth(data.width + 'px');
+		}
+	}
 
+	if (data.maximize_height) {
+		var height = $(document).height();
+		chart.outerHeight(height - data.y - _grid_size);
+	}
+	else {
+		if (data.height) {
+			chart.outerHeight(data.height + 'px');
+		}
+	}
+
+	chart.find(".title").text(data.name);
 	charts.push(data);
 }
 
@@ -315,6 +340,8 @@ function chartSettings(k) {
 	$('#chart-settings [name=sort]'     ).val(charts[k].sort);
 	$('#chart-settings [name=top]'      ).val(charts[k].top);
 	$('#chart-settings [name=top-value]').val(charts[k].top_value);
+	$('[name=maximize-width]' ).prop('checked', charts[k].maximize_width );
+	$('[name=maximize-height]').prop('checked', charts[k].maximize_height);
 	topChange();
 	var modal = $.UIkit.modal("#chart-settings").show();
 }
@@ -328,6 +355,8 @@ function chartSettingsSave() {
 	charts[id].sort			= $('#chart-settings [name=sort]'     ).val();
 	charts[id].top			= $('#chart-settings [name=top]'      ).val();
 	charts[id].top_value	= $('#chart-settings [name=top-value]').val();
+	charts[id].maximize_width = $('[name=maximize-width]' ).is(':checked')? 1:0;
+	charts[id].maximize_height= $('[name=maximize-height]').is(':checked')? 1:0;
 	$('#chart' + id + " .title").text(charts[id].name);
 	var modal = $.UIkit.modal("#chart-settings");
 	modal.hide();
@@ -386,7 +415,10 @@ function saveChart(index) {
 			sort:      charts[index].sort,
 			top:       charts[index].top,
 			top_value: charts[index].top_value,
-			x:x, y:y, width:w, height:h };
+			x:x, y:y, width:w, height:h,
+			maximize_width:  charts[index].maximize_width,
+			maximize_height: charts[index].maximize_height
+			};
 		$.post('/object-save', data, function(result) {
 			saveCount++;
 			if (saveCount === charts.length) {

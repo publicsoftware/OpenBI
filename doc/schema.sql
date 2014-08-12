@@ -61,7 +61,7 @@ create table objects (
 	name		nvarchar(1023),
 	x			int default 0,
 	y			int default 0,
-	z			int default 0,					-- z-index
+	z			int default 0,					-- z-index, reserved
 	width		int default 240,
 	height		int default 120,
 	style		nvarchar(16383),				-- custom css styling
@@ -69,10 +69,15 @@ create table objects (
 	options		longtext,						-- json format for the chart
 	dimension	longtext,						-- code e.g. dc.pluck('column')
 	reduce		longtext,			-- code e.g. reduceSum(dc.pluck('column'))
-	sort		varchar(255) default '',
-	top			varchar(255) default '',
-	top_value	bigint default 0
+	sort		varchar(255) default '',		-- none, asc, desc
+	top			varchar(255) default '',		-- top or bottom
+	top_value	bigint default 0,
+	maximize_width	int default 0,
+	maximize_height	int default 0
 );
+
+-- alter table objects add column maximize_width int default 0;
+-- alter table objects add column maximize_height int default 0;
 
 drop table if exists themes;
 create table themes (

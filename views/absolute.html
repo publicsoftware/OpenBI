@@ -143,10 +143,12 @@ function main() {
 			sort:		'<%= charts[i].sort %>',
 			top:		'<%= charts[i].top %>',
 			top_value:	'<%= charts[i].top_value %>',
-			x:		<%= charts[i].x %>,
+			x:				<%= charts[i].x %>,
 			y:		<%= charts[i].y %>,
 			width:	<%= charts[i].width %>,
-			height:	<%= charts[i].height %>
+			height:	<%= charts[i].height %>,
+			maximize_width:		<%= charts[i].maximize_width %>,
+			maximize_height:	<%= charts[i].maximize_height %>
 		});
 	<% } %>
 
