@@ -153,38 +153,16 @@ function main() {
 	<% } %>
 
 
-	/*
-	var docWidth  = $(document).width();
-	var docHeight = $(document).height();
-	var winWidth  = $(window).width();
-	var winHeight = $(window).height();
-	*/
-
-	var maxWidth = 0;
-	var maxHeight = 0;
-	for (var i = 0; i < charts.length; i++) {
-		var tmp = charts[i].x + charts[i].width;
-		if (maxWidth < tmp) {
-			maxWidth = tmp;
-		}
-		var tmp = charts[i].y + charts[i].height;
-		if (maxHeight < tmp) {
-			maxHeight = tmp;
-		}
-	}
-
 	$('body').append(
 	"<div id='pad-right' style='position:absolute;background:none;'></div>");
-	$('#pad-right').css('width',  _grid_size + 'px');
-	$('#pad-right').css('height', _grid_size + 'px');
-	$('#pad-right').css('left', maxWidth + 'px');
-
 	$('body').append(
 	"<div id='pad-bottom' style='position:absolute;background:none;'></div>");
+
+	$('#pad-right').css('width',  _grid_size + 'px');
+	$('#pad-right').css('height', _grid_size + 'px');
 	$('#pad-bottom').css('width',  _grid_size + 'px');
 	$('#pad-bottom').css('height', _grid_size + 'px');
-	$('#pad-bottom').css('top', maxHeight + 'px');
-
+	resize();
 	restart();
 }
 
