@@ -89,8 +89,6 @@ router.get('/document/:id', function(req, res) {
 				connection.release();
 				return;
 			}
-
-			records[0].data = '/' + records[0].data;
 			connection.query("select * from objects where document=?",
 				[id],
 			function(error, objects) {
@@ -100,6 +98,12 @@ router.get('/document/:id', function(req, res) {
 					return;
 				}
 
+				if (records[0].data_type === 'file') {
+					records[0].data = '/' + records[0].data;
+				}
+				if (records[0].data_type === 'url') {
+					records[0].data_url = records[0].data;
+				}
 				if (records[0].init == null) {
 					records[0].init = '';
 				}
@@ -154,45 +158,55 @@ router.post('/document-delete/:id', function(req, res) {
 router.post('/document-save', function(req, res) {
 	if (req.session.info == null) {
 		res.redirect('/document/' + req.body.document);
+		return;
 	}
-	else {
-		var user     = req.session.info.id;
-		var document = parseInt(req.body.document);
-		var public   = req.body.public === 'on' ? 1 : 0;
-		var init     = req.body.init;
+	var user     = req.session.info.id;
+	var document = parseInt(req.body.document);
+	var public   = req.body.public === 'on' ? 1 : 0;
+	var init     = req.body.init;
+	var dataType = req.body.data;
 
-		pool.getConnection(function(error, db) {
-			if (error) {
-				res.redirect('/document/' + req.body.document);
-			}
-			else {
+	pool.getConnection(function(error, db) {
+		if (error) {
+			res.redirect('/document/' + req.body.document);
+			return;
+		}
+		db.query(
+			"update documents set name=?, public=?, data_type=?, " +
+			"init=?, style=? " +
+			"where id=? and user=?",
+		[req.body.name, public, dataType, init, req.body.style, document, user],
+		function(error, records) {
+			if (dataType === 'file') {
+				var path = req.files.file ? req.files.file.path : '';
+				var file = req.files.file ? req.files.file.originalname : '';
+				if (path === '') {
+					res.redirect('/document/' + req.body.document);
+					db.release();
+					return;
+				}
 				db.query(
-					"update documents set name=?, public=?, " +
-					"init=?, style=? " +
+					"update documents set "+
+					"data_name=?, data=? " +
 					"where id=? and user=?",
-				[req.body.name, public, init, req.body.style, document, user],
+				[file, path, document, user],
 				function(error, records) {
-					var path = req.files.file ? req.files.file.path : '';
-					var file = req.files.file ? req.files.file.originalname:'';
-					if (path === '') {
-						res.redirect('/document/' + req.body.document);
-						db.release();
-					}
-					else {
-						db.query(
-							"update documents set data_type='file'"+
-							", data_name=?, data=? " +
-							"where id=? and user=?",
-						[file, path, document, user],
-						function(error, records) {
-							res.redirect('/document/' + req.body.document);
-							db.release();
-						});
-					}
+					res.redirect('/document/' + req.body.document);
+					db.release();
+				});
+			}
+			else
+			if (dataType === 'url') {
+				db.query("update documents set data_name='', data=? " +
+					"where id=? and user=?",
+					[req.body.url, document, user],
+				function(error, records) {
+					res.redirect('/document/' + req.body.document);
+					db.release();
 				});
 			}
 		});
-	}
+	});
 });
 
 router.post('/object-delete', function(req, res) {

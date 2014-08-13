@@ -1,5 +1,26 @@
 
 
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+http://query.yahooapis.com/v1/public/yql?q=
+select * from yahoo.finance.quotes where
+  symbol in ('aapl goog msft')
+&format=json&diagnostics=false
+&env=http://datatables.org/alltables.env
+&callback=
+
+
+data = data.query.results.quote;
+data.forEach(function(d) {
+  d._Count = 1;
+  d._MarketCap = parseInt(d.MarketCapitalization);
+});
+
+
+// " and startDate='2014-06-01' and endDate='2014-06-30'" +
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
 $('.chart').each(
 function() {
   console.log($(this).css('z-index'));

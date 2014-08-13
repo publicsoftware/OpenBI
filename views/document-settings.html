@@ -11,7 +11,7 @@
 
 			<div class='uk-grid uk-grid-preserve'>
 				<div class='uk-width-3-10'>
-					<label>Name</label>
+					Name
 				</div>
 				<div class='uk-width-7-10'>
 					<input type='text' name='name' class='uk-width-1-1'
@@ -19,21 +19,33 @@
 				</div>
 
 				<div class='uk-width-3-10'>
-					<label>Upload Data</label>
-				</div>
-				<div class='uk-width-7-10'>
-					<input type='button' class='uk-button' value='Choose File'
-						onclick='javascript:documentChooseFile()' />
-				</div>
-
-				<div class='uk-width-3-10'>
-					<label>Public</label>
+					&nbsp;
 				</div>
 				<div class='uk-width-7-10'>
 					<input type='checkbox' name='public' id='public'
-						 <%= document.public ? 'checked' : '' %> />
-					<label for='public'>Allow everyone to view
-					</label>
+						<%= document.public ? 'checked' : '' %> />
+					<label for='public'>Allow everyone to view</label>
+				</div>
+
+				<div class='uk-width-3-10'>
+					Data
+				</div>
+				<div class='uk-width-7-10'>
+					<select name="data" onchange="documentDataType()">
+						<option value='url'>From URL</option>
+						<option value='file'>From CSV File</option>
+					</select>
+					<input type='button' class='uk-button'
+						value='Choose CSV File' id='choose-csv'
+						style='display:none;'
+						onclick='documentChooseFile()' />
+					<input type='hidden' />
+				</div>
+
+				<div class='uk-width-1-1'>
+					<textarea class='code' name='url' id='data-url'
+						placeholder='Data URL' style='display:none;'
+						><%- document.data_url %></textarea>
 				</div>
 
 				<div class='uk-width-1-1'>

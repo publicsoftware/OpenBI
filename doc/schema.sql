@@ -1,6 +1,6 @@
--- create database openbi default charset=utf8;
--- create user 'openbi'@'localhost' identified by 'p@ssword';
--- grant all on openbi.* to 'openbi'@'localhost';
+create database openbi default charset=utf8;
+create user 'openbi'@'localhost' identified by 'p@ssword';
+grant all on openbi.* to 'openbi'@'localhost';
 -- set password for 'openbi'@'localhost' = password('');
 
 use openbi;
@@ -41,7 +41,7 @@ if (data_type == 'file') {
 	data		is the path on the server
 }
 if (data_type == 'url') {
-	data_name	is the name or description of data
+	data_name	is the field name inside data variable
 	data		is the url to data
 }
 if (data_type == 'query') {
@@ -76,6 +76,17 @@ create table objects (
 	maximize_height	int default 0
 );
 
+drop table if exists data;
+create table data (
+	id			serial,
+	user		bigint,
+	name		nvarchar(1023),
+	data		longtext,
+	url			nvarchar(2047),
+	field		nvarchar(1023)
+);
+
+/*
 drop table if exists themes;
 create table themes (
 	id			serial,
@@ -83,19 +94,8 @@ create table themes (
 	style		nvarchar(16383)
 );
 
-
 insert into themes(name, style) values('Light', 'background: #ccc;');
 insert into themes(name, style) values('Dark', 'background: black;');
-
-
-/*
-drop table if exists data;
-create table data (
-	id			 serial,
-	user		 bigint,
-	name		 nvarchar(1023),
-	data		 longtext
-);
 */
 
 /*

@@ -24,10 +24,12 @@
 
 <div>
 	<ul class='title'>
+		<!--
 		<li>
 			<a href="#drawer" id='navicon' data-uk-offcanvas title="Menu"
 				class="uk-icon-button uk-icon-bars"></a>
 		</li>
+		-->
 		<li>
 			<a href="/" class="uk-icon-button uk-icon-home" title="Home"></a>
 		</li>
@@ -45,7 +47,7 @@
 				class="uk-icon-button uk-icon-save"></a>
 		</li>
 		<li>
-			<a href="#settings" data-uk-modal title="Settings"
+			<a href="javascript:documentSettings()" title="Settings"
 				class="uk-icon-button uk-icon-gears"></a>
 		</li>
 		<li>
@@ -111,6 +113,7 @@ var xf;
 var dimension;
 var group;
 var columns;
+var data_type = '<%= document.data_type %>';
 
 $.ajaxSetup({cache: false});
 
@@ -185,13 +188,19 @@ function main() {
 }
 
 function restart() {
-	createCrossFilter("/data/<%= document.id %>");
+	if (data_type === 'file') {
+		d3.csv("/data/<%= document.id %>", createCrossFilter);
+	}
+	else
+	if (data_type === 'url') {
+		var url = $('#settings [name=url]').val();
+		url = url.replace(/\n/g, '');
+		$.getJSON(url, createCrossFilter);
+	}
 }
-
 
 </script>
 
-<%- include drawer.html %>
 <script src="/js/uikit.js"></script>
 
 <script src="/js/d3.js"></script>

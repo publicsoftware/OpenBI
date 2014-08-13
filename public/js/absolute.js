@@ -3,220 +3,213 @@ var _grid_size = 8;
 var _chart_padding = 16;
 var _z_index = 1000;
 
-function createCrossFilter(dataUrl) {
-	// TODO load data only one time
-	// TODO support realtime data
-	d3.csv(dataUrl, function(dataResult) {
-		data = dataResult;
+function createCrossFilter(dataResult) {
+	data = dataResult;
 
-		try {
-			var r = eval(init);
+	try {
+		var r = eval(init);
+	}
+	catch (e) {
+	}
+
+	xf        = crossfilter(data);
+	dimension = new Array();
+	group     = new Array();
+	columns   = new Array();
+	for (var k in data[0]) {
+		columns.push(k);
+	}
+
+	$('select[name=dimension]').html('');
+	$('select[name=group]').html('');
+	for (var i = 0; i < columns.length; i++) {
+		$('select[name=dimension]')
+			.append('<option>' + columns[i] + '</option>');
+		$('select[name=group]')
+			.append('<option>' + columns[i] + '</option>');
+	}
+
+	// console.log(charts);
+
+	for (var i = 0; i < charts.length; i++) {
+		dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
+		group[i] = dimension[i].group()
+				.reduceSum(dc.pluck(charts[i].group))
+				;
+		var color = d3.scale.category20();
+		var width  = $('#chart' + i).outerWidth();
+		var height = $('#chart' + i).outerHeight();
+		height -= _chart_padding;
+		var square = Math.min(width, height);
+
+		if (charts[i].type === 'pie' ||
+			charts[i].type === 'donut') {
+			charts[i].chart = dc.pieChart("#chart" + i)
+				.width(width)
+				.height(height - _chart_padding)
+				.dimension(dimension[i])
+				.group(group[i])
+				.radius(square / 2 - _chart_padding)
+				.innerRadius(charts[i].type === 'pie' ? 0 : square / 10)
+				.legend(dc.legend())
+				;
 		}
-		catch (e) {
+		else
+		if (charts[i].type === 'row') {
+			charts[i].chart = dc.rowChart('#chart' + i)
+				.width(width)
+				.height(height - _chart_padding)
+				.dimension(dimension[i])
+				.group(group[i])
+				.elasticX(true)
+				;
 		}
-
-		xf        = crossfilter(data);
-		dimension = new Array();
-		group     = new Array();
-		columns   = new Array();
-		for (var k in data[0]) {
-			columns.push(k);
-		}
-
-		$('select[name=dimension]').html('');
-		$('select[name=group]').html('');
-		for (var i = 0; i < columns.length; i++) {
-			$('select[name=dimension]')
-				.append('<option>' + columns[i] + '</option>');
-			$('select[name=group]')
-				.append('<option>' + columns[i] + '</option>');
-		}
-
-		// console.log(charts);
-
-		for (var i = 0; i < charts.length; i++) {
-			dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
-			group[i] = dimension[i].group()
-					.reduceSum(dc.pluck(charts[i].group))
-					;
-			var color = d3.scale.category20();
-			var width  = $('#chart' + i).outerWidth();
-			var height = $('#chart' + i).outerHeight();
-			height -= _chart_padding;
-			var square = Math.min(width, height);
-
-			if (charts[i].type === 'pie' ||
-				charts[i].type === 'donut') {
-				charts[i].chart = dc.pieChart("#chart" + i)
-					.width(width)
-					.height(height - _chart_padding)
-					.dimension(dimension[i])
-					.group(group[i])
-					.radius(square / 2 - _chart_padding)
-					.innerRadius(charts[i].type === 'pie' ? 0 : square / 10)
-					.legend(dc.legend())
-					;
+		else
+		if (charts[i].type === 'line') {
+			var data = group[i].top(Infinity);
+			var min = +Infinity;
+			var max = -Infinity;
+			for (var d = 0; d < data.length; d++) {
+				var value = parseFloat(data[d].key);
+				if (min > value)
+					min = value;
+				if (max < value)
+					max = value;
 			}
-			else
-			if (charts[i].type === 'row') {
-				charts[i].chart = dc.rowChart('#chart' + i)
-					.width(width)
-					.height(height - _chart_padding)
-					.dimension(dimension[i])
-					.group(group[i])
-					.elasticX(true)
-					;
-			}
-			else
-			if (charts[i].type === 'line') {
-				var data = group[i].top(Infinity);
-				var min = +Infinity;
-				var max = -Infinity;
-				for (var d = 0; d < data.length; d++) {
-					var value = parseFloat(data[d].key);
-					if (min > value)
-						min = value;
-					if (max < value)
-						max = value;
-				}
-				charts[i].chart = dc.lineChart('#chart' + i)
-					.width(width)
-					.height(height - _chart_padding)
-					.dimension(dimension[i])
-					.group(group[i])
-					.elasticY(true)
-					.brushOn(true)
-					.x(d3.scale.linear().domain([min, max]))
-					;
+			charts[i].chart = dc.lineChart('#chart' + i)
+				.width(width)
+				.height(height - _chart_padding)
+				.dimension(dimension[i])
+				.group(group[i])
+				.elasticY(true)
+				.brushOn(true)
+				.x(d3.scale.linear().domain([min, max]))
+				;
 
-				/*
-				// for ordinal
-				charts[i].chart = dc.lineChart('#chart' + i)
-					.width(width)
-					.height(height - _chart_padding)
-					.dimension(dimension[i])
-					.group(group[i])
-					.elasticY(true)
-					.brushOn(true)
-					.x(d3.scale.ordinal())
-					.xUnits(dc.units.ordinal)
-					;
-				*/
-			}
-			else
-			if (charts[i].type === 'bar') {
-				var data = group[i].top(Infinity);
-				var min = +Infinity;
-				var max = -Infinity;
-				for (var d = 0; d < data.length; d++) {
-					var value = parseFloat(data[d].key);
-					if (min > value)
-						min = value;
-					if (max < value)
-						max = value;
-				}
-
-				charts[i].chart = dc.barChart('#chart' + i)
-					.width(width)
-					.height(height - _chart_padding)
-					.dimension(dimension[i])
-					.group(group[i])
-					.centerBar(true)
-					.brushOn(true)
-					.elasticY(true)
-					.x(d3.scale.linear().domain([min, max]))
-					.renderHorizontalGridLines(true)
-					.outerPadding(1)
-					.barPadding(.5)
-					.gap(1)
-					;
-				/*
-				// for ordinal
-				charts[i].chart = dc.barChart('#chart' + i)
-					.width(width)
-					.height(height - _chart_padding)
-					.dimension(dimension[i])
-					.group(group[i])
-					.centerBar(true)
-					.brushOn(true)
-					.elasticY(true)
-					.x(d3.scale.ordinal())
-					.xUnits(dc.units.ordinal)
-					.renderHorizontalGridLines(true)
-					.outerPadding(1)
-					.barPadding(.5)
-					// .gap(1)
-					;
-				*/
-			}
-			else
-			if (charts[i].type === 'wordcloud') {
-				charts[i].chart = dc.wordCloud('#chart' + i)
-					.width(width)
-					.height(height - _chart_padding)
-					.ordering(function(d){ return d.value; })
-					.dimension(dimension[i])
-					.group(group[i])
-					;
-			}
 			/*
-			else
-			if (charts[i].type === 'bubble') {
-				charts[i].chart = dc.bubbleChart('#chart' + i)
-					.width(width)
-					.height(height - _chart_padding)
-					.ordering(function(d){ return d.value; })
-					.dimension(dimension[i])
-					.group(group[i])
-					.brushOn(true)
-					.elasticY(true)
-					.x(d3.scale.ordinal())
-					.xUnits(dc.units.ordinal)
-					;
-			}
+			// for ordinal
+			charts[i].chart = dc.lineChart('#chart' + i)
+				.width(width)
+				.height(height - _chart_padding)
+				.dimension(dimension[i])
+				.group(group[i])
+				.elasticY(true)
+				.brushOn(true)
+				.x(d3.scale.ordinal())
+				.xUnits(dc.units.ordinal)
+				;
 			*/
-
-			if (charts[i].chart != null) {
-				charts[i].chart
-					.transitionDuration(1000)
-					.colors(color);
-
-				if (charts[i].sort === 'asc') {
-					charts[i].chart.ordering(function(d){ return d.value; })
-				}
-				else
-				if (charts[i].sort === 'desc') {
-					charts[i].chart.ordering(function(d){ return -d.value; })
-				}
-
-				if (charts[i].top === 'top') {
-					group[i].value = parseInt(charts[i].top_value);
-					charts[i].chart.data(function(group) {
-						return group.top(group.value);
-					});
-				}
-				else
-				if (charts[i].top === 'bottom') {
-					group[i].value = -parseInt(charts[i].top_value);
-					charts[i].chart.data(function(group) {
-						return group.top(Infinity).splice(group.value);
-					});
-				}
-			}
 		}
+		else
+		if (charts[i].type === 'bar') {
+			var data = group[i].top(Infinity);
+			var min = +Infinity;
+			var max = -Infinity;
+			for (var d = 0; d < data.length; d++) {
+				var value = parseFloat(data[d].key);
+				if (min > value)
+					min = value;
+				if (max < value)
+					max = value;
+			}
 
-		dc.renderAll();
+			charts[i].chart = dc.barChart('#chart' + i)
+				.width(width)
+				.height(height - _chart_padding)
+				.dimension(dimension[i])
+				.group(group[i])
+				.centerBar(true)
+				.brushOn(true)
+				.elasticY(true)
+				.x(d3.scale.linear().domain([min, max]))
+				.renderHorizontalGridLines(true)
+				.outerPadding(1)
+				.barPadding(.5)
+				.gap(1)
+				;
+			/*
+			// for ordinal
+			charts[i].chart = dc.barChart('#chart' + i)
+				.width(width)
+				.height(height - _chart_padding)
+				.dimension(dimension[i])
+				.group(group[i])
+				.centerBar(true)
+				.brushOn(true)
+				.elasticY(true)
+				.x(d3.scale.ordinal())
+				.xUnits(dc.units.ordinal)
+				.renderHorizontalGridLines(true)
+				.outerPadding(1)
+				.barPadding(.5)
+				// .gap(1)
+				;
+			*/
+		}
+		else
+		if (charts[i].type === 'wordcloud') {
+			charts[i].chart = dc.wordCloud('#chart' + i)
+				.width(width)
+				.height(height - _chart_padding)
+				.ordering(function(d){ return d.value; })
+				.dimension(dimension[i])
+				.group(group[i])
+				;
+		}
 		/*
-		d3.selectAll("g.x text")
-			.attr("class", "campusLabel")
-			.style("text-anchor", "end")
-			.attr("transform", "translate(-10,0)rotate(315)");
+		else
+		if (charts[i].type === 'bubble') {
+			charts[i].chart = dc.bubbleChart('#chart' + i)
+				.width(width)
+				.height(height - _chart_padding)
+				.ordering(function(d){ return d.value; })
+				.dimension(dimension[i])
+				.group(group[i])
+				.brushOn(true)
+				.elasticY(true)
+				.x(d3.scale.ordinal())
+				.xUnits(dc.units.ordinal)
+				;
+		}
 		*/
 
-	});
+		if (charts[i].chart != null) {
+			charts[i].chart
+				.transitionDuration(1000)
+				.colors(color);
+
+			if (charts[i].sort === 'asc') {
+				charts[i].chart.ordering(function(d){ return d.value; })
+			}
+			else
+			if (charts[i].sort === 'desc') {
+				charts[i].chart.ordering(function(d){ return -d.value; })
+			}
+
+			if (charts[i].top === 'top') {
+				group[i].value = parseInt(charts[i].top_value);
+				charts[i].chart.data(function(group) {
+					return group.top(group.value);
+				});
+			}
+			else
+			if (charts[i].top === 'bottom') {
+				group[i].value = -parseInt(charts[i].top_value);
+				charts[i].chart.data(function(group) {
+					return group.top(Infinity).splice(group.value);
+				});
+			}
+		}
+	}
+
+	dc.renderAll();
+	/*
+	d3.selectAll("g.x text")
+		.attr("class", "campusLabel")
+		.style("text-anchor", "end")
+		.attr("transform", "translate(-10,0)rotate(315)");
+	*/
 }
-
-
 
 var saveCount = 0;
 function documentSaveLayout() {
@@ -235,6 +228,25 @@ function documentDelete() {
 
 function documentChooseFile() {
 	$('[name=file]').click();
+}
+
+function documentSettings() {
+	$('#settings [name=data]').val(data_type);
+	documentDataType();
+	var modal = $.UIkit.modal("#settings").show();
+}
+
+function documentDataType() {
+	var source = $('#settings [name=data]').val();
+	if (source === 'file') {
+		$('#data-url').hide();
+		$('#choose-csv').fadeIn();
+	}
+	else
+	if (source === 'url') {
+		$('#choose-csv').hide();
+		$('#data-url').fadeIn();
+	}
 }
 
 function documentSettingsClose() {
@@ -304,8 +316,8 @@ function createChart(data) {
 	chart.resizable();
 	chart.css('z-index', count + _z_index);
 
-	if (data.x)			chart.css('left', data.x + 'px');
-	if (data.y)			chart.css('top',  data.y + 'px');
+	if (data.x)	chart.css('left', data.x + 'px');
+	if (data.y)	chart.css('top',  data.y + 'px');
 
 	if (data.maximize_width) {
 		var width = $(document).width();
