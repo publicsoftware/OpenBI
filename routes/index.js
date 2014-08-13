@@ -75,79 +75,80 @@ router.get('/document/:id', function(req, res) {
 	pool.getConnection(function(error, connection) {
 		if (error) {
 			res.redirect("/");
+			return;
 		}
-		else {
-			var user = req.session.info == null ? 0 : req.session.info.id;
-			var id = req.params.id;
-			connection.query(
+
+		var user = req.session.info == null ? 0 : req.session.info.id;
+		var id = req.params.id;
+		connection.query(
 			"select * from documents where id=? and (user=? or public=1)",
-				[id, user],
-			function (error, records) {
-				if (error || records.length === 0) {
+			[id, user],
+		function (error, records) {
+			if (error || records.length === 0) {
+				res.redirect("/");
+				connection.release();
+				return;
+			}
+
+			records[0].data = '/' + records[0].data;
+			connection.query("select * from objects where document=?",
+				[id],
+			function(error, objects) {
+				if (error) {
 					res.redirect("/");
+					connection.release();
+					return;
+				}
+
+				if (records[0].init == null) {
+					records[0].init = '';
+				}
+
+				var host = req.protocol + "://";
+				if (req.get('x-forwarded-host') == null) {
+					host += req.get('host');
 				}
 				else {
-					records[0].data = '/' + records[0].data;
-					connection.query("select * from objects where document=?",
-						[id],
-					function(error, objects) {
-						if (error) {
-							res.redirect("/");
-						}
-						else {
-							if (records[0].init == null) {
-								records[0].init = '';
-							}
-
-							var host = req.protocol + "://";
-							if (req.get('x-forwarded-host') == null) {
-								host += req.get('host');
-							}
-							else {
-								host += req.get('x-forwarded-host');
-							}
-
-							res.render('absolute.html', {
-								title: title + ' ' + records[0].name,
-								host: host,
-								user: user,
-								document: records[0],
-								charts: objects
-							});
-						}
-						connection.release();
-					});
+					host += req.get('x-forwarded-host');
 				}
+
+				res.render('absolute.html', {
+					title: title + ' ' + records[0].name,
+					host: host,
+					user: user,
+					document: records[0],
+					charts: objects
+				});
+				connection.release();
 			});
-		}
+		});
 	});
 });
 
 router.post('/document-delete/:id', function(req, res) {
 	if (req.session.info == null) {
 		res.send(ERROR);
+		return;
 	}
-	else {
-		pool.getConnection(function(error, db) {
+
+	pool.getConnection(function(error, db) {
+		if (error) {
+			res.send(ERROR);
+			return;
+		}
+		var id   = req.params.id;
+		var user = req.session.info.id;
+		var sql  = "delete from documents where id=? and user=?";
+		db.query(sql, [id, user], function(error, records) {
 			if (error) {
 				res.send(ERROR);
 			}
 			else {
-				var id   = req.params.id;
-				var user = req.session.info.id;
-				var sql  = "delete from documents where id=? and user=?";
-				db.query(sql, [id, user], function(error, records) {
-					if (error) {
-						res.send(ERROR);
-					}
-					else {
-						res.send(OK);
-					}
-					db.release();
-				});
+				res.send(OK);
 			}
+			db.release();
 		});
-	}
+	});
 });
 
 router.post('/document-save', function(req, res) {
