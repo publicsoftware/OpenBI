@@ -25,31 +25,31 @@
 <div>
 	<ul class='title'>
 		<li>
-			<a href="#drawer" id='navicon' data-uk-offcanvas
+			<a href="#drawer" id='navicon' data-uk-offcanvas title="Menu"
 				class="uk-icon-button uk-icon-bars"></a>
 		</li>
 		<li>
-			<a href="/" class="uk-icon-button uk-icon-home"></a>
+			<a href="/" class="uk-icon-button uk-icon-home" title="Home"></a>
 		</li>
 		<li>
-			<a href="javascript:location.reload()"
+			<a href="javascript:location.reload()" title="Refresh"
 				class="uk-icon-button uk-icon-refresh"></a>
 		</li>
 		<% if (user !== 0) { %>
 		<li>
-			<a href='javascript:createChart({})'
+			<a href='javascript:createChart({})' title="Add Chart"
 				class="uk-icon-button uk-icon-plus"></a>
 		</li>
 		<li>
-			<a href='javascript:documentSaveLayout()'
+			<a href='javascript:documentSaveLayout()' title="Save"
 				class="uk-icon-button uk-icon-save"></a>
 		</li>
 		<li>
-			<a href="#settings" data-uk-modal
+			<a href="#settings" data-uk-modal title="Settings"
 				class="uk-icon-button uk-icon-gears"></a>
 		</li>
 		<li>
-			<a href="javascript:documentViewData()"
+			<a href="javascript:documentViewData()" title="View Data"
 				class="uk-icon-button uk-icon-database"></a>
 		</li>
 		<% } %>
@@ -82,13 +82,13 @@
 	<span class='item' style='top:1920px;'>1920</span>
 </div>
 
-
 <script type="text/html" id="chart-template">
 <div class='chart' id='chart_id'>
 	<span class='handle'>
 		<span class='title'></span>
 		<span class='button'>
-			<i class="uk-icon-gears" onclick='javascript:chartSettings(_id)'></i>
+			<i class="uk-icon-gears" onclick='javascript:chartSettings(_id)'
+			title="Settings"></i>
 		</span>
 	</span>
 </div>
