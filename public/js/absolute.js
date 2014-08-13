@@ -66,11 +66,11 @@ function createCrossFilter(dataResult) {
 		}
 		else
 		if (charts[i].type === 'line') {
-			var data = group[i].top(Infinity);
+			var dat = group[i].top(Infinity);
 			var min = +Infinity;
 			var max = -Infinity;
-			for (var d = 0; d < data.length; d++) {
-				var value = parseFloat(data[d].key);
+			for (var d = 0; d < dat.length; d++) {
+				var value = parseFloat(dat[d].key);
 				if (min > value)
 					min = value;
 				if (max < value)
@@ -102,11 +102,11 @@ function createCrossFilter(dataResult) {
 		}
 		else
 		if (charts[i].type === 'bar') {
-			var data = group[i].top(Infinity);
+			var dat = group[i].top(Infinity);
 			var min = +Infinity;
 			var max = -Infinity;
-			for (var d = 0; d < data.length; d++) {
-				var value = parseFloat(data[d].key);
+			for (var d = 0; d < dat.length; d++) {
+				var value = parseFloat(dat[d].key);
 				if (min > value)
 					min = value;
 				if (max < value)
@@ -209,6 +209,8 @@ function createCrossFilter(dataResult) {
 		.style("text-anchor", "end")
 		.attr("transform", "translate(-10,0)rotate(315)");
 	*/
+
+	// console.log(data);
 }
 
 var saveCount = 0;
@@ -254,11 +256,24 @@ function documentSettingsClose() {
 }
 
 function documentViewData() {
-	$.get('/data/' + doc)
-	.success(function(result) {
-		$('#csv').val(result);
-		$.UIkit.modal("#data").show();
-	});
+	var MAX = 10;
+	var str = "";
+	for (var j = 0; j < columns.length - 1; j++) {
+		str += columns[j] + ",";
+	}
+	str += columns[columns.length - 1] + "\n";
+
+	MAX = Math.min(MAX, data.length);
+
+	for (var i = 0; i < MAX; i++) {
+		for (var j = 0; j < columns.length - 1; j++) {
+			str += data[i][columns[j]] + ",";
+		}
+		str += data[i][columns[columns.length - 1]] + "\n";
+	}
+
+	$('#data #csv').val(str);
+	$.UIkit.modal("#data").show();
 }
 
 function sampleCode() {
