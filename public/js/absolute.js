@@ -22,11 +22,12 @@ function createCrossFilter(dataResult) {
 
 	$('select[name=dimension]').html('');
 	$('select[name=group]').html('');
+	var sortedColumns = columns.sort();
 	for (var i = 0; i < columns.length; i++) {
 		$('select[name=dimension]')
-			.append('<option>' + columns[i] + '</option>');
+			.append('<option>' + sortedColumns[i] + '</option>');
 		$('select[name=group]')
-			.append('<option>' + columns[i] + '</option>');
+			.append('<option>' + sortedColumns[i] + '</option>');
 	}
 
 	// console.log(charts);
