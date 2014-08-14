@@ -42,6 +42,7 @@ router.get('/document-list', function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send(ERROR);
+			console.log(error);
 			return;
 		}
 		db.query("select * from documents where user=?",
@@ -73,6 +74,7 @@ router.get('/document/:id', function(req, res) {
 	pool.getConnection(function(error, connection) {
 		if (error) {
 			res.redirect("/");
+			console.log(error);
 			return;
 		}
 
@@ -136,6 +138,7 @@ router.post('/document-delete/:id', function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send(ERROR);
+			console.log(error);
 			return;
 		}
 		var id   = req.params.id;
@@ -167,6 +170,7 @@ router.post('/document-save', function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.redirect('/document/' + req.body.document);
+			console.log(error);
 			return;
 		}
 		db.query(
@@ -215,6 +219,7 @@ router.post('/object-delete', function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send(ERROR);
+			console.log(error);
 			return;
 		}
 
@@ -260,6 +265,7 @@ router.post('/object-save', function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send(ERROR);
+			console.log(error);
 			return;
 		}
 		db.query("select user from documents where id=?", [document],
@@ -347,6 +353,7 @@ router.get('/data/:id', function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send([]);
+			console.log(error);
 			return;
 		}
 		else {
@@ -380,6 +387,7 @@ router.post('/document-create', function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.redirect("/");
+			console.log(error);
 			return;
 		}
 		var name = req.body.name;
@@ -424,6 +432,7 @@ router.post('/login', function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send(ERROR);
+			console.log(error);
 			return;
 		}
 
