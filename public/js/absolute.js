@@ -389,7 +389,7 @@ function chartSettingsSave() {
 	$('#chart' + id + " .title").text(charts[id].name);
 	var modal = $.UIkit.modal("#chart-settings");
 	modal.hide();
-	restart();
+	start();
 }
 
 function sortChange() {
