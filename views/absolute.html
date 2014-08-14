@@ -6,10 +6,8 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no" />
 	<meta property="og:title" content="<%= title %>" />
 	<meta property="og:type" content="website" />
-	<meta property="og:description"
-		content="<%= title %>" />
-	<meta property="og:image"
-		content="<%= host %>/images/square.jpg" />
+	<meta property="og:description" content="<%= title %>" />
+	<meta property="og:image" content="<%= host %>/images/square.jpg" />
 	<meta property="og:image:type" content="image/jpg" />
 	<title><%= title %></title>
 	<link rel="icon" type="image/png" href="/favicon.png" />
@@ -96,6 +94,8 @@
 </div>
 </script>
 
+<script type="text/html" id="init"><%- document.init %></script>
+
 <%- include chart-settings.html %>
 <%- include document-settings.html %>
 <%- include document-data.html %>
@@ -132,20 +132,7 @@ $(document).ready(function() {
 	main();
 });
 
-<%
-	var init = document.init;
-	// escape for " not need for ' < >
-	init = init.replace(/\r/g, '');
-	init = init.replace(/"/g, "\\\"");
-	var lines = init.split('\n');
-	init = "";
-	for (var i = 0; i < lines.length; i++) {
-		init += '"' + lines[i] + '\\n" + ';
-	}
-	init += '""';
-%>
-
-var init = <%- init %>;
+var init = $('#init').text();
 
 function main() {
 	$('.chart').remove();
