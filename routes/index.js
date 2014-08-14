@@ -344,13 +344,14 @@ router.get('/data', function(req, res) {
 });
 
 router.get('/data/:id', function(req, res) {
-	pool.getConnection(function(error, connection) {
+	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send([]);
+			return;
 		}
 		else {
 			var user = req.session.info ? req.session.info.id : 0;
-			connection.query(
+			db.query(
 			"select * from documents where id=? and (user=? or public=1)",
 			[req.params.id, user],
 			function (error, records) {
@@ -365,7 +366,7 @@ router.get('/data/:id', function(req, res) {
 						res.sendfile(records[0].data);
 					}
 				}
-				connection.release();
+				db.release();
 			});
 		}
 	});
@@ -374,79 +375,76 @@ router.get('/data/:id', function(req, res) {
 router.post('/document-create', function(req, res) {
 	if (req.session.info == null) {
 		res.redirect("/login");
+		return;
 	}
-	else {
-		pool.getConnection(function(error, db) {
-			if (error) {
-				res.redirect("/");
-			}
-			else {
-				var name = req.body.name;
-				if (name == null) {
-					name = '';
-				}
-				var path = req.files.file ? req.files.file.path : '';
-				var file = req.files.file ? req.files.file.originalname : '';
-				if (path === '') {
-					db.query("insert into documents(user, name)"+
-						" values(?, ?)",
-						[req.session.info.id, name],
-					function(error, result) {
-						if (result == null) {
-							res.redirect("/");
-						}
-						else {
-							res.redirect("/document/" + result.insertId);
-						}
-						db.release();
-					});
+	pool.getConnection(function(error, db) {
+		if (error) {
+			res.redirect("/");
+			return;
+		}
+		var name = req.body.name;
+		if (name == null) {
+			name = '';
+		}
+		var path = req.files.file ? req.files.file.path : '';
+		var file = req.files.file ? req.files.file.originalname : '';
+		if (path === '') {
+			db.query("insert into documents(user, name)"+
+				" values(?, ?)",
+				[req.session.info.id, name],
+			function(error, result) {
+				if (result == null) {
+					res.redirect("/");
 				}
 				else {
-					db.query("insert into documents(user, name, "+
-						" data_type, data_name, data) " +
-						" values(?, ?, 'file', ?, ?)",
-						[req.session.info.id, name, file, path],
-					function(error, result) {
-						if (result == null) {
-							res.redirect("/");
-						}
-						else {
-							res.redirect("/document/" + result.insertId);
-						}
-						db.release();
-					});
+					res.redirect("/document/" + result.insertId);
 				}
-			}
-		});
-	}
-});
-
-router.post('/login', function(req, res) {
-	pool.getConnection(function(error, connection) {
-		if (error) {
-			res.send(ERROR);
+				db.release();
+			});
 		}
 		else {
-			var digest = crypto.createHash('sha256').update(req.body.password)
-					.digest("hex");
-			connection.query('select * from users where email=? or user=?',
-			[req.body.username, req.body.username],
-			function(error, rows) {
-				if (error == null &&
-					rows.length > 0 &&
-					rows[0].password === digest)
-				{
-					req.session.info = rows[0];
-					res.send(OK);
+			db.query("insert into documents(user, name, "+
+				" data_type, data_name, data) " +
+				" values(?, ?, 'file', ?, ?)",
+				[req.session.info.id, name, file, path],
+			function(error, result) {
+				if (result == null) {
+					res.redirect("/");
 				}
 				else {
-					res.send(ERROR);
+					res.redirect("/document/" + result.insertId);
 				}
-				connection.release();
+				db.release();
 			});
 		}
 	});
+});
 
+router.post('/login', function(req, res) {
+	pool.getConnection(function(error, db) {
+		if (error) {
+			res.send(ERROR);
+			return;
+		}
+
+		var digest = crypto.createHash('sha256').update(req.body.password)
+				.digest("hex");
+		db.query('select * from users where email=? or user=?',
+		[req.body.username, req.body.username],
+		function(error, rows) {
+			if (error == null &&
+				rows.length > 0 &&
+				rows[0].password === digest)
+			{
+				req.session.info = rows[0];
+				res.send(OK);
+			}
+			else {
+				res.send(ERROR);
+			}
+			db.release();
+		});
+	});
 });
 
 router.get('/debug-stock', function(req, res) {
