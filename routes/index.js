@@ -210,134 +210,133 @@ router.post('/document-save', function(req, res) {
 router.post('/object-delete', function(req, res) {
 	if (req.session.info == null) {
 		res.send(ERROR);
+		return;
 	}
-	else {
-		pool.getConnection(function(error, connection) {
+	pool.getConnection(function(error, db) {
+		if (error) {
+			res.send(ERROR);
+			return;
+		}
+
+		var id = parseInt(req.body.id);
+		var document = parseInt(req.body.document);
+		db.query("select user from documents where id=?", [document],
+		function(error, records) {
 			if (error) {
 				res.send(ERROR);
+				db.release();
+				return;
 			}
-			else {
-				var id = parseInt(req.body.id);
-				var document = parseInt(req.body.document);
-				connection.query("select user from documents where id=?",
-				[document],
-				function(error, records) {
-					if (error) {
-						res.send(ERROR);
-					}
-					else
-					{
-						if (records[0].user === req.session.info.id) {
-							connection.query("delete from objects where id=?",
-							[id],
-							function(errors, records) {
-								if (errors) {
-									res.send(ERROR);
-								}
-								else {
-									res.send(OK);
-								}
-								connection.release();
-							});
-						}
-						else {
+			else
+			{
+				if (records[0].user === req.session.info.id) {
+					db.query("delete from objects where id=?", [id],
+					function(errors, records) {
+						if (errors) {
 							res.send(ERROR);
 						}
-					}
-				});
+						else {
+							res.send(OK);
+						}
+						db.release();
+					});
+				}
+				else {
+					res.send(ERROR);
+					db.release();
+				}
 			}
 		});
-	}
+	});
 });
 
 router.post('/object-save', function(req, res) {
-	var id = parseInt(req.body.id);
-	var document = parseInt(req.body.document);
-
 	if (req.session.info == null) {
 		res.send(ERROR);
+		return;
 	}
-	else {
-		pool.getConnection(function(error, connection) {
+	var id = parseInt(req.body.id);
+	var document = parseInt(req.body.document);
+	pool.getConnection(function(error, db) {
+		if (error) {
+			res.send(ERROR);
+			return;
+		}
+		db.query("select user from documents where id=?", [document],
+		function(error, records) {
 			if (error) {
 				res.send(ERROR);
+				db.release();
+				return;
 			}
-			else {
-				connection.query("select user from documents where id=?",
-				[document],
-				function(error, records) {
-					if (error) {
-						res.send(ERROR);
-					}
-					else
-					{
-						var type      = req.body.type;
-						var dimension = req.body.dimension;
-						var group     = req.body.group;
+			else
+			{
+				var type      = req.body.type;
+				var dimension = req.body.dimension;
+				var group     = req.body.group;
 
-						if (records[0].user === req.session.info.id) {
-							if (id === 0) {
-								connection.query(
-										"insert into objects(document, name, " +
-										" type, dimension, reduce, sort, " +
-										" top, top_value, " +
-										" maximize_width, maximize_height, " +
-										" x, y, width, height) " +
-									" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-								[document,
-									req.body.name, type,
-									dimension, group,
-									req.body.sort,
-									req.body.top, req.body.top_value,
-									req.body.maximize_width,
-									req.body.maximize_height,
-									req.body.x, req.body.y,
-									req.body.width, req.body.height],
-								function(error, rows) {
-									if (error) {
-										res.send(ERROR);
-									}
-									else {
-										res.send(OK);
-									}
-								});
+				if (records[0].user === req.session.info.id) {
+					if (id === 0) {
+						db.query(
+							"insert into objects(document, name, " +
+							" type, dimension, reduce, sort, " +
+							" top, top_value, " +
+							" maximize_width, maximize_height, " +
+							" x, y, width, height) " +
+							" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+						[document,
+							req.body.name, type,
+							dimension, group,
+							req.body.sort,
+							req.body.top, req.body.top_value,
+							req.body.maximize_width,
+							req.body.maximize_height,
+							req.body.x, req.body.y,
+							req.body.width, req.body.height],
+						function(error, rows) {
+							if (error) {
+								res.send(ERROR);
 							}
 							else {
-								connection.query("update objects set " +
-									" name=?, type=?, dimension=?, reduce=?," +
-									" sort=?, top=?, top_value=?," +
-									" x=?, y=?, width=?, height=?, " +
-									" maximize_width=?, maximize_height=? " +
-									" where id = ?"
-								,[req.body.name, type,
-									dimension, group,
-									req.body.sort,
-									req.body.top, req.body.top_value,
-									req.body.x, req.body.y,
-									req.body.width, req.body.height,
-									req.body.maximize_width,
-									req.body.maximize_height,
-									id],
-								function(error, rows) {
-									if (error) {
-										res.send(ERROR);
-									}
-									else {
-										res.send(OK);
-									}
-									connection.release();
-								});
+								res.send(OK);
 							}
-						}
-						else {
-							res.send(ERROR);
-						}
+							db.release();
+						});
 					}
-				});
+					else {
+						db.query("update objects set " +
+							" name=?, type=?, dimension=?, reduce=?," +
+							" sort=?, top=?, top_value=?," +
+							" x=?, y=?, width=?, height=?, " +
+							" maximize_width=?, maximize_height=? " +
+							" where id = ?"
+						,[req.body.name, type,
+							dimension, group,
+							req.body.sort,
+							req.body.top, req.body.top_value,
+							req.body.x, req.body.y,
+							req.body.width, req.body.height,
+							req.body.maximize_width,
+							req.body.maximize_height,
+							id],
+						function(error, rows) {
+							if (error) {
+								res.send(ERROR);
+							}
+							else {
+								res.send(OK);
+							}
+							db.release();
+						});
+					}
+				}
+				else {
+					res.send(ERROR);
+					db.release();
+				}
 			}
 		});
-	}
-
+	});
 });
 
 router.get('/data', function(req, res) {
