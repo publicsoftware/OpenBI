@@ -166,15 +166,15 @@ function main() {
 	$('body').append(
 	"<div id='pad-bottom' style='position:absolute;background:none;'></div>");
 
-	$('#pad-right').css('width',  _grid_size + 'px');
-	$('#pad-right').css('height', _grid_size + 'px');
+	$('#pad-right') .css('width',  _grid_size + 'px');
+	$('#pad-right') .css('height', _grid_size + 'px');
 	$('#pad-bottom').css('width',  _grid_size + 'px');
 	$('#pad-bottom').css('height', _grid_size + 'px');
 	resize();
-	restart();
+	start();
 }
 
-function restart() {
+function start() {
 	if (data_type === 'file') {
 		d3.csv("/data/<%= document.id %>", createCrossFilter);
 	}
