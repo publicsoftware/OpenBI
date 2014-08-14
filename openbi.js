@@ -50,5 +50,5 @@ app.use(function(err, req, res, next) {
 });
 
 var server = app.listen(PORT, function() {
-	console.log('Express server listening on port ' + server.address().port);
+	console.log('OpenBI listening on port ' + server.address().port);
 });

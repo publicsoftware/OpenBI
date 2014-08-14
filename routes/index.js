@@ -37,24 +37,22 @@ router.get('/session', function(req, res) {
 router.get('/document-list', function(req, res) {
 	if (req.session.info == null) {
 		res.send(ERROR);
+		return;
 	}
-	else {
-		pool.getConnection(function(error, db) {
-			if (error) {
-				res.send(ERROR);
-			}
-			else {
-				db.query("select * from documents where user=?",
-				[req.session.info.id],
-				function(error, records) {
-					var result = OK;
-					result.data = records;
-					res.send(result);
-					db.release();
-				});
-			}
+	pool.getConnection(function(error, db) {
+		if (error) {
+			res.send(ERROR);
+			return;
+		}
+		db.query("select * from documents where user=?",
+		[req.session.info.id],
+		function(error, records) {
+			var result = OK;
+			result.data = records;
+			res.send(result);
+			db.release();
 		});
-	}
+	});
 });
 
 
