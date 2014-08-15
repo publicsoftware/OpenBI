@@ -20,9 +20,14 @@ pool.on('error', function(err) {
 });
 
 router.get('/', function(req, res) {
-	res.render('index.html', {
-		title: title
-	});
+	if (req.session.info == null) {
+		res.render('welcome.html', {title: title});
+	}
+	else {
+		res.render('index.html', {
+			title: title
+		});
+	}
 });
 
 router.get('/session', function(req, res) {
@@ -54,16 +59,6 @@ router.get('/document-list', function(req, res) {
 			db.release();
 		});
 	});
-});
-
-
-router.get('/logout', function(req, res) {
-	req.session.destroy();
-	res.send(OK);
-});
-
-router.get('/debug', function(req, res) {
-	res.send(OK);
 });
 
 router.get('/document', function(req, res) {
@@ -428,7 +423,60 @@ router.post('/document-create', function(req, res) {
 	});
 });
 
+router.get('/login', function(req, res) {
+	if (req.session.info == null) {
+		res.render('login.html', { title: title });
+	}
+	else {
+		res.redirect("/");
+	}
+});
+
 router.post('/login', function(req, res) {
+	pool.getConnection(function(error, db) {
+		if (error) {
+			res.redirect("/login?error=Unable to connect to database");
+			console.log(error);
+			return;
+		}
+
+		var digest = crypto.createHash('sha256').update(req.body.password)
+						.digest("hex");
+		db.query('select * from users where email=? or user=?',
+			[req.body.username, req.body.username],
+		function(error, r) {
+			if (error == null && r.length > 0 && r[0].password === digest) {
+				req.session.info = r[0];
+				res.redirect("/");
+			}
+			else {
+				res.redirect("/login?error=Invalid user name or password");
+			}
+			db.release();
+		});
+	});
+});
+
+router.get('/logout', function(req, res) {
+	req.session.destroy();
+	res.redirect("/"); // or res.render('logout.html', { title: title });
+});
+
+
+/*
+
+SPA version
+
+router.get('/logout-spa', function(req, res) {
+	req.session.destroy();
+	res.send(OK);
+});
+
+router.get('/debug', function(req, res) {
+	res.send(OK);
+});
+
+router.post('/login-spa', function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send(ERROR);
@@ -455,6 +503,8 @@ router.post('/login', function(req, res) {
 		});
 	});
 });
+
+*/
 
 router.get('/debug-stock', function(req, res) {
 	res.render('debug-stock.html', { title: title });

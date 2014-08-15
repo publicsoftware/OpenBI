@@ -7,19 +7,18 @@
 				class="uk-icon-button uk-icon-bars"></a>
 		</li>
 		<li>
-			<a href="javascript:showIndex()"
-				class="uk-icon-button uk-icon-home"></a>
+			<a href="/" class="uk-icon-button uk-icon-home"></a>
 		</li>
 		<li>
-			<%= title %>
-		</li>
-		<li>
-			<a href='javascript:showNew()' id='new' style='display:none;'
+			<a href='javascript:showNew()' id='new'
 				class="uk-icon-button uk-icon-file-o"></a>
 		</li>
 		<li>
-			<a href="javascript:logout()" id='logout' style='display:none;'
+			<a href="/logout" id='logout'
 				class="uk-icon-button uk-icon-sign-out"></a>
+		</li>
+		<li>
+			<%= title %>
 		</li>
 	</ul>
 </div>
@@ -53,111 +52,31 @@
 "use strict";
 $.ajaxSetup({cache: false});
 $(document).ready(main);
-var session = null;
 
 function main() {
-	$.getJSON('/session')
+	$.getJSON('/document-list')
 	.success(function(result) {
 		if (result.result === 'ok') {
-			session = result;
-			showIndex();
-		}
-		else {
-			session = null;
-			showWelcome();
-		}
-		updateToolbar();
-	})
-	.error(function(result) {
-		showWelcome();
-	});
-}
-
-function updateToolbar() {
-	if (session == null) {
-		$('#logout').fadeOut();
-		$('#new').fadeOut();
-	}
-	else {
-		$('#logout').fadeIn();
-		$('#new').fadeIn();
-	}
-}
-
-function showIndex() {
-	if (session == null) {
-		showWelcome();
-	}
-	else {
-		$.getJSON('/document-list')
-		.success(function(result) {
-			if (result.result === 'ok') {
-				var html = "<div class='uk-grid uk-grid-preserve'>";
-				for (var i = 0; i < result.data.length; i++) {
-					if (result.data[i].name == '')
-						result.data[i].name = '&nbsp;';
-					html += $('#folder-template').html()
-						.replace('_id',   result.data[i].id)
-						.replace('_name', result.data[i].name)
-						;
-				}
-				html += "</div>";
-				$('#main').html(html);
-				updateToolbar();
+			var html = "<div class='uk-grid uk-grid-preserve'>";
+			for (var i = 0; i < result.data.length; i++) {
+				if (result.data[i].name == '')
+					result.data[i].name = '&nbsp;';
+				html += $('#folder-template').html()
+					.replace('_id',   result.data[i].id)
+					.replace('_name', result.data[i].name)
+					;
 			}
-		});
-	}
+			html += "</div>";
+			$('#main').html(html);
+		}
+	});
 }
 
 function showDocument(id) {
 	window.location = "/document/" + id;
 }
 
-function showWelcome() {
-	$.get('/welcome.html')
-	.success(function(result) {
-		$('#main').html(result);
-		updateToolbar();
-	});
-}
-
-function showLogin() {
-	if (session == null) {
-		$.get('/login.html')
-		.success(function(result) {
-			$('#main').html(result);
-			$('[name=username]').focus();
-		});
-	}
-	else {
-		showIndex();
-	}
-}
-
-function login() {
-	var username = $('[name=username]').val();
-	var password = $('[name=password]').val();
-	$.post('/login', {username: username, password: password})
-	.success(function(result) {
-		if (result.result === 'ok') {
-			main();
-		}
-		else {
-			showWelcome();
-		}
-	});
-}
-
-function logout() {
-	$.get('/logout')
-	.success(function() {
-		session = null;
-		showWelcome();
-	})
-}
-
 </script>
-
 
 <%- include document-new.html %>
 <%- include drawer.html %>

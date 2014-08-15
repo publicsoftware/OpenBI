@@ -2,24 +2,17 @@
 body {
 	background: white;
 }
-.uk-container {
-	padding: 0;
+form>* {
+	display: block;
+	margin: 0 auto;
 }
 </style>
 <form class="uk-form" id='login-form' action='javascript:login()'>
 	<h1>Log In</h1>
-	<div class="uk-grid uk-grid-preserve">
-		<label class="uk-width-4-10 uk-width-small-1-3">User Name</label>
-		<input class="uk-width-3-10 uk-width-small-2-3" type="text" name="username"
-					autofocus placeholder="User Name" />
-	</div>
-	<div class="uk-grid uk-grid-preserve">
-		<label class="uk-width-4-10 uk-width-small-1-3">Password</label>
-		<input class="uk-width-3-10 uk-width-small-2-3" type="password" name="password"
-					placeholder="Password"/>
-	</div>
-	<div class="uk-grid uk-grid-preserve">
-		<span  class="uk-width-4-10 uk-width-small-1-3">&nbsp;</span>
-		<input type="submit" value="Log In" class="uk-button" />
-	</div>
+	<input type="text" name="username"
+		autofocus placeholder="User Name" />
+	<input type="password" name="password"
+		placeholder="Password"/>
+	<br/>
+	<input type="submit" value="Log In" class="uk-button" />
 </form>
