@@ -1,76 +1,58 @@
 <%- include header.html %>
 
-<div>
-	<ul class='title'>
-		<li>
-			<a href="#drawer" id='navicon' data-uk-offcanvas
-				class="uk-icon-button uk-icon-bars"></a>
-		</li>
-		<li>
-			<a href="/" class="uk-icon-button uk-icon-home"></a>
-		</li>
-		<li>
-			<a href='javascript:showNew()' id='new'
-				class="uk-icon-button uk-icon-file-o"></a>
-		</li>
-		<li>
-			<a href="/logout" id='logout'
-				class="uk-icon-button uk-icon-sign-out"></a>
-		</li>
-		<li>
-			<%= title %>
-		</li>
-	</ul>
-</div>
+<ul class='title'>
+	<li>
+		<a href="#drawer" id='navicon' data-uk-offcanvas
+			class="uk-icon-button uk-icon-bars"></a>
+	</li>
+	<li>
+		<a href="/" class="uk-icon-button uk-icon-home"></a>
+	</li>
+	<li>
+		<a href='javascript:showNew()' id='new'
+			class="uk-icon-button uk-icon-file-o"></a>
+	</li>
+	<li>
+		<a href="/logout" id='logout'
+			class="uk-icon-button uk-icon-sign-out"></a>
+	</li>
+	<li>
+		<%= title %>
+	</li>
+</ul>
 
 <div class='uk-container' id='main'>
-
-</div>
-
-<div class="uk-modal" id="modal">
-	<div class="uk-modal-dialog">
-		<a class="uk-modal-close uk-close"></a>
-		<div class="content">
+	<div class='uk-grid uk-grid-preserve'>
+		<% for (var i = 0; i < document.length; i++) { %>
+		<div class='folder uk-width-1-2 uk-width-small-1-3 uk-width-medium-1-4
+			uk-width-large-1-5' onclick='showDocument(<%= document[i].id %>)'>
+			<div class='block'>
+				<div class='name'>
+					<p><%= document[i].name %></p>
+				</div>
+				<div class='detail'>
+				</div>
+			</div>
 		</div>
+		<% } %>
 	</div>
-</div>
 
-<script type='text/html' id='folder-template'>
-<div class='folder uk-width-1-2 uk-width-small-1-3 uk-width-medium-1-4
-	uk-width-large-1-5' onclick='showDocument(_id)'>
-	<div class='block'>
-		<div class='name'>
-			<p>_name</p>
-		</div>
-		<div class='detail'>
-		</div>
-	</div>
 </div>
-</script>
-
 <script>
 "use strict";
 $.ajaxSetup({cache: false});
-$(document).ready(main);
 
-function main() {
-	$.getJSON('/document-list')
-	.success(function(result) {
-		if (result.result === 'ok') {
-			var html = "<div class='uk-grid uk-grid-preserve'>";
-			for (var i = 0; i < result.data.length; i++) {
-				if (result.data[i].name == '')
-					result.data[i].name = '&nbsp;';
-				html += $('#folder-template').html()
-					.replace('_id',   result.data[i].id)
-					.replace('_name', result.data[i].name)
-					;
-			}
-			html += "</div>";
-			$('#main').html(html);
-		}
-	});
-}
+/*
+$(document).ready(function() {
+	var bodyHeight = $('body').height();
+	var windowHeight = $(window).height();
+	if (bodyHeight < windowHeight) {
+		// console.log(bodyHeight);
+		// console.log(windowHeight);
+		$('body').height(windowHeight + 'px');
+	}
+});
+*/
 
 function showDocument(id) {
 	window.location = "/document/" + id;
@@ -86,6 +68,13 @@ function chooseFile() {
 }
 
 </script>
+
+<style>
+body {
+	background: lightsteelblue;
+	box-shadow: inset 0px 0px 400px rgba(0,0,0,.5);
+}
+</style>
 
 <%- include document-new.html %>
 <%- include drawer.html %>

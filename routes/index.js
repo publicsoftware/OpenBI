@@ -22,12 +22,24 @@ pool.on("error", function(err) {
 router.get("/", function(req, res) {
 	if (req.session.info == null) {
 		res.redirect("/login")
+		return;
 	}
-	else {
-		res.render("index.html", {
-			title: title
+	pool.getConnection(function(error, db) {
+		if (error) {
+			res.send(ERROR);
+			console.log(error);
+			return;
+		}
+		db.query("select * from documents where user=?",
+		[req.session.info.id],
+		function(error, records) {
+			res.render("index.html", {
+				title: title,
+				document: records
+			});
+			db.release();
 		});
-	}
+	});
 });
 
 router.get("/document-list", function(req, res) {

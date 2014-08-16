@@ -11,7 +11,6 @@
 		</div>
 
 		<div class="uk-width-3-10">
-
 			<form class="uk-form" id='login-form' method="post">
 				<span class="center">
 					<h2>Log In</h2>
@@ -33,14 +32,19 @@
 </div>
 
 
+<script>
+$(document).ready(function() {
+	var bodyHeight = $('body').height();
+	var windowHeight = $(window).height();
+	if (bodyHeight < windowHeight) {
+		$('body').height(windowHeight + 'px');
+	}
+});
+</script>
+
 <style>
 body {
-	padding-top: 40px;
 	background: lightsteelblue;
-}
-
-html {
-	height: 100%;
 	box-shadow: inset 0px 0px 400px rgba(0,0,0,.5);
 }
 </style>

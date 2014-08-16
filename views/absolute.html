@@ -20,45 +20,43 @@
 </head>
 <body>
 
-<div>
-	<ul class='title'>
-		<!--
-		<li>
-			<a href="#drawer" id='navicon' data-uk-offcanvas title="Menu"
-				class="uk-icon-button uk-icon-bars"></a>
-		</li>
-		-->
-		<li>
-			<a href="/" class="uk-icon-button uk-icon-home" title="Home"></a>
-		</li>
-		<li>
-			<a href="javascript:location.reload()" title="Refresh"
-				class="uk-icon-button uk-icon-refresh"></a>
-		</li>
-		<% if (user !== 0) { %>
-		<li>
-			<a href='javascript:createChart({})' title="Add Chart"
-				class="uk-icon-button uk-icon-plus"></a>
-		</li>
-		<li>
-			<a href='javascript:documentSaveLayout()' title="Save"
-				class="uk-icon-button uk-icon-save"></a>
-		</li>
-		<li>
-			<a href="javascript:documentSettings()" title="Settings"
-				class="uk-icon-button uk-icon-gears"></a>
-		</li>
-		<li>
-			<a href="javascript:documentViewData()" title="View Data"
-				class="uk-icon-button uk-icon-database"></a>
-		</li>
-		<% } %>
-		<li>
-			<!-- <h2 style='margin:0; text-shadow: 0 1px white;'> -->
-			<%= document.name %>
-		</li>
-	</ul>
-</div>
+<ul class='title'>
+	<!--
+	<li>
+		<a href="#drawer" id='navicon' data-uk-offcanvas title="Menu"
+			class="uk-icon-button uk-icon-bars"></a>
+	</li>
+	-->
+	<li>
+		<a href="/" class="uk-icon-button uk-icon-home" title="Home"></a>
+	</li>
+	<li>
+		<a href="javascript:location.reload()" title="Refresh"
+			class="uk-icon-button uk-icon-refresh"></a>
+	</li>
+	<% if (user !== 0) { %>
+	<li>
+		<a href='javascript:createChart({})' title="Add Chart"
+			class="uk-icon-button uk-icon-plus"></a>
+	</li>
+	<li>
+		<a href='javascript:documentSaveLayout()' title="Save"
+			class="uk-icon-button uk-icon-save"></a>
+	</li>
+	<li>
+		<a href="javascript:documentSettings()" title="Settings"
+			class="uk-icon-button uk-icon-gears"></a>
+	</li>
+	<li>
+		<a href="javascript:documentViewData()" title="View Data"
+			class="uk-icon-button uk-icon-database"></a>
+	</li>
+	<% } %>
+	<li>
+		<!-- <h2 style='margin:0; text-shadow: 0 1px white;'> -->
+		<%= document.name %>
+	</li>
+</ul>
 
 <div class='ruler horz'>
 	<span class='item' style='left:320px;' > 320</span>
