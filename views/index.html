@@ -47,16 +47,8 @@
 
 $(document).ready(function() {
 	var t = new Trianglify({noiseIntensity: 0});
-	/*
-	var pattern = t.generate(document.body.clientWidth,
-		document.body.clientHeight);
-	*/
-	var pattern = t.generate(800, 600);
-	$('body').css('background', pattern.dataUrl);
-	$('body').css('background-repeat', 'no-repeat');
-	$('body').css('background-position', 'center');
-	$('body').css('background-size', 'cover');
-	$('body').css('background-attachment', 'fixed');
+	var p = t.generate(document.body.clientWidth, document.body.clientHeight);
+	$('body').css('background-image', p.dataUrl);
 });
 
 function showDocument(id) {
