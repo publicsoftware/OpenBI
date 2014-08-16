@@ -1,35 +1,48 @@
 <%- include header.html %>
 
+<div class="uk-container">
+	<div class="uk-grid uk-grid-preserve">
+
+		<div class="uk-width-7-10" id="welcome">
+			<h1>Welcome to OpenBI</h1>
+			The easiest way to create interactive dashboard.
+			<br/>
+			<a href="/openbi.pdf">User's Guide</a>
+		</div>
+
+		<div class="uk-width-3-10">
+
+			<form class="uk-form" id='login-form' method="post">
+				<span class="center">
+					<h2>Log In</h2>
+				</span>
+
+				<input type="text" name="username"
+					autofocus placeholder="User Name" />
+				<input type="password" name="password"
+					placeholder="Password"/>
+
+				<span class="center">
+					<input type="submit" value="Log In" class="uk-button" />
+				</span>
+				<!-- TODO forget password -->
+			</form>
+		</div>
+
+	</div>
+</div>
+
+
 <style>
 body {
-	background: white;
+	padding-top: 40px;
+	background: lightsteelblue;
 }
 
-form>* {
-	display: block;
-	margin: 0 auto;
-}
-
-.center {
-	text-align: center;
+html {
+	height: 100%;
+	box-shadow: inset 0px 0px 400px rgba(0,0,0,.5);
 }
 </style>
 
-<form class="uk-form" id='login-form' method="post">
-	<span class="center">
-		<h2>Log In</h2>
-	</span>
-
-	<input type="text" name="username"
-		autofocus placeholder="User Name" />
-	<input type="password" name="password"
-		placeholder="Password"/>
-
-	<span class="center">
-		<input type="submit" value="Log In" class="uk-button" />
-	</span>
-	<!-- TODO forget password -->
-</form>
-
-<%- include drawer.html %>
 <%- include footer.html %>

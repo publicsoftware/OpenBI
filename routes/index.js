@@ -21,7 +21,7 @@ pool.on("error", function(err) {
 
 router.get("/", function(req, res) {
 	if (req.session.info == null) {
-		res.render("welcome.html", {title: title});
+		res.redirect("/login")
 	}
 	else {
 		res.render("index.html", {

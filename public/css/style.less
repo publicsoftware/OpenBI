@@ -10,18 +10,15 @@ body {
 }
 
 h1,h2,h3,h4,h5,h6 {
-	font-weight: 200;
+	font-weight: 100;
 }
 
 a { text-decoration: none; }
 a:hover { text-decoration: none; }
 
-#main {
+
+.uk-container {
 	margin: 0 auto;
-	.uk-grid {
-		margin: 0 auto;
-		text-align: center;
-	}
 }
 
 .uk-form {
@@ -138,6 +135,7 @@ input[type=checkbox] {
 
 .modal-button {
 	margin: 0;
+	min-height: 20px;
 	input {
 		float: right;
 		margin: 0;
@@ -145,6 +143,40 @@ input[type=checkbox] {
 	}
 }
 
+
+#main {
+	margin: 0 auto;
+	.uk-grid {
+		margin: 0 auto;
+		text-align: center;
+	}
+}
+
+#login-form {
+	background:white;
+	border-radius:4px;
+	opacity: 0.95;
+	transition: all 0.25s ease-in-out;
+	&:hover {
+		opacity: 1.0;
+	}
+	input[type=text],
+	input[type=password] {
+		width: 100%;
+	}
+}
+
+#welcome {
+	background: white;
+	height: 400px;
+	border-radius: 4px;
+	padding: 20px;
+	opacity: 0.95;
+	transition: all 0.25s ease-in-out;
+	&:hover {
+		opacity: 1.0;
+	}
+}
 
 @media print {
 	ul.title {
@@ -158,6 +190,22 @@ input[type=checkbox] {
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
