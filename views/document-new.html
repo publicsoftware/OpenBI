@@ -15,22 +15,13 @@
 				<a href="javascript:theme('Light')" class="uk-button">
 					Light
 				</a>
-
 				<a href="javascript:theme('Dark')" class="uk-button">
 					Dark
 				</a>
-
 			</div>
 -->
 
 			Data &nbsp;&nbsp;&nbsp;&nbsp;
-<!--
-			<select>
-				<option>Data 1</option>
-				<option>Data 2</option>
-				<option>Data 3</option>
-			</select>
--->
 			<a href="javascript:chooseFile()" class="uk-button">
 				Choose CSV File
 			</a>
@@ -43,7 +34,6 @@
 			<input type="submit" value="Create"
 					class="uk-button uk-button-primary" />
 		</form>
-
 	</div>
 </div>
 
@@ -57,7 +47,4 @@ function chooseFile() {
 	$('[name=file]').click();
 }
 
-function theme(t) {
-	$('[name=theme]').val(t);
-}
 </script>

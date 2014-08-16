@@ -1,0 +1,35 @@
+<%- include header.html %>
+
+<style>
+body {
+	background: white;
+}
+
+form>* {
+	display: block;
+	margin: 0 auto;
+}
+
+.center {
+	text-align: center;
+}
+</style>
+
+<form class="uk-form" id='login-form' method="post">
+	<span class="center">
+		<h2>Log In</h2>
+	</span>
+
+	<input type="text" name="username"
+		autofocus placeholder="User Name" />
+	<input type="password" name="password"
+		placeholder="Password"/>
+
+	<span class='center'>
+		<input type="submit" value="Log In" class="uk-button" />
+	</span>
+	<!-- TODO forget password -->
+</form>
+
+<%- include drawer.html %>
+<%- include footer.html %>
