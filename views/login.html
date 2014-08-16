@@ -37,7 +37,11 @@
 <script src="/js/trianglify.js"></script>
 <script>
 $(document).ready(function() {
-	var t = new Trianglify({noiseIntensity: 0});
+	var t = new Trianglify({
+		noiseIntensity: 0
+		,cellsize: 60
+		// ,x_gradient: Trianglify.colorbrewer.BuGn[0]
+		});
 	var p = t.generate(document.body.clientWidth, document.body.clientHeight);
 	$('body').css('background-image', p.dataUrl);
 });
