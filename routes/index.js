@@ -4,42 +4,33 @@ var mysql	= require('mysql');
 var crypto	= require('crypto');
 var http    = require('http');
 
-var title = 'OpenBI';
-var OK    = { result: 'ok' };
-var ERROR = { result: 'error' };
+var title = "OpenBI";
+var OK    = { result: "ok" };
+var ERROR = { result: "error" };
 
 var pool = mysql.createPool({
-	host		: 'localhost',
-	user		: 'openbi',
-	password	: 'p@ssword',
-	database	: 'openbi'
+	host		: "localhost",
+	user		: "openbi",
+	password	: "p@ssword",
+	database	: "openbi"
 });
 
-pool.on('error', function(err) {
+pool.on("error", function(err) {
 	console.log(err.code);
 });
 
-router.get('/', function(req, res) {
+router.get("/", function(req, res) {
 	if (req.session.info == null) {
-		res.render('welcome.html', {title: title});
+		res.render("welcome.html", {title: title});
 	}
 	else {
-		res.render('index.html', {
+		res.render("index.html", {
 			title: title
 		});
 	}
 });
 
-router.get('/session', function(req, res) {
-	var result = req.session.info || {};
-	if (result.password != null) {
-		result.password = '';
-		result.result = 'ok';
-	}
-	res.send(result);
-});
-
-router.get('/document-list', function(req, res) {
+router.get("/document-list", function(req, res) {
 	if (req.session.info == null) {
 		res.send(ERROR);
 		return;
@@ -61,11 +52,11 @@ router.get('/document-list', function(req, res) {
 	});
 });
 
-router.get('/document', function(req, res) {
-	res.redirect('/');
+router.get("/document", function(req, res) {
+	res.redirect("/");
 });
 
-router.get('/document/:id', function(req, res) {
+router.get("/document/:id", function(req, res) {
 	pool.getConnection(function(error, connection) {
 		if (error) {
 			res.redirect("/");
@@ -93,25 +84,25 @@ router.get('/document/:id', function(req, res) {
 					return;
 				}
 
-				if (records[0].data_type === 'file') {
-					records[0].data = '/' + records[0].data;
+				if (records[0].data_type === "file") {
+					records[0].data = "/" + records[0].data;
 				}
-				if (records[0].data_type === 'url') {
+				if (records[0].data_type === "url") {
 					records[0].data_url = records[0].data;
 				}
 				if (records[0].init == null) {
-					records[0].init = '';
+					records[0].init = "";
 				}
 
 				var host = req.protocol + "://";
-				if (req.get('x-forwarded-host') == null) {
-					host += req.get('host');
+				if (req.get("x-forwarded-host") == null) {
+					host += req.get("host");
 				}
 				else {
-					host += req.get('x-forwarded-host');
+					host += req.get("x-forwarded-host");
 				}
 
-				res.render('absolute.html', {
+				res.render("absolute.html", {
 					title: title + ' ' + records[0].name,
 					host: host,
 					user: user,
@@ -124,7 +115,7 @@ router.get('/document/:id', function(req, res) {
 	});
 });
 
-router.post('/document-delete/:id', function(req, res) {
+router.post("/document-delete/:id", function(req, res) {
 	if (req.session.info == null) {
 		res.send(ERROR);
 		return;
@@ -151,20 +142,20 @@ router.post('/document-delete/:id', function(req, res) {
 	});
 });
 
-router.post('/document-save', function(req, res) {
+router.post("/document-save", function(req, res) {
 	if (req.session.info == null) {
-		res.redirect('/document/' + req.body.document);
+		res.redirect("/document/" + req.body.document);
 		return;
 	}
 	var user     = req.session.info.id;
 	var document = parseInt(req.body.document);
-	var public   = req.body.public === 'on' ? 1 : 0;
+	var public   = req.body.public === "on" ? 1 : 0;
 	var init     = req.body.init;
 	var dataType = req.body.data;
 
 	pool.getConnection(function(error, db) {
 		if (error) {
-			res.redirect('/document/' + req.body.document);
+			res.redirect("/document/" + req.body.document);
 			console.log(error);
 			return;
 		}
@@ -174,21 +165,20 @@ router.post('/document-save', function(req, res) {
 			"where id=? and user=?",
 		[req.body.name, public, dataType, init, req.body.style, document, user],
 		function(error, records) {
-			if (dataType === 'file') {
-				var path = req.files.file ? req.files.file.path : '';
-				var file = req.files.file ? req.files.file.originalname : '';
-				if (path === '') {
-					res.redirect('/document/' + req.body.document);
+			if (dataType === "file") {
+				var path = req.files.file ? req.files.file.path : "";
+				var file = req.files.file ? req.files.file.originalname : "";
+				if (path === "") {
+					res.redirect("/document/" + req.body.document);
 					db.release();
 					return;
 				}
 				db.query(
-					"update documents set "+
-					"data_name=?, data=? " +
+					"update documents set data_name=?, data=? " +
 					"where id=? and user=?",
 				[file, path, document, user],
 				function(error, records) {
-					res.redirect('/document/' + req.body.document);
+					res.redirect("/document/" + req.body.document);
 					db.release();
 				});
 			}
@@ -198,7 +188,7 @@ router.post('/document-save', function(req, res) {
 					"where id=? and user=?",
 					[req.body.url, document, user],
 				function(error, records) {
-					res.redirect('/document/' + req.body.document);
+					res.redirect("/document/" + req.body.document);
 					db.release();
 				});
 			}
@@ -206,7 +196,7 @@ router.post('/document-save', function(req, res) {
 	});
 });
 
-router.post('/object-delete', function(req, res) {
+router.post("/object-delete", function(req, res) {
 	if (req.session.info == null) {
 		res.send(ERROR);
 		return;
@@ -250,7 +240,7 @@ router.post('/object-delete', function(req, res) {
 	});
 });
 
-router.post('/object-save', function(req, res) {
+router.post("/object-save", function(req, res) {
 	if (req.session.info == null) {
 		res.send(ERROR);
 		return;
@@ -340,11 +330,11 @@ router.post('/object-save', function(req, res) {
 	});
 });
 
-router.get('/data', function(req, res) {
+router.get("/data", function(req, res) {
 	res.send([]);
 });
 
-router.get('/data/:id', function(req, res) {
+router.get("/data/:id", function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send([]);
@@ -362,7 +352,7 @@ router.get('/data/:id', function(req, res) {
 				}
 				else {
 					if (records[0].data == null) {
-						res.send('');
+						res.send([]);
 					}
 					else {
 						res.sendfile(records[0].data);
@@ -374,7 +364,7 @@ router.get('/data/:id', function(req, res) {
 	});
 });
 
-router.post('/document-create', function(req, res) {
+router.post("/document-create", function(req, res) {
 	if (req.session.info == null) {
 		res.redirect("/login");
 		return;
@@ -387,11 +377,11 @@ router.post('/document-create', function(req, res) {
 		}
 		var name = req.body.name;
 		if (name == null) {
-			name = '';
+			name = "";
 		}
-		var path = req.files.file ? req.files.file.path : '';
-		var file = req.files.file ? req.files.file.originalname : '';
-		if (path === '') {
+		var path = req.files.file ? req.files.file.path : "";
+		var file = req.files.file ? req.files.file.originalname : "";
+		if (path === "") {
 			db.query("insert into documents(user, name)"+
 				" values(?, ?)",
 				[req.session.info.id, name],
@@ -406,7 +396,7 @@ router.post('/document-create', function(req, res) {
 			});
 		}
 		else {
-			db.query("insert into documents(user, name, "+
+			db.query("insert into documents(user, name, " +
 				" data_type, data_name, data) " +
 				" values(?, ?, 'file', ?, ?)",
 				[req.session.info.id, name, file, path],
@@ -423,16 +413,16 @@ router.post('/document-create', function(req, res) {
 	});
 });
 
-router.get('/login', function(req, res) {
+router.get("/login", function(req, res) {
 	if (req.session.info == null) {
-		res.render('login.html', { title: title });
+		res.render("login.html", { title: title });
 	}
 	else {
 		res.redirect("/");
 	}
 });
 
-router.post('/login', function(req, res) {
+router.post("/login", function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.redirect("/login?error=Unable to connect to database");
@@ -440,9 +430,9 @@ router.post('/login', function(req, res) {
 			return;
 		}
 
-		var digest = crypto.createHash('sha256').update(req.body.password)
+		var digest = crypto.createHash("sha256").update(req.body.password)
 						.digest("hex");
-		db.query('select * from users where email=? or user=?',
+		db.query("select * from users where email=? or user=?",
 			[req.body.username, req.body.username],
 		function(error, r) {
 			if (error == null && r.length > 0 && r[0].password === digest) {
@@ -457,15 +447,32 @@ router.post('/login', function(req, res) {
 	});
 });
 
-router.get('/logout', function(req, res) {
+router.get("/logout", function(req, res) {
 	req.session.destroy();
 	res.redirect("/"); // or res.render('logout.html', { title: title });
 });
+
+router.get("/debug-stock", function(req, res) {
+	res.render("debug-stock.html", { title: title });
+});
+
+module.exports = router;
+
+
 
 
 /*
 
 SPA version
+
+router.get('/session', function(req, res) {
+	var result = req.session.info || {};
+	if (result.password != null) {
+		result.password = '';
+		result.result = 'ok';
+	}
+	res.send(result);
+});
 
 router.get('/logout-spa', function(req, res) {
 	req.session.destroy();
@@ -505,14 +512,6 @@ router.post('/login-spa', function(req, res) {
 });
 
 */
-
-router.get('/debug-stock', function(req, res) {
-	res.render('debug-stock.html', { title: title });
-});
-
-
-module.exports = router;
-
 
 
 

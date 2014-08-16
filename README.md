@@ -1,9 +1,19 @@
 OpenBI
 ======
 
-Web-based Business Intelligence system for the rest of us on this planet.
+The easiest way to create interactive dashboard for the rest of us on this planet.
 
 ![] (http://openbi.publicsoftwareproject.org/images/ogp.png)
+
+Contribute
+----------
+OpenBI is doing crowdfunding, please feel free to support and share the campaign:
+https://www.indiegogo.com/projects/openbi
+
+This project is a part of The Public Software Project. Please feel free to contribute this project, by visiting the following websites:
+- GitHub: https://github.com/publicsoftware/OpenBI.git
+- Trello: https://trello.com/b/z68nfFvh/openbi
+- Demo:   http://openbi.publicsoftwareproject.org/document/1
 
 Installation
 ------------
@@ -13,13 +23,6 @@ Installation
 >$ node openbi<br/>
 >Execute SQL statements from doc/schema.sql to local database server<br/>
 >Open your browser to localhost:3500<br/>
-
-Contribute
-----------
-This project is a part of The Public Software Project. Please feel free to contribute this project, by visiting the following websites:
-- GitHub: https://github.com/publicsoftware/OpenBI.git
-- Trello: https://trello.com/b/z68nfFvh/openbi
-- Demo:   http://openbi.publicsoftwareproject.org/document/1
 
 Organization Websites
 ---------------------
