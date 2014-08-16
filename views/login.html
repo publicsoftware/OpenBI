@@ -3,14 +3,16 @@
 <div class="uk-container">
 	<div class="uk-grid uk-grid-preserve">
 
-		<div class="uk-width-7-10" id="welcome">
-			<h1>Welcome to OpenBI</h1>
-			The easiest way to create interactive dashboard.
-			<br/>
-			<a href="/openbi.pdf">User's Guide</a>
+		<div class="uk-width-small-1-1 uk-width-medium-6-10 uk-width-large-7-10">
+			<div id="welcome">
+				<h1>Welcome to OpenBI</h1>
+				The easiest way to create interactive dashboard.
+				<br/>
+				<a href="/openbi.pdf">User's Guide</a>
+			</div>
 		</div>
 
-		<div class="uk-width-3-10">
+		<div class="uk-width-small-1-1 uk-width-medium-4-10 uk-width-large-3-10">
 			<form class="uk-form" id='login-form' method="post">
 				<span class="center">
 					<h2>Log In</h2>
@@ -33,13 +35,18 @@
 
 
 <script>
-$(document).ready(function() {
+
+$(document).ready(resize);
+$(document).resize(resize);
+
+function resize() {
 	var bodyHeight = $('body').height();
 	var windowHeight = $(window).height();
 	if (bodyHeight < windowHeight) {
 		$('body').height(windowHeight + 'px');
 	}
-});
+}
+
 </script>
 
 <style>
