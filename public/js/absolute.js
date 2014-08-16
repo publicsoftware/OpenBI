@@ -20,44 +20,43 @@ function createCrossFilter(dataResult) {
 		columns.push(k);
 	}
 
-	$('select[name=dimension]').html('');
-	$('select[name=group]').html('');
+	$("select[name=dimension]").html("");
+	$("select[name=group]").html("");
 	var sortedColumns = columns.sort();
 	for (var i = 0; i < columns.length; i++) {
-		$('select[name=dimension]')
-			.append('<option>' + sortedColumns[i] + '</option>');
-		$('select[name=group]')
-			.append('<option>' + sortedColumns[i] + '</option>');
+		$("select[name=dimension]")
+			.append("<option>" + sortedColumns[i] + "</option>");
+		$("select[name=group]")
+			.append("<option>" + sortedColumns[i] + "</option>");
 	}
 
 	// console.log(charts);
 
 	for (var i = 0; i < charts.length; i++) {
 		dimension[i] = xf.dimension(dc.pluck(charts[i].dimension));
-		group[i] = dimension[i].group()
-				.reduceSum(dc.pluck(charts[i].group))
-				;
-		var color = d3.scale.category20();
-		var width  = $('#chart' + i).outerWidth();
-		var height = $('#chart' + i).outerHeight();
-		height -= _chart_padding;
+		group[i]   = dimension[i].group()
+					.reduceSum(dc.pluck(charts[i].group));
+		var color  = d3.scale.category20();
+		var width  = $("#chart" + i).outerWidth();
+		var height = $("#chart" + i).outerHeight();
+		height    -= _chart_padding;
 		var square = Math.min(width, height);
 
-		if (charts[i].type === 'pie' ||
-			charts[i].type === 'donut') {
+		if (charts[i].type === "pie" ||
+			charts[i].type === "donut") {
 			charts[i].chart = dc.pieChart("#chart" + i)
 				.width(width)
 				.height(height - _chart_padding)
 				.dimension(dimension[i])
 				.group(group[i])
 				.radius(square / 2 - _chart_padding)
-				.innerRadius(charts[i].type === 'pie' ? 0 : square / 10)
+				.innerRadius(charts[i].type === "pie" ? 0 : square / 10)
 				.legend(dc.legend())
 				;
 		}
 		else
-		if (charts[i].type === 'row') {
-			charts[i].chart = dc.rowChart('#chart' + i)
+		if (charts[i].type === "row") {
+			charts[i].chart = dc.rowChart("#chart" + i)
 				.width(width)
 				.height(height - _chart_padding)
 				.dimension(dimension[i])
@@ -66,7 +65,7 @@ function createCrossFilter(dataResult) {
 				;
 		}
 		else
-		if (charts[i].type === 'line') {
+		if (charts[i].type === "line") {
 			var dat = group[i].top(Infinity);
 			var min = +Infinity;
 			var max = -Infinity;
@@ -77,7 +76,7 @@ function createCrossFilter(dataResult) {
 				if (max < value)
 					max = value;
 			}
-			charts[i].chart = dc.lineChart('#chart' + i)
+			charts[i].chart = dc.lineChart("#chart" + i)
 				.width(width)
 				.height(height - _chart_padding)
 				.dimension(dimension[i])
@@ -86,23 +85,9 @@ function createCrossFilter(dataResult) {
 				.brushOn(true)
 				.x(d3.scale.linear().domain([min, max]))
 				;
-
-			/*
-			// for ordinal
-			charts[i].chart = dc.lineChart('#chart' + i)
-				.width(width)
-				.height(height - _chart_padding)
-				.dimension(dimension[i])
-				.group(group[i])
-				.elasticY(true)
-				.brushOn(true)
-				.x(d3.scale.ordinal())
-				.xUnits(dc.units.ordinal)
-				;
-			*/
 		}
 		else
-		if (charts[i].type === 'bar') {
+		if (charts[i].type === "bar") {
 			var dat = group[i].top(Infinity);
 			var min = +Infinity;
 			var max = -Infinity;
@@ -114,7 +99,7 @@ function createCrossFilter(dataResult) {
 					max = value;
 			}
 
-			charts[i].chart = dc.barChart('#chart' + i)
+			charts[i].chart = dc.barChart("#chart" + i)
 				.width(width)
 				.height(height - _chart_padding)
 				.dimension(dimension[i])
@@ -128,28 +113,10 @@ function createCrossFilter(dataResult) {
 				.barPadding(.5)
 				.gap(1)
 				;
-			/*
-			// for ordinal
-			charts[i].chart = dc.barChart('#chart' + i)
-				.width(width)
-				.height(height - _chart_padding)
-				.dimension(dimension[i])
-				.group(group[i])
-				.centerBar(true)
-				.brushOn(true)
-				.elasticY(true)
-				.x(d3.scale.ordinal())
-				.xUnits(dc.units.ordinal)
-				.renderHorizontalGridLines(true)
-				.outerPadding(1)
-				.barPadding(.5)
-				// .gap(1)
-				;
-			*/
 		}
 		else
-		if (charts[i].type === 'wordcloud') {
-			charts[i].chart = dc.wordCloud('#chart' + i)
+		if (charts[i].type === "wordcloud") {
+			charts[i].chart = dc.wordCloud("#chart" + i)
 				.width(width)
 				.height(height - _chart_padding)
 				.ordering(function(d){ return d.value; })
@@ -179,22 +146,22 @@ function createCrossFilter(dataResult) {
 				.transitionDuration(1000)
 				.colors(color);
 
-			if (charts[i].sort === 'asc') {
+			if (charts[i].sort === "asc") {
 				charts[i].chart.ordering(function(d){ return d.value; })
 			}
 			else
-			if (charts[i].sort === 'desc') {
+			if (charts[i].sort === "desc") {
 				charts[i].chart.ordering(function(d){ return -d.value; })
 			}
 
-			if (charts[i].top === 'top') {
+			if (charts[i].top === "top") {
 				group[i].value = parseInt(charts[i].top_value);
 				charts[i].chart.data(function(group) {
 					return group.top(group.value);
 				});
 			}
 			else
-			if (charts[i].top === 'bottom') {
+			if (charts[i].top === "bottom") {
 				group[i].value = -parseInt(charts[i].top_value);
 				charts[i].chart.data(function(group) {
 					return group.top(Infinity).splice(group.value);
@@ -210,8 +177,6 @@ function createCrossFilter(dataResult) {
 		.style("text-anchor", "end")
 		.attr("transform", "translate(-10,0)rotate(315)");
 	*/
-
-	// console.log(data);
 }
 
 var saveCount = 0;
@@ -223,32 +188,32 @@ function documentSaveLayout() {
 }
 
 function documentDelete() {
-	$.post('/document-delete/' + doc)
+	$.post("/document-delete/" + doc)
 	.success(function(result) {
-		window.location = '/';
+		window.location = "/";
 	});
 }
 
 function documentChooseFile() {
-	$('[name=file]').click();
+	$("[name=file]").click();
 }
 
 function documentSettings() {
-	$('#settings [name=data]').val(data_type);
+	$("#settings [name=data]").val(data_type);
 	documentDataType();
 	var modal = $.UIkit.modal("#settings").show();
 }
 
 function documentDataType() {
-	var source = $('#settings [name=data]').val();
-	if (source === 'file') {
-		$('#data-url').hide();
-		$('#choose-csv').fadeIn();
+	var source = $("#settings [name=data]").val();
+	if (source === "file") {
+		$("#data-url").hide();
+		$("#choose-csv").fadeIn();
 	}
 	else
-	if (source === 'url') {
-		$('#choose-csv').hide();
-		$('#data-url').fadeIn();
+	if (source === "url") {
+		$("#choose-csv").hide();
+		$("#data-url").fadeIn();
 	}
 }
 
@@ -273,21 +238,21 @@ function documentViewData() {
 		str += data[i][columns[columns.length - 1]] + "\n";
 	}
 
-	$('#data #csv').val(str);
+	$("#data #csv").val(str);
 	$.UIkit.modal("#data").show();
 }
 
 function sampleCode() {
 	var s = "data.forEach(function(d) {\n  d.Count = 1;\n});";
-	$('[name=init]').val(s);
+	$("[name=init]").val(s);
 }
 
 function theme(name) {
-	if (name === 'light') {
-		$('[name=style]').val('');
+	if (name === "light") {
+		$("[name=style]").val("");
 	}
 	else
-	if (name === 'dark') {
+	if (name === "dark") {
 		var s = "{\n  background: '#333',\n  text: '#eee',\n  " +
 		"chartTitle: '#777',\n  chartBorder: '#777',\n  " +
 		"chartBackground: '#555',\n  " +
@@ -296,7 +261,7 @@ function theme(name) {
 		$('[name=style]').val(s);
 	}
 	else
-	if (name === 'white') {
+	if (name === "white") {
 		var s = "{\n  background: 'white',\n  text: '#666',\n  " +
 		"chartTitle: '#eee',\n  chartBorder: '@background',\n  " +
 		"chartBackground: '@background',\n  axis: '#666'\n}";
@@ -308,17 +273,17 @@ function theme(name) {
 function createChart(data) {
 	if (data.id == null) {
 		data.id = 0;
-		data.name = 'New';
-		data.type = 'none';
-		data.dimension = '';
-		data.group = '';
+		data.name = "New";
+		data.type = "none";
+		data.dimension = "";
+		data.group = "";
 		data.x = _grid_size;
 		data.y = _grid_size * 6;
 		data.width = 304;
 		data.height = 304;
-		data.sort = '';
-		data.top = '';
-		data.top_value = '0';
+		data.sort = "";
+		data.top = "";
+		data.top_value = "0";
 		data.maximize_width = 0;
 		data.maximize_height = 0;
 	}

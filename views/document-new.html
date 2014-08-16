@@ -3,8 +3,8 @@
 		<a class="uk-modal-close uk-close"></a>
 		<h2>New</h2>
 
-		<form method="post" action="/document-create"
-			enctype="multipart/form-data" class="uk-form" >
+		<form method="post" action="/document-create" class="uk-form"
+			enctype="multipart/form-data" >
 
 			<input type="text" name="name" placeholder="Title" autofocus
 					class="uk-width-1-1" />
@@ -32,19 +32,7 @@
 
 			<hr/>
 			<input type="submit" value="Create"
-					class="uk-button uk-button-primary" />
+				class="uk-button uk-button-primary" />
 		</form>
 	</div>
 </div>
-
-<script>
-function showNew() {
-	$('[name=name]').val('New');
-	var modal = $.UIkit.modal("#new-modal").show();
-}
-
-function chooseFile() {
-	$('[name=file]').click();
-}
-
-</script>

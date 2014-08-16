@@ -76,6 +76,15 @@ function showDocument(id) {
 	window.location = "/document/" + id;
 }
 
+function showNew() {
+	$("#new-modal [name=name]").val("New");
+	var modal = $.UIkit.modal("#new-modal").show();
+}
+
+function chooseFile() {
+	$("[name=file]").click();
+}
+
 </script>
 
 <%- include document-new.html %>
