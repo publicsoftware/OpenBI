@@ -33,27 +33,22 @@
 	</div>
 </div>
 
-
+<script src="/js/d3.js"></script>
+<script src="/js/trianglify.js"></script>
 <script>
-
-$(document).ready(resize);
-$(document).resize(resize);
-
-function resize() {
-	var bodyHeight = $('body').height();
-	var windowHeight = $(window).height();
-	if (bodyHeight < windowHeight) {
-		$('body').height(windowHeight + 'px');
-	}
-}
-
+$(document).ready(function() {
+	var t = new Trianglify({noiseIntensity: 0});
+	/*
+	var pattern = t.generate(document.body.clientWidth,
+		document.body.clientHeight);
+	*/
+	var pattern = t.generate(800, 600);
+	$('body').css('background', pattern.dataUrl);
+	$('body').css('background-repeat', 'no-repeat');
+	$('body').css('background-position', 'center');
+	$('body').css('background-size', 'cover');
+	$('body').css('background-attachment', 'fixed');
+});
 </script>
-
-<style>
-body {
-	background: lightsteelblue;
-	box-shadow: inset 0px 0px 400px rgba(0,0,0,.5);
-}
-</style>
 
 <%- include footer.html %>
