@@ -42,17 +42,13 @@
 "use strict";
 $.ajaxSetup({cache: false});
 
-/*
 $(document).ready(function() {
 	var bodyHeight = $('body').height();
 	var windowHeight = $(window).height();
 	if (bodyHeight < windowHeight) {
-		// console.log(bodyHeight);
-		// console.log(windowHeight);
 		$('body').height(windowHeight + 'px');
 	}
 });
-*/
 
 function showDocument(id) {
 	window.location = "/document/" + id;
