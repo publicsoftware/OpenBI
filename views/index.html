@@ -1,27 +1,25 @@
 <%- include header.html %>
 
-<div class='uk-container' style="padding:0;">
-	<ul class='title'>
-		<li>
-			<a href="#drawer" id='navicon' data-uk-offcanvas
-				class="uk-icon-button uk-icon-bars"></a>
-		</li>
-		<li>
-			<a href="/" class="uk-icon-button uk-icon-home"></a>
-		</li>
-		<li>
-			<a href='javascript:showNew()' id='new'
-				class="uk-icon-button uk-icon-file-o"></a>
-		</li>
-		<li>
-			<a href="/logout" id='logout'
-				class="uk-icon-button uk-icon-sign-out"></a>
-		</li>
-		<li>
-			<%= title %>
-		</li>
-	</ul>
-</div>
+<ul class='title'>
+	<li>
+		<a href="#drawer" id='navicon' data-uk-offcanvas
+			class="uk-icon-button uk-icon-bars"></a>
+	</li>
+	<li>
+		<a href="/" class="uk-icon-button uk-icon-home"></a>
+	</li>
+	<li>
+		<a href='javascript:showNew()' id='new'
+			class="uk-icon-button uk-icon-file-o"></a>
+	</li>
+	<li>
+		<a href="/logout" id='logout'
+			class="uk-icon-button uk-icon-sign-out"></a>
+	</li>
+	<li>
+		<%= title %>
+	</li>
+</ul>
 
 <div class='uk-container'>
 	<div class='uk-grid uk-grid-preserve'>
@@ -50,8 +48,9 @@ $(document).ready(function() {
 		noiseIntensity: 0
 		,cellsize: 60
 		// ,x_gradient: Trianglify.colorbrewer.BuGn[0]
-		});
-	var p = t.generate(document.body.clientWidth, document.body.clientHeight);
+	});
+	// var p = t.generate(document.body.clientWidth,document.body.clientHeight);
+	var p = t.generate(800, 600);
 	$('body').css('background-image', p.dataUrl);
 });
 
