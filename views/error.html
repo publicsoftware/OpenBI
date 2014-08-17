@@ -1,8 +1,27 @@
 <%- include header.html %>
 
-<div class="uk-container-center" style="padding-top:100px;">
+<div class="uk-container-center" style="padding-top:100px; text-align:center;">
 	<h1><%= message %></h1>
 </div>
 
-<%- include drawer.html %>
+<script src="/js/d3.js"></script>
+<script src="/js/trianglify.js"></script>
+<script>
+"use strict";
+
+$(document).ready(function() {
+	var t = new Trianglify({
+		noiseIntensity: 0
+		,cellsize: 60
+		// ,x_gradient: Trianglify.colorbrewer.BuGn[0]
+	});
+	// var p = t.generate(document.body.clientWidth,document.body.clientHeight);
+	var p = t.generate(800, 600);
+	$('body').css('background-image', p.dataUrl);
+});
+$(document).click(function() {
+	window.location = "/";
+});
+</script>
+
 <%- include footer.html %>
