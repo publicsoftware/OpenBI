@@ -25,14 +25,12 @@ Auto Save
 Doing
 SSL
 Home page
-Welcome page
 About
 Dynamic OGP
-Expand width/height
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Done
-
+Expand width/height
 Delete Document
 Settings Dialog
 Use SPA architecture
