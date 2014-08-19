@@ -1,3 +1,7 @@
+OpenBI 0.6
+- Support SSL
+- Use Trianglify as a background
+- Support REST so it can read data from any database and big data
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 To Do
@@ -23,13 +27,13 @@ Auto Save
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Doing
-SSL
 Home page
 About
 Dynamic OGP
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Done
+SSL
 Expand width/height
 Delete Document
 Settings Dialog
