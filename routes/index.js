@@ -15,9 +15,9 @@ var pool = mysql.createPool({
 	database	: "openbi"
 });
 
-pool.on("error", function(err) {
-	console.log(err.code);
-});
+function log(e) {
+	console.log(e);
+}
 
 router.get("/", function(req, res) {
 	if (req.session.info == null) {
@@ -27,7 +27,7 @@ router.get("/", function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send(ERROR);
-			console.log(error);
+			log(error);
 			return;
 		}
 		db.query("select * from documents where user=?",
@@ -50,7 +50,7 @@ router.get("/document-list", function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send(ERROR);
-			console.log(error);
+			log(error);
 			return;
 		}
 		db.query("select * from documents where user=?",
@@ -72,7 +72,7 @@ router.get("/document/:id", function(req, res) {
 	pool.getConnection(function(error, connection) {
 		if (error) {
 			res.redirect("/");
-			console.log(error);
+			log(error);
 			return;
 		}
 
@@ -136,7 +136,7 @@ router.post("/document-delete/:id", function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send(ERROR);
-			console.log(error);
+			log(error);
 			return;
 		}
 		var id   = req.params.id;
@@ -168,7 +168,7 @@ router.post("/document-save", function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.redirect("/document/" + req.body.document);
-			console.log(error);
+			log(error);
 			return;
 		}
 		db.query(
@@ -216,7 +216,7 @@ router.post("/object-delete", function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send(ERROR);
-			console.log(error);
+			log(error);
 			return;
 		}
 
@@ -262,7 +262,7 @@ router.post("/object-save", function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send(ERROR);
-			console.log(error);
+			log(error);
 			return;
 		}
 		db.query("select user from documents where id=?", [document],
@@ -350,7 +350,7 @@ router.get("/data/:id", function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.send([]);
-			console.log(error);
+			log(error);
 			return;
 		}
 		else {
@@ -384,7 +384,7 @@ router.post("/document-create", function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.redirect("/");
-			console.log(error);
+			log(error);
 			return;
 		}
 		var name = req.body.name;
@@ -438,7 +438,7 @@ router.post("/login", function(req, res) {
 	pool.getConnection(function(error, db) {
 		if (error) {
 			res.redirect("/login?error=Unable to connect to database");
-			console.log(error);
+			log(error);
 			return;
 		}
 
@@ -473,63 +473,6 @@ router.get("/debug-background", function(req, res) {
 });
 
 module.exports = router;
-
-
-
-
-/*
-
-SPA version
-
-router.get('/session', function(req, res) {
-	var result = req.session.info || {};
-	if (result.password != null) {
-		result.password = '';
-		result.result = 'ok';
-	}
-	res.send(result);
-});
-
-router.get('/logout-spa', function(req, res) {
-	req.session.destroy();
-	res.send(OK);
-});
-
-router.get('/debug', function(req, res) {
-	res.send(OK);
-});
-
-router.post('/login-spa', function(req, res) {
-	pool.getConnection(function(error, db) {
-		if (error) {
-			res.send(ERROR);
-			console.log(error);
-			return;
-		}
-
-		var digest = crypto.createHash('sha256').update(req.body.password)
-				.digest("hex");
-		db.query('select * from users where email=? or user=?',
-		[req.body.username, req.body.username],
-		function(error, rows) {
-			if (error == null &&
-				rows.length > 0 &&
-				rows[0].password === digest)
-			{
-				req.session.info = rows[0];
-				res.send(OK);
-			}
-			else {
-				res.send(ERROR);
-			}
-			db.release();
-		});
-	});
-});
-
-*/
-
-
 
 
 
