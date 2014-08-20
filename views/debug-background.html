@@ -1,0 +1,16 @@
+<%- include header.html %>
+<script src="/js/d3.js"></script>
+<script src="/js/trianglify.js"></script>
+<script>
+$(document).ready(function() {
+    var t = new Trianglify({
+        cellsize: 60,
+        // x_gradient: Trianglify.colorbrewer.BuGn[0],
+        noiseIntensity: 0
+    });
+    // var p = t.generate(document.body.clientWidth,document.body.clientHeight);
+    var p = t.generate(800, 600);
+    $('body').css('background-image', p.dataUrl);
+});
+</script>
+<%- include footer.html %>

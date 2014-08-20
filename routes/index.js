@@ -468,6 +468,10 @@ router.get("/debug-stock", function(req, res) {
 	res.render("debug-stock.html", { title: title });
 });
 
+router.get("/debug-background", function(req, res) {
+	res.render("debug-background.html", { title: title });
+});
+
 module.exports = router;
 
 
