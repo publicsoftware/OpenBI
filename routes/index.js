@@ -459,6 +459,10 @@ router.post("/login", function(req, res) {
 	});
 });
 
+router.get("/about", function(req, res) {
+	res.render("about.html", { title: title });
+});
+
 router.get("/logout", function(req, res) {
 	req.session.destroy();
 	res.redirect("/"); // or res.render('logout.html', { title: title });

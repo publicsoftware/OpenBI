@@ -57,11 +57,11 @@ var server = app.listen(PORT, function() {
 var fs = require('fs');
 var https = require('https');
 var options = {
-    key: fs.readFileSync('/path/url.key'),
-    cert: fs.readFileSync('/path/url.crt')
+	key: fs.readFileSync('/path/url.key'),
+	cert: fs.readFileSync('/path/url.crt')
 };
 
 var sslServer = https.createServer(options, app).listen(PORT + 1, function(){
-    console.log("OpenBI listening on port " + (PORT + 1));
+	console.log("OpenBI listening on port " + (PORT + 1));
 });
 */
