@@ -26,7 +26,14 @@
 				<span class="center">
 					<input type="submit" value="Log In" class="uk-button" />
 				</span>
-				<!-- TODO forget password -->
+				<!-- TODO forgot password
+				&nbsp;
+				<a href='#'>Forgot Password ?</a>
+				-->
+				
+				<div id='error' style='display:none; margin: -4px 0 6px 0;'>
+				</div>
+
 			</form>
 		</div>
 
@@ -45,6 +52,18 @@ $(document).ready(function() {
 	// var p = t.generate(document.body.clientWidth,document.body.clientHeight);
 	var p = t.generate(800, 600);
 	$('body').css('background-image', p.dataUrl);
+
+	var query = location.href.split('?');
+	if (query.length > 1) {
+		var pair = query[1].split('&');
+		for (var i = 0; i < pair.length; i++) {
+			var p = unescape(pair[i]).split('=');
+			if (p[0] === "error") {
+				// console.log(p[1]);
+				$('#error').html(p[1]).fadeIn();
+			}
+		}
+	}
 });
 </script>
 
