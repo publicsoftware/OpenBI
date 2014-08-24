@@ -1,13 +1,13 @@
 var PORT = 3500;
 
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var routes = require('./routes/index');
-var multer = require('multer');
-var app = express();
+var express			= require('express');
+var path			= require('path');
+var cookieParser	= require('cookie-parser');
+var bodyParser		= require('body-parser');
+var session			= require('express-session');
+var routes			= require('./routes/index');
+var multer			= require('multer');
+var app				= express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
