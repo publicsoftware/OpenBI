@@ -69,7 +69,7 @@ router.get("/document", function(req, res) {
 });
 
 router.get("/document/:id", function(req, res) {
-	pool.getConnection(function(error, connection) {
+	pool.getConnection(function(error, db) {
 		if (error) {
 			res.redirect("/");
 			log(error);
@@ -78,21 +78,21 @@ router.get("/document/:id", function(req, res) {
 
 		var user = req.session.info == null ? 0 : req.session.info.id;
 		var id = req.params.id;
-		connection.query(
+		db.query(
 			"select * from documents where id=? and (user=? or public=1)",
 			[id, user],
 		function (error, records) {
 			if (error || records.length === 0) {
 				res.redirect("/");
-				connection.release();
+				db.release();
 				return;
 			}
-			connection.query("select * from objects where document=?",
+			db.query("select * from objects where document=?",
 				[id],
 			function(error, objects) {
 				if (error) {
 					res.redirect("/");
-					connection.release();
+					db.release();
 					return;
 				}
 
@@ -121,7 +121,7 @@ router.get("/document/:id", function(req, res) {
 					document: records[0],
 					charts: objects
 				});
-				connection.release();
+				db.release();
 			});
 		});
 	});
