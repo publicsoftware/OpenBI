@@ -499,9 +499,7 @@ function resize() {
 	}
 
 	$('#pad-right').css('left', maxWidth + 'px');
-
 	$('#pad-bottom').css('top', maxHeight + 'px');
-
 }
 
 (function($) {
@@ -520,6 +518,8 @@ function resize() {
 			if (w-x1+x < 40 && h-y1+y < 40) {
 				$(this).css('cursor', 'nwse-resize');
 				$(this).addClass('resizable');
+				// var background = $('body').css('background');
+				// $('body').css('background', '#eaeaea');
 
 				var x = $(this).offset().left;
 				var y = $(this).offset().top;
@@ -543,17 +543,20 @@ function resize() {
 					.css('z-index', z)
 					.css('cursor', 'default')
 					.removeClass('resizable');
+					// $('body').css('background', background);
 					snapAll();
 				});
 			}
 			e.preventDefault();
 		});
 
+		/*
 		$(this).on("mouseup", function() {
 			$(this).css('cursor', 'default')
 			.removeClass('resizable');
 			snapAll();
 		});
+		*/
 
 		return $(this);
 	};
@@ -561,9 +564,10 @@ function resize() {
 
 (function($) {
 	$.fn.draggable = function(opt) {
-		if(opt.handle === "") {
+		if (opt.handle === "") {
 			var el = this;
-		} else {
+		}
+		else {
 			var el = this.find(opt.handle);
 		}
 
