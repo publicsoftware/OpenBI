@@ -1,4 +1,4 @@
-/*! UIkit 2.8.0 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
+/*! UIkit 2.9.0 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
 
 (function(addon) {
 
@@ -67,7 +67,7 @@
             this.element.wrap('<div class="uk-autocomplete"></div>');
 
             this.autocomplete = UI.autocomplete(this.element.parent(), this.options);
-            this.autocomplete.dropdown.addClass('uk-dropdown-scrollable');
+            this.autocomplete.dropdown.addClass('uk-dropdown-small uk-dropdown-scrollable');
 
             this.autocomplete.on('autocomplete-show', function() {
 
@@ -151,7 +151,7 @@
     });
 
     // init code
-    $(document).on("focus.timepicker.uikit", "[data-uk-timepicker]", function(e) {
+    UI.$doc.on("focus.timepicker.uikit", "[data-uk-timepicker]", function(e) {
         var ele = $(this);
 
         if (!ele.data("timepicker")) {
