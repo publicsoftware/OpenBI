@@ -1,3 +1,5 @@
+"use strict";
+
 var express	= require('express');
 var router	= express.Router();
 var mysql	= require('mysql');
@@ -161,7 +163,7 @@ router.post("/document-save", function(req, res) {
 	}
 	var user     = req.session.info.id;
 	var document = parseInt(req.body.document);
-	var public   = req.body.public === "on" ? 1 : 0;
+	var pub      = req.body.public === "on" ? 1 : 0;
 	var init     = req.body.init;
 	var dataType = req.body.data;
 
@@ -175,7 +177,7 @@ router.post("/document-save", function(req, res) {
 			"update documents set name=?, public=?, data_type=?, " +
 			"init=?, style=? " +
 			"where id=? and user=?",
-		[req.body.name, public, dataType, init, req.body.style, document, user],
+		[req.body.name, pub, dataType, init, req.body.style, document, user],
 		function(error, records) {
 			if (dataType === "file") {
 				var path = req.files.file ? req.files.file.path : "";

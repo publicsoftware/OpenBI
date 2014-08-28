@@ -1,3 +1,4 @@
+"use strict";
 var PORT = 3500;
 
 var express			= require('express');
