@@ -1,5 +1,12 @@
 
 
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+Responsive
+
+- prefix ab- ar- ui-
+- let user add a panel with class name like ab-xs-12 ab-sm-8 (xs,sm,md,lg,xl)
+
+
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
