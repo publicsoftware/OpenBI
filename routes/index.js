@@ -465,6 +465,10 @@ router.get("/about", function(req, res) {
 	res.render("about.html", { title: title });
 });
 
+router.get("/editor", function(req, res) {
+	res.render("editor.html", { title: title });
+});
+
 router.get("/logout", function(req, res) {
 	req.session.destroy();
 	res.redirect("/"); // or res.render('logout.html', { title: title });

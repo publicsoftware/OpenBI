@@ -5,8 +5,81 @@ Responsive
 
 - prefix ab- ar- ui-
 - let user add a panel with class name like ab-xs-12 ab-sm-8 (xs,sm,md,lg,xl)
+- margin of ab-xy-n is 4px
+- ab-container no container required, it should auto add ab-container
+- ab-row ?
+- remove all width, min-, max-, but height is ok
+
+Document Menu
+[Add Row]
+
+Row (ui-row)
+
+Up Down Edit Add
+
++---+---------------------------------------------+
+| x |                                             |
+| x |                                             |
++---+---------------------------------------------+
+
+[ ui-sm-8 ] Left Right Edit
 
 
+@background: white;
+
+ui-row,ui-row>* {
+background: 1px solid @background;
+}
+
+ui-row:active,
+ui-row>*:active {
+background: 1px solid @active;
+}
+
+
+ui-row:active,
+ui-row>*:active {
+box-shadow: 5px 5px black;
+}
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+<!--
+
+<script type='text/html' id='row-template'>
+<div class="ui-row">
+    <div class="ui-xs-6" contenteditable>Column</div>
+    <div class="ui-xs-6" contenteditable>Column</div>
+</div>
+</script>
+
+<div class='ui-row'>
+    <div class='ui-xs-1'  >ui-xs-1 </div>
+    <div class='ui-xs-11' >ui-xs-11</div>
+
+    <div class='ui-xs-2'  >ui-xs-2 </div>
+    <div class='ui-xs-10' >ui-xs-10</div>
+
+    <div class='ui-xs-3'  >ui-xs-3</div>
+    <div class='ui-xs-9'  >ui-xs-9</div>
+
+    <div class='ui-xs-8'  >ui-xs-8</div>
+    <div class='ui-xs-4'  >ui-xs-4</div>
+
+    <div class='ui-xs-12' >ui-xs-12</div>
+
+    <div class='ui-xs-12 ui-sm-8 ui-md-4'  >Item 1</div>
+    <div class='ui-xs-12 ui-sm-4 ui-md-4'  >Item 2</div>
+    <div class='ui-xs-12 ui-sm-4 ui-md-4'  >Item 3</div>
+</div>
+
+<div class='ui-row'>
+    <div class=' ui-md-4 ui-xs-12 ui-sm-8'  >Item 1</div>
+    <div class=' ui-md-4 ui-xs-12 ui-sm-4'  >Item 2</div>
+    <div class=' ui-md-4 ui-xs-12 ui-sm-4'  >Item 3</div>
+</div>
+-->
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 

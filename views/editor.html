@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+<meta property="og:title" content="<%= title %>" />
+<meta property="og:type" content="website" />
+<meta property="og:description" content="<%= title %>" />
+<meta property="og:image" content="/images/square.jpg" />
+<meta property="og:image:type" content="image/jpg" />
+<title><%= title %></title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<script src="/js/jquery.js"></script>
+<link rel="stylesheet" type="text/less" href="/css/normalize.less" />
+<link rel="stylesheet" type="text/less" href="/css/editor.less" />
+<style type='text/less'>
+</style>
+<script src="/js/less.js"></script>
+
+<script>
+$(document).ready(function() {
+	$('body').on('click', '.ui-row>*', function(e) {
+		clearSelection();
+		$(e.target).addClass('active');
+	});
+});
+
+function clearSelection() {
+	$('.active').removeClass('active');
+}
+
+function addRow() {
+	var html = '<div class="ui-row">\n';
+	for (var i = 0; i < arguments.length; i++) {
+		html += '<div class="ui-xs-' + arguments[i] +
+			'"></div>\n';
+	}
+	html += '</div>\n';
+	$('body').prepend(html);
+}
+
+function edit() {
+	var item = $('.active');
+	if (item.length === 0) {
+		console.log('please select item');
+	}
+	else {
+		console.log('show editor');
+	}
+}
+
+function append() {
+	var item = $('.active');
+	if (item.length === 0) {
+	}
+	else {
+		item.parent().append('<div class="ui-xs-3"></div>');
+	}
+}
+
+function left() {
+	var item = $('.active');
+	item.after(item.prev());
+}
+
+function right() {
+	var item = $('.active');
+	item.before(item.next());
+}
+
+function rowUp() {
+	var item = $('.active').parent();
+	item.after(item.prev('.ui-row'));
+}
+
+function rowDown() {
+	var item = $('.active').parent();
+	item.before(item.next('.ui-row'));
+}
+
+</script>
+</head>
+
+<body>
+
+
+<div style='height:40px; padding:4px;'>
+<button onclick='addRow(3,6,3)'>Row 3-6-3</button>
+<button onclick='addRow(4,4,4)'>Row 4-4-4</button>
+<button onclick='addRow(2,4,4,2)'>Row 2-4-4-2</button>
+<button onclick='rowUp()'>Row Up</button>
+<button onclick='rowDown()'>Row Down</button>
+<br/>
+<button onclick='clearSelection()'>Clear Selection</button>
+<button onclick='edit()'>Edit</button>
+<button onclick='append()'>Append Column</button>
+<button onclick='left()'>Left</button>
+<button onclick='right()'>Right</button>
+
+</div>
+</body>
+</html>
