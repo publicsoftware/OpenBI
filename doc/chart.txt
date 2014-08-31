@@ -3,10 +3,10 @@
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Responsive
 
-- prefix ab- ar- ui-
-- let user add a panel with class name like ab-xs-12 ab-sm-8 (xs,sm,md,lg,xl)
-- margin of ab-xy-n is 4px
-- ab-container no container required, it should auto add ab-container
+- prefix ui-
+- let user add a panel with class name like ui-xs-12 ui-sm-8 (xs,sm,md,lg,xl)
+- margin of ui-xy-n is 4px
+- ab-container no container required, it should auto add ui-container
 - ab-row ?
 - remove all width, min-, max-, but height is ok
 
