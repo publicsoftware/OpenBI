@@ -20,11 +20,19 @@
 
 <script>
 $(document).ready(function() {
+	updateInspector();
+
 	$('body').on('click', '.ui-row>*', function(e) {
 		clearSelection();
 		$(e.target).addClass('active');
+		updateInspector();
 	});
 });
+
+function updateInspector() {
+	var container = $('.active').length > 0 ? $('.active')[0].outerHTML : '';
+	$('#editor-container').val(container);
+}
 
 function clearSelection() {
 	$('.active').removeClass('active');
@@ -97,6 +105,11 @@ function rowDown() {
 <button onclick='append()'>Append Column</button>
 <button onclick='left()'>Left</button>
 <button onclick='right()'>Right</button>
+<br/>
+
+<textarea type='text' id='editor-container' class='code'></textarea>
+<textarea type='text' id='editor-item' class='code'></textarea>
+
 
 </div>
 </body>
