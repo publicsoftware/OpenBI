@@ -21,17 +21,28 @@
 <script>
 $(document).ready(function() {
 	updateInspector();
-
-	$('body').on('click', '.ui-row>*', function(e) {
-		clearSelection();
-		$(e.target).addClass('active');
-		updateInspector();
-	});
+	$('body').on('click', '.ui-row>*', columnClick);
 });
+
+function columnClick(e) {
+	clearSelection();
+	$(e.target).addClass('active');
+	updateInspector();
+}
 
 function updateInspector() {
 	var container = $('.active').length > 0 ? $('.active')[0].outerHTML : '';
 	$('#editor-container').val(container);
+}
+
+function save() {
+	var item = $('.active');
+	if (item.length === 0) {
+		return;
+	}
+
+	var html = $('#editor-container').val();
+	item[0].outerHTML = html;
 }
 
 function clearSelection() {
@@ -101,15 +112,16 @@ function rowDown() {
 <button onclick='rowDown()'>Row Down</button>
 <br/>
 <button onclick='clearSelection()'>Clear Selection</button>
-<button onclick='edit()'>Edit</button>
+<button onclick='save()'>Save</button>
 <button onclick='append()'>Append Column</button>
 <button onclick='left()'>Left</button>
 <button onclick='right()'>Right</button>
 <br/>
 
 <textarea type='text' id='editor-container' class='code'></textarea>
+<!--
 <textarea type='text' id='editor-item' class='code'></textarea>
-
+-->
 
 </div>
 </body>
