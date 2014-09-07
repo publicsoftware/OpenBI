@@ -25,6 +25,7 @@ Installation page
 Table
 Auto Save
 Dynamic OGP
+Improve IDE
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Doing
