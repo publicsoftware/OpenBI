@@ -1,3 +1,28 @@
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+Open Ecosystem
+
+Introducing new projects to make truly open source ecosystem:
+
+Stack & Infrastructure
+- Web desktop environment
+- Open source OS
+- Open source CPU, emulator
+- Open source board of FPGA (Xilinx, Altera, Lattice)
+- Open source board of ARM, x86
+
+Education
+- web-based office suite (Word processor, Spreadsheet, Presentation)
+- web-based IDE
+- Streaming server
+
+Business
+- web app for business: CMS, OpenBI, OpenClinic, ERP, webmail package ...
+
+some projects are available, so improve them
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
 OpenBI 0.6
 - Support SSL
 - Use Trianglify as a background
