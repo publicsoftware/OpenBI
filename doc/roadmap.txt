@@ -5,11 +5,11 @@ Open Ecosystem
 Introducing new projects to make truly open source ecosystem:
 
 Stack & Infrastructure
-- Web desktop environment
-- Open source OS
-- Open source CPU, emulator
 - Open source board of FPGA (Xilinx, Altera, Lattice)
 - Open source board of ARM, x86
+- Open source CPU, emulator
+- Open source OS
+- Web desktop environment (Stack, IDE, Control Panel, Docker)
 
 Education
 - web-based office suite (Word processor, Spreadsheet, Presentation)
@@ -19,7 +19,7 @@ Education
 Business
 - web app for business: CMS, OpenBI, OpenClinic, ERP, webmail package ...
 
-some projects are available, so improve them
+some projects are available, make it easy to install and access
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
