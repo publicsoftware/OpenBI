@@ -114,22 +114,6 @@ data.forEach(function(d) {
 // " and startDate='2014-06-01' and endDate='2014-06-30'" +
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-
-$('.chart').each(
-function() {
-  console.log($(this).css('z-index'));
-});
-
-{
-  background: '#333',
-  text: '#eee',
-  chartTitle: '#777',
-  chartBorder: '@background',
-  chartBackground: '@background',
-  axis: 'white'
-}
-
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 Using LESS to change theme
 
 <link rel="stylesheet" type="text/less" href="/css/absolute.less" />
