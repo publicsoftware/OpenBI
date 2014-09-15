@@ -18,7 +18,7 @@ var pool = mysql.createPool({
 });
 
 function log(e) {
-	console.log(e);
+	// console.log(e);
 }
 
 router.get("/", function(req, res) {
