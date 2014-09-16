@@ -1,6 +1,6 @@
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-Open Ecosystem
+Open Ecosystem - Making something people love
 
 Introducing new projects to make truly open source ecosystem:
 
@@ -10,6 +10,7 @@ Stack & Infrastructure
 - Open source CPU, emulator
 - Open source OS
 - Web desktop environment (Stack, IDE, Control Panel, Docker)
+- Thai spell checker / screen keyboard
 
 Education
 - web-based office suite (Word processor, Spreadsheet, Presentation)
