@@ -11,6 +11,7 @@ Stack & Infrastructure
 - Open source OS
 - Web desktop environment (Stack, IDE, Control Panel, Docker)
 - Thai spell checker / screen keyboard
+- Control panel for Docker
 
 Education
 - web-based office suite (Word processor, Spreadsheet, Presentation)
