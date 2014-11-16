@@ -3,7 +3,7 @@ OpenBI
 
 The easiest way to create interactive dashboard for the rest of us on this planet.
 
-![] (http://openbi.publicsoftwareproject.org/images/ogp.png)
+![] (https://images.indiegogo.com/file_attachments/768056/files/20140805103503-Screen_Shot_2014-08-06_at_0.34.41.png)
 
 Contribute
 ----------
